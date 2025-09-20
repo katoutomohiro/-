@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Use specific pnpm version to avoid conflicts
+npx -y pnpm@9.12.3 run test:smoke

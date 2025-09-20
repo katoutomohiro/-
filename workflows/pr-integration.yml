@@ -1,0 +1,57 @@
+name: PR Integration Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_branch:
+        description: 'PR branch to integrate'
+        required: true
+        type: string
+      pr_number:
+        description: 'PR number'
+        required: true
+        type: string
+
+jobs:
+  integrate-pr:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.3
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Rebase PR branch
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git fetch origin
+          git checkout ${{ inputs.pr_branch }}
+          git rebase origin/main
+          
+      - name: Run integration tests
+        run: pnpm pr:check
+        
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pr-integration-results-${{ inputs.pr_number }}
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 7
