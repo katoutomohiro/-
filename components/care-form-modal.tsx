@@ -48,19 +48,19 @@ export function CareFormModal({ isOpen, onClose, formType, onSubmit, selectedUse
       case "seizure":
         return <SeizureForm selectedUser={selectedUser} onSubmit={handleSubmit} onCancel={onClose} />
       case "vitals":
-        return <VitalsForm selectedUser={selectedUser} onSubmit={handleSubmit} onCancel={onClose} />
+        return <VitalsForm onSubmit={handleSubmit} onCancel={onClose} />
       case "hydration":
-        return <HydrationForm selectedUser={selectedUser} onSubmit={handleSubmit} onCancel={onClose} />
+        return <HydrationForm onSubmit={handleSubmit} onCancel={onClose} />
       case "tube_feeding":
-        return <TubeFeedingForm selectedUser={selectedUser} onSubmit={handleSubmit} onCancel={onClose} />
+        return <TubeFeedingForm onSubmit={handleSubmit} onCancel={onClose} />
       case "expression":
-        return <ExpressionForm selectedUser={selectedUser} onSubmit={handleSubmit} onCancel={onClose} />
+        return <ExpressionForm onSubmit={handleSubmit} onCancel={onClose} />
       case "excretion":
-        return <ExcretionForm selectedUser={selectedUser} onSubmit={handleSubmit} onCancel={onClose} />
+        return <ExcretionForm onSubmit={handleSubmit} onCancel={onClose} />
       case "activity":
-        return <ActivityForm selectedUser={selectedUser} onSubmit={handleSubmit} onCancel={onClose} />
+        return <ActivityForm onSubmit={handleSubmit} onCancel={onClose} />
       case "skin_oral_care":
-        return <SkinOralCareForm selectedUser={selectedUser} onSubmit={handleSubmit} onCancel={onClose} />
+        return <SkinOralCareForm onSubmit={handleSubmit} onCancel={onClose} />
       case "respiratory":
         return <RespiratoryForm selectedUser={selectedUser} onSubmit={handleSubmit} onCancel={onClose} />
       case "positioning":
