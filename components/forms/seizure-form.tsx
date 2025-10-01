@@ -13,7 +13,7 @@ import { SEIZURE_TYPES } from "@/app/(records)/options"
 import { DataStorageService } from "@/services/data-storage-service"
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
-import CareFormLayout from "@/components/care-form-layout"
+
 
 interface SeizureFormProps {
   selectedUser: string // Added selectedUser prop to get current user
@@ -241,14 +241,16 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
   }
 
   return (
-    <CareFormLayout
-      title="⚡ 発作記録"
-      onSubmit={handleSubmit}
-      onCancel={onCancel}
-      className="bg-gradient-to-r from-red-50 to-orange-50"
-      data-build="records-seizure-v1"
-    >
-      <div className="space-y-16">
+    <div className="h-full flex flex-col">
+      {/* ヘッダー（固定） */}
+      <div className="shrink-0 bg-gradient-to-r from-red-50 to-orange-50 border-b p-4">
+        <h2 className="text-xl font-bold text-gray-800">⚡ 発作記録</h2>
+      </div>
+
+      {/* スクロール可能なフォームコンテンツ */}
+      <div className="flex-1 overflow-y-auto p-6 space-y-6"
+           style={{ scrollbarWidth: 'thin', scrollbarColor: '#d1d5db #f3f4f6' }}>
+        <div className="space-y-16">
         <Card className="border-blue-200 bg-blue-50/30">
           <CardContent className="p-4">
             <Label htmlFor="time" className="text-blue-700 font-medium">
@@ -517,7 +519,27 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
             />
           </CardContent>
         </Card>
+        </div>
       </div>
-    </CareFormLayout>
+
+      {/* フッター（固定、保存ボタン） */}
+      <div className="shrink-0 border-t bg-white/95 backdrop-blur-sm p-4 flex gap-3 justify-end shadow-lg">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onCancel}
+          className="px-6 bg-transparent"
+        >
+          キャンセル
+        </Button>
+        <Button 
+          type="submit" 
+          className="px-6 bg-green-600 hover:bg-green-700"
+          onClick={handleSubmit}
+        >
+          記録を保存
+        </Button>
+      </div>
+    </div>
   )
 }
