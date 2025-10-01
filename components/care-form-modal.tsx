@@ -1,6 +1,6 @@
 "use client"
 
-import { Dialog, DialogContent, DialogDescription } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog"
 import { SeizureForm } from "./forms/seizure-form"
 import { VitalsForm } from "./forms/vitals-form"
 import { HydrationForm } from "./forms/hydration-form"
@@ -83,8 +83,11 @@ export function CareFormModal({ isOpen, onClose, formType, onSubmit, selectedUse
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white border-2 border-gray-200 shadow-2xl p-0 max-w-6xl w-[98vw] flex flex-col z-[100] relative">
-        <DialogDescription className="sr-only">
+        <DialogTitle className="sr-only">
           {formType ? `${formType}の記録フォーム` : "ケア記録フォーム"}
+        </DialogTitle>
+        <DialogDescription className="sr-only">
+          {formType ? `${formType}に関する詳細な記録を入力してください` : "ケア記録の詳細情報を入力してください"}
         </DialogDescription>
         <div>{renderForm()}</div>
       </DialogContent>

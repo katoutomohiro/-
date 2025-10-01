@@ -15,6 +15,7 @@ import { DataStorageService } from "@/services/data-storage-service"
 import { useToast } from "@/components/ui/toast"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import { AdminPasswordAuth } from "@/components/admin-password-auth"
+import AIDashboard from "@/components/ai-dashboard"
 
 const eventCategories = [
   {
@@ -230,7 +231,7 @@ export default function WorldClassSoulCareApp() {
   const [isPdfPreviewOpen, setIsPdfPreviewOpen] = useState(false)
   const [isA4RecordSheetOpen, setIsA4RecordSheetOpen] = useState(false)
   const [careEvents, setCareEvents] = useState<any[]>([])
-  const [currentView, setCurrentView] = useState<"dashboard" | "statistics" | "settings">("dashboard")
+  const [currentView, setCurrentView] = useState<"dashboard" | "statistics" | "settings" | "ai-analysis">("dashboard")
   const [isLoading, setIsLoading] = useState(false)
   const [isExporting, setIsExporting] = useState(false)
   const [appTitle, setAppTitle] = useState("日常ケア記録システム")
@@ -420,6 +421,10 @@ export default function WorldClassSoulCareApp() {
             event.preventDefault()
             setCurrentView("settings")
             break
+          case "4":
+            event.preventDefault()
+            setCurrentView("ai-analysis")
+            break
           case "p":
             event.preventDefault()
             handlePdfPreview()
@@ -490,6 +495,44 @@ export default function WorldClassSoulCareApp() {
                   day: "numeric",
                 })}
               </Badge>
+            </div>
+          </div>
+
+          {/* ビュー切り替えナビゲーション */}
+          <div className="border-t border-border/50 pt-4 mt-6">
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant={currentView === "dashboard" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setCurrentView("dashboard")}
+                className="flex items-center gap-2"
+              >
+                🏠 ダッシュボード
+              </Button>
+              <Button
+                variant={currentView === "statistics" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setCurrentView("statistics")}
+                className="flex items-center gap-2"
+              >
+                📊 統計・分析
+              </Button>
+              <Button
+                variant={currentView === "ai-analysis" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setCurrentView("ai-analysis")}
+                className="flex items-center gap-2"
+              >
+                🤖 AI分析
+              </Button>
+              <Button
+                variant={currentView === "settings" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setCurrentView("settings")}
+                className="flex items-center gap-2"
+              >
+                ⚙️ 設定
+              </Button>
             </div>
           </div>
         </div>
@@ -638,6 +681,8 @@ export default function WorldClassSoulCareApp() {
           </>
         ) : currentView === "statistics" ? (
           <StatisticsDashboard selectedUser={selectedUser} />
+        ) : currentView === "ai-analysis" ? (
+          <AIDashboard selectedUserId={selectedUser} />
         ) : (
           <div className="space-y-6">
             <AdminPasswordAuth onUserNamesUpdate={handleUserNamesUpdate} onAppTitleUpdate={handleAppTitleUpdate} />

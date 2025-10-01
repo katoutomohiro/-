@@ -39,12 +39,12 @@ export class DataStorageService {
       const newEvent: CareEvent = {
         ...event,
         id: this.generateId(),
-      }
+      } as CareEvent
 
       events.push(newEvent)
       localStorage.setItem(this.CARE_EVENTS_KEY, JSON.stringify(events))
 
-      console.log("[v0] Care event saved:", newEvent.id)
+      // Care event saved successfully
       return newEvent
     } catch (error) {
       console.error("[v0] Failed to save care event:", error)
@@ -85,7 +85,7 @@ export class DataStorageService {
       }
 
       localStorage.setItem(this.CARE_EVENTS_KEY, JSON.stringify(filteredEvents))
-      console.log("[v0] Care event deleted:", eventId)
+      // Care event deleted successfully
       return true
     } catch (error) {
       console.error("[v0] Failed to delete care event:", error)
@@ -110,7 +110,7 @@ export class DataStorageService {
         const updatedProfiles = profiles.map((p) => (p.id === existingProfile.id ? updatedProfile : p))
 
         localStorage.setItem(this.USER_PROFILES_KEY, JSON.stringify(updatedProfiles))
-        console.log("[v0] User profile updated:", updatedProfile.id)
+        // User profile updated successfully
         return updatedProfile
       } else {
         // Create new profile
@@ -123,7 +123,7 @@ export class DataStorageService {
 
         profiles.push(newProfile)
         localStorage.setItem(this.USER_PROFILES_KEY, JSON.stringify(profiles))
-        console.log("[v0] User profile created:", newProfile.id)
+        // User profile created successfully
         return newProfile
       }
     } catch (error) {
@@ -146,6 +146,11 @@ export class DataStorageService {
     return this.getAllUserProfiles().find((profile) => profile.id === userId) || null
   }
 
+  // Alias for getAllUserProfiles for compatibility
+  static getUsers(): UserProfile[] {
+    return this.getAllUserProfiles()
+  }
+
   static deleteUserProfile(userId: string): boolean {
     try {
       const profiles = this.getAllUserProfiles()
@@ -156,7 +161,7 @@ export class DataStorageService {
       }
 
       localStorage.setItem(this.USER_PROFILES_KEY, JSON.stringify(filteredProfiles))
-      console.log("[v0] User profile deleted:", userId)
+      // User profile deleted successfully
       return true
     } catch (error) {
       console.error("[v0] Failed to delete user profile:", error)
@@ -178,7 +183,7 @@ export class DataStorageService {
   static saveCustomUserNames(userNames: string[]): void {
     try {
       localStorage.setItem(this.CUSTOM_USER_NAMES_KEY, JSON.stringify(userNames))
-      console.log("[v0] Custom user names saved:", userNames.length)
+      // Custom user names saved successfully
     } catch (error) {
       console.error("[v0] Failed to save custom user names:", error)
       throw new Error("利用者名の保存に失敗しました")
@@ -190,7 +195,7 @@ export class DataStorageService {
       const events = this.getAllCareEvents()
       const updatedEvents = events.map((event) => (event.userId === oldName ? { ...event, userId: newName } : event))
       localStorage.setItem(this.CARE_EVENTS_KEY, JSON.stringify(updatedEvents))
-      console.log("[v0] Updated user name in events:", oldName, "->", newName)
+      // User name updated in events successfully
     } catch (error) {
       console.error("[v0] Failed to update user name in events:", error)
       throw new Error("記録データの利用者名更新に失敗しました")
@@ -204,7 +209,7 @@ export class DataStorageService {
         profile.name === oldName ? { ...profile, name: newName, updatedAt: new Date().toISOString() } : profile,
       )
       localStorage.setItem(this.USER_PROFILES_KEY, JSON.stringify(updatedProfiles))
-      console.log("[v0] Updated user name in profiles:", oldName, "->", newName)
+      // User name updated in profiles successfully
     } catch (error) {
       console.error("[v0] Failed to update user name in profiles:", error)
       throw new Error("プロフィールデータの利用者名更新に失敗しました")
@@ -225,7 +230,7 @@ export class DataStorageService {
   static saveFormOptions(options: any): void {
     try {
       localStorage.setItem(this.FORM_OPTIONS_KEY, JSON.stringify(options))
-      console.log("[v0] Form options saved")
+      // Form options saved successfully
     } catch (error) {
       console.error("[v0] Failed to save form options:", error)
       throw new Error("フォーム選択項目の保存に失敗しました")
@@ -235,7 +240,7 @@ export class DataStorageService {
   static resetFormOptions(): void {
     try {
       localStorage.removeItem(this.FORM_OPTIONS_KEY)
-      console.log("[v0] Form options reset to default")
+      // Form options reset to default successfully
     } catch (error) {
       console.error("[v0] Failed to reset form options:", error)
       throw new Error("フォーム選択項目のリセットに失敗しました")
@@ -255,7 +260,7 @@ export class DataStorageService {
         version: "1.1",
       }
 
-      console.log("[v0] Data exported successfully")
+      // Data exported successfully
       return JSON.stringify(data, null, 2)
     } catch (error) {
       console.error("[v0] Failed to export data:", error)
@@ -296,7 +301,7 @@ export class DataStorageService {
         localStorage.setItem(this.FORM_OPTIONS_KEY, JSON.stringify(data.formOptions))
       }
 
-      console.log("[v0] Data imported successfully")
+      // Data imported successfully
       return true
     } catch (error) {
       console.error("[v0] Failed to import data:", error)
@@ -325,7 +330,7 @@ export class DataStorageService {
   static saveAppSettings(settings: any): void {
     try {
       localStorage.setItem(this.APP_SETTINGS_KEY, JSON.stringify(settings))
-      console.log("[v0] App settings saved")
+      // App settings saved successfully
     } catch (error) {
       console.error("[v0] Failed to save app settings:", error)
       throw new Error("設定の保存に失敗しました")
@@ -344,7 +349,7 @@ export class DataStorageService {
       localStorage.removeItem(this.APP_SETTINGS_KEY)
       localStorage.removeItem(this.CUSTOM_USER_NAMES_KEY)
       localStorage.removeItem(this.FORM_OPTIONS_KEY)
-      console.log("[v0] All data cleared")
+      // All data cleared successfully
     } catch (error) {
       console.error("[v0] Failed to clear data:", error)
       throw new Error("データの削除に失敗しました")
