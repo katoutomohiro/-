@@ -140,6 +140,7 @@ export function VitalsForm({ onSubmit, onCancel }: VitalsFormProps) {
     skinCondition: "",
     measurementCondition: "",
     measurementDifficulties: [] as string[],
+    timeOfDay: "",
     notes: "",
     time: new Date().toTimeString().slice(0, 5),
   })
@@ -194,6 +195,26 @@ export function VitalsForm({ onSubmit, onCancel }: VitalsFormProps) {
             >
               今すぐ
             </Button>
+          </div>
+        </div>
+
+        <div className="border-indigo-200 bg-indigo-50/30 border rounded-lg p-4">
+          <Label className="text-indigo-700 font-medium">
+            🌅 測定時間帯
+          </Label>
+          <div className="mt-2">
+            <ClickableDropdown
+              value={formData.timeOfDay}
+              onValueChange={(value) => setFormData({ ...formData, timeOfDay: value })}
+              placeholder="時間帯を選択してください"
+              options={[
+                { value: "morning", label: "🌅 朝（6:00-11:59）" },
+                { value: "afternoon", label: "☀️ 昼（12:00-17:59）" },
+                { value: "evening", label: "🌆 夕（18:00-23:59）" },
+                { value: "night", label: "🌙 夜（0:00-5:59）" },
+              ]}
+              className="w-full"
+            />
           </div>
         </div>
 

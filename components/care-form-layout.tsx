@@ -15,13 +15,13 @@ type CareFormLayoutProps = {
 
 export function CareFormLayout({ title, onSubmit, onCancel, children, isSubmitting = false }: CareFormLayoutProps) {
   return (
-    <form onSubmit={onSubmit} className="h-full">
-      <Card className="flex flex-col h-[95vh] w-full">
+    <form onSubmit={onSubmit} className="h-full flex flex-col">
+      <Card className="flex flex-col h-full w-full min-h-[600px] max-h-[90vh]">
         <CardHeader className="shrink-0 bg-gradient-to-r from-blue-50 to-purple-50 border-b">
           <h2 className="text-xl font-bold text-gray-800">{title}</h2>
         </CardHeader>
 
-        <CardContent className="flex-1 overflow-y-auto space-y-6 p-6 pb-2">{children}</CardContent>
+        <CardContent className="flex-1 overflow-y-auto space-y-6 p-6 pb-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">{children}</CardContent>
 
         <CardFooter className="shrink-0 border-t bg-background p-4 flex gap-3 justify-end">
           <Button

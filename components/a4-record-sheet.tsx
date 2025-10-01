@@ -167,6 +167,15 @@ export function A4RecordSheet({
     return vitalsRecords[vitalsRecords.length - 1]
   }
 
+  const getVitalsByTimeOfDay = (timeOfDay: string) => {
+    return vitalsRecords.filter(record => record.timeOfDay === timeOfDay)
+  }
+
+  const getLatestVitalsByTimeOfDay = (timeOfDay: string) => {
+    const records = getVitalsByTimeOfDay(timeOfDay)
+    return records.length > 0 ? records[records.length - 1] : null
+  }
+
   const getCareRecordsByType = (type: string) => {
     const records = careRecords.filter((record) => {
       const eventType = record.eventType
@@ -388,9 +397,9 @@ export function A4RecordSheet({
             <tbody>
               <tr>
                 <td className="border border-foreground p-2 font-medium">体温 (℃)</td>
-                <td className="border border-foreground p-2 text-center">{latestVitals?.temperature || ""}</td>
-                <td className="border border-foreground p-2 text-center"></td>
-                <td className="border border-foreground p-2 text-center"></td>
+                <td className="border border-foreground p-2 text-center">{getLatestVitalsByTimeOfDay("morning")?.temperature || ""}</td>
+                <td className="border border-foreground p-2 text-center">{getLatestVitalsByTimeOfDay("afternoon")?.temperature || ""}</td>
+                <td className="border border-foreground p-2 text-center">{getLatestVitalsByTimeOfDay("evening")?.temperature || ""}</td>
                 <td className="border border-foreground p-2 text-xs">
                   {translateToJapanese(latestVitals?.temperatureSite) || ""}
                 </td>
@@ -398,39 +407,56 @@ export function A4RecordSheet({
               <tr className="bg-muted/30">
                 <td className="border border-foreground p-2 font-medium">血圧 (mmHg)</td>
                 <td className="border border-foreground p-2 text-center">
-                  {latestVitals?.bloodPressureSystolic && latestVitals?.bloodPressureDiastolic
-                    ? `${latestVitals.bloodPressureSystolic}/${latestVitals.bloodPressureDiastolic}`
-                    : ""}
+                  {(() => {
+                    const morningVitals = getLatestVitalsByTimeOfDay("morning")
+                    return morningVitals?.bloodPressureSystolic && morningVitals?.bloodPressureDiastolic
+                      ? `${morningVitals.bloodPressureSystolic}/${morningVitals.bloodPressureDiastolic}`
+                      : ""
+                  })()}
                 </td>
-                <td className="border border-foreground p-2 text-center"></td>
-                <td className="border border-foreground p-2 text-center"></td>
+                <td className="border border-foreground p-2 text-center">
+                  {(() => {
+                    const afternoonVitals = getLatestVitalsByTimeOfDay("afternoon")
+                    return afternoonVitals?.bloodPressureSystolic && afternoonVitals?.bloodPressureDiastolic
+                      ? `${afternoonVitals.bloodPressureSystolic}/${afternoonVitals.bloodPressureDiastolic}`
+                      : ""
+                  })()}
+                </td>
+                <td className="border border-foreground p-2 text-center">
+                  {(() => {
+                    const eveningVitals = getLatestVitalsByTimeOfDay("evening")
+                    return eveningVitals?.bloodPressureSystolic && eveningVitals?.bloodPressureDiastolic
+                      ? `${eveningVitals.bloodPressureSystolic}/${eveningVitals.bloodPressureDiastolic}`
+                      : ""
+                  })()}
+                </td>
                 <td className="border border-foreground p-2 text-xs">
                   {translateToJapanese(latestVitals?.bloodPressureSite) || ""}
                 </td>
               </tr>
               <tr>
                 <td className="border border-foreground p-2 font-medium">脈拍 (回/分)</td>
-                <td className="border border-foreground p-2 text-center">{latestVitals?.heartRate || ""}</td>
-                <td className="border border-foreground p-2 text-center"></td>
-                <td className="border border-foreground p-2 text-center"></td>
+                <td className="border border-foreground p-2 text-center">{getLatestVitalsByTimeOfDay("morning")?.heartRate || ""}</td>
+                <td className="border border-foreground p-2 text-center">{getLatestVitalsByTimeOfDay("afternoon")?.heartRate || ""}</td>
+                <td className="border border-foreground p-2 text-center">{getLatestVitalsByTimeOfDay("evening")?.heartRate || ""}</td>
                 <td className="border border-foreground p-2 text-xs">
                   {translateToJapanese(latestVitals?.heartRhythm) || ""}
                 </td>
               </tr>
               <tr className="bg-muted/30">
                 <td className="border border-foreground p-2 font-medium">呼吸数 (回/分)</td>
-                <td className="border border-foreground p-2 text-center">{latestVitals?.respiratoryRate || ""}</td>
-                <td className="border border-foreground p-2 text-center"></td>
-                <td className="border border-foreground p-2 text-center"></td>
+                <td className="border border-foreground p-2 text-center">{getLatestVitalsByTimeOfDay("morning")?.respiratoryRate || ""}</td>
+                <td className="border border-foreground p-2 text-center">{getLatestVitalsByTimeOfDay("afternoon")?.respiratoryRate || ""}</td>
+                <td className="border border-foreground p-2 text-center">{getLatestVitalsByTimeOfDay("evening")?.respiratoryRate || ""}</td>
                 <td className="border border-foreground p-2 text-xs">
                   {translateToJapanese(latestVitals?.breathingPattern) || ""}
                 </td>
               </tr>
               <tr>
                 <td className="border border-foreground p-2 font-medium">SpO2 (%)</td>
-                <td className="border border-foreground p-2 text-center">{latestVitals?.oxygenSaturation || ""}</td>
-                <td className="border border-foreground p-2 text-center"></td>
-                <td className="border border-foreground p-2 text-center"></td>
+                <td className="border border-foreground p-2 text-center">{getLatestVitalsByTimeOfDay("morning")?.oxygenSaturation || ""}</td>
+                <td className="border border-foreground p-2 text-center">{getLatestVitalsByTimeOfDay("afternoon")?.oxygenSaturation || ""}</td>
+                <td className="border border-foreground p-2 text-center">{getLatestVitalsByTimeOfDay("evening")?.oxygenSaturation || ""}</td>
                 <td className="border border-foreground p-2 text-xs">
                   {translateToJapanese(latestVitals?.oxygenLevel) || ""}
                 </td>
