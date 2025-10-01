@@ -35,12 +35,10 @@ export function CareFormModal({ isOpen, onClose, formType, onSubmit, selectedUse
       }
 
       const savedEvent = DataStorageService.saveCareEvent(eventData)
-      console.log("[v0] Care event saved via DataStorageService:", savedEvent.id)
 
       onSubmit(savedEvent)
       onClose()
     } catch (error) {
-      console.error("[v0] Failed to save care event:", error)
       alert("記録の保存に失敗しました。もう一度お試しください。")
     }
   }

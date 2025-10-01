@@ -14,13 +14,36 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react'],
   },
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, dev }) => {
+    // Improve module resolution
+    config.resolve.symlinks = false;
+    
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
         fs: false,
+        net: false,
+        dns: false,
+        child_process: false,
+        tls: false,
       };
     }
+
+    // Optimize for development
+    if (dev) {
+      config.cache = {
+        type: 'filesystem',
+      };
+    }
+
+    // Fix webpack internal errors
+    config.module.rules.push({
+      test: /\.m?js/,
+      resolve: {
+        fullySpecified: false
+      }
+    });
+
     return config;
   },
   async rewrites() {

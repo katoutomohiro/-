@@ -260,7 +260,6 @@ export default function WorldClassSoulCareApp() {
   }
 
   const handleFormSubmit = (data: any) => {
-    console.log("[v0] Form submitted:", data)
     addToast({
       type: "success",
       title: "記録を保存しました",
@@ -274,7 +273,6 @@ export default function WorldClassSoulCareApp() {
     try {
       generateDailyLog()
       setIsPdfPreviewOpen(true)
-      console.log("[v0] Opening PDF preview modal")
       addToast({
         type: "success",
         title: "PDFプレビューを開きました",
@@ -294,20 +292,15 @@ export default function WorldClassSoulCareApp() {
     try {
       setIsExporting(true)
       generateDailyLog()
-      console.log("[v0] Starting CSV export with data:", { dailyLog, careEvents })
-      console.time("[v0] CSV Export Handler")
 
       await DailyLogExportService.exportToCsv(dailyLog, careEvents)
 
-      console.timeEnd("[v0] CSV Export Handler")
-      console.log("[v0] CSV export completed successfully")
       addToast({
         type: "success",
         title: "CSV出力が完了しました",
         description: "ファイルがダウンロードされました",
       })
     } catch (error) {
-      console.error("[v0] CSV export failed:", error)
       addToast({
         type: "error",
         title: "CSV出力に失敗しました",
@@ -323,7 +316,6 @@ export default function WorldClassSoulCareApp() {
     try {
       generateDailyLog()
       setIsA4RecordSheetOpen(true)
-      console.log("[v0] Opening A4 record sheet preview")
       addToast({
         type: "success",
         title: "A4記録用紙を開きました",
