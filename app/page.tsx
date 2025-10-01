@@ -235,9 +235,12 @@ export default function WorldClassSoulCareApp() {
   const [isExporting, setIsExporting] = useState(false)
   const [appTitle, setAppTitle] = useState("日常ケア記録システム")
   const [appSubtitle, setAppSubtitle] = useState("重症心身障がい児者支援アプリ - PROJECT SOUL")
+  const [isClient, setIsClient] = useState(false)
   const { addToast } = useToast()
 
+  // Client-side only initialization to prevent hydration mismatch
   useEffect(() => {
+    setIsClient(true)
     const savedTitle = localStorage.getItem("app-title")
     const savedSubtitle = localStorage.getItem("app-subtitle")
     if (savedTitle) setAppTitle(savedTitle)
@@ -395,6 +398,8 @@ export default function WorldClassSoulCareApp() {
   }
 
   useEffect(() => {
+    if (!isClient) return
+    
     const savedUserNames = DataStorageService.getCustomUserNames()
     if (savedUserNames.length > 0) {
       setCustomUserNames(savedUserNames)
@@ -405,7 +410,7 @@ export default function WorldClassSoulCareApp() {
     } else {
       setCustomUserNames(users)
     }
-  }, [selectedUser])
+  }, [selectedUser, isClient])
 
   useEffect(() => {
     const handleKeyDown = (event: globalThis.KeyboardEvent) => {
@@ -444,6 +449,15 @@ export default function WorldClassSoulCareApp() {
   }, [handlePdfPreview, handleExcelExport, handleA4RecordSheetPreview])
 
   const currentUsers = customUserNames.length > 0 ? customUserNames : users
+
+  // Prevent hydration mismatch by not rendering until client-side
+  if (!isClient) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
