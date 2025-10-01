@@ -5,6 +5,8 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
+    "dev:3001": "next dev -p 3001 -H 127.0.0.1",
+    "dev:open": "next dev -p 3001 -H 0.0.0.0",
     "lint": "next lint",
     "start": "next start"
   },

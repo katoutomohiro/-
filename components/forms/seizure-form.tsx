@@ -10,9 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { NowButton } from "@/components/NowButton"
 import { SEIZURE_TYPES } from "@/app/(records)/options"
-import { DataStorageService } from "@/services/data-storage-service"
-import { useToast } from "@/hooks/use-toast"
-import { useRouter } from "next/navigation"
+// Saving is delegated to parent via onSubmit
 
 
 interface SeizureFormProps {
@@ -95,8 +93,6 @@ const defaultMeasurementIssues = [
 ]
 
 export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormProps) {
-  const { toast } = useToast()
-  const router = useRouter()
 
   const [formData, setFormData] = useState({
     type: "",
@@ -187,49 +183,29 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSave = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("[v0] Seizure form submitted with data:", formData)
-
-    try {
-      const careEvent = await DataStorageService.saveCareEvent({
-        eventType: "seizure",
-        timestamp: new Date().toISOString(),
-        userId: selectedUser, // Use actual selected user instead of hardcoded value
-        time: formData.time,
-        type: formData.type, // Use 'type' field that A4RecordSheet expects
-        seizureType: formData.type, // Keep seizureType for backward compatibility
-        duration: formData.duration,
-        severity: formData.severity,
-        consciousness: formData.consciousness,
-        skinColor: formData.skinColor,
-        muscleResponse: formData.muscleResponse,
-        eyeMovement: formData.eyeMovement,
-        breathing: formData.breathing,
-        triggers: formData.triggers,
-        response: formData.response,
-        postSeizureState: formData.postSeizureState,
-        observedSymptoms: formData.observedSymptoms,
-        measurementIssues: formData.measurementIssues,
-        notes: formData.notes || "",
-      })
-
-      onSubmit(careEvent)
-
-      toast({
-        title: "発作記録を保存しました",
-        description: "記録が正常に保存されました。",
-      })
-
-      onCancel()
-    } catch (error) {
-      console.error("[v0] Failed to save seizure record:", error)
-      toast({
-        title: "保存に失敗しました",
-        description: "記録の保存中にエラーが発生しました。",
-        variant: "destructive",
-      })
+    // Build payload and delegate saving to parent (CareFormModal)
+    const payload = {
+      eventType: "seizure",
+      time: formData.time,
+      type: formData.type,
+      seizureType: formData.type, // backward compatibility
+      duration: formData.duration,
+      severity: formData.severity,
+      consciousness: formData.consciousness,
+      skinColor: formData.skinColor,
+      muscleResponse: formData.muscleResponse,
+      eyeMovement: formData.eyeMovement,
+      breathing: formData.breathing,
+      triggers: formData.triggers,
+      response: formData.response,
+      postSeizureState: formData.postSeizureState,
+      observedSymptoms: formData.observedSymptoms,
+      measurementIssues: formData.measurementIssues,
+      notes: formData.notes || "",
     }
+    onSubmit(payload)
   }
 
   const handleSymptomChange = (symptom: string, checked: boolean) => {
@@ -241,14 +217,14 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
   }
 
   return (
-    <div className="h-full flex flex-col">
+    <form className="h-full grid grid-rows-[auto,1fr,auto]" onSubmit={handleSave}>
       {/* ヘッダー（固定） */}
-      <div className="shrink-0 bg-gradient-to-r from-red-50 to-orange-50 border-b p-4">
+      <div className="bg-gradient-to-r from-red-50 to-orange-50 border-b p-4">
         <h2 className="text-xl font-bold text-gray-800">⚡ 発作記録</h2>
       </div>
 
       {/* スクロール可能なフォームコンテンツ */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6"
+      <div className="min-h-0 overflow-y-auto p-6 pb-32 space-y-6 overscroll-contain"
            style={{ scrollbarWidth: 'thin', scrollbarColor: '#d1d5db #f3f4f6' }}>
         <div className="space-y-16">
         <Card className="border-blue-200 bg-blue-50/30">
@@ -265,7 +241,8 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
                 required
                 className="text-lg flex-1"
               />
-              <NowButton onNow={(iso) => setFormData((prev) => ({ ...prev, time: iso }))} />
+              {/* Convert ISO string to HH:mm for time input */}
+              <NowButton onNow={(iso) => setFormData((prev) => ({ ...prev, time: new Date(iso).toTimeString().slice(0, 5) }))} />
             </div>
           </CardContent>
         </Card>
@@ -523,7 +500,7 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
       </div>
 
       {/* フッター（固定、保存ボタン） */}
-      <div className="shrink-0 border-t bg-white/95 backdrop-blur-sm p-4 flex gap-3 justify-end shadow-lg">
+      <div className="border-t bg-white/95 backdrop-blur-sm p-4 flex gap-3 justify-end shadow-lg">
         <Button
           type="button"
           variant="outline"
@@ -535,11 +512,10 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
         <Button 
           type="submit" 
           className="px-6 bg-green-600 hover:bg-green-700"
-          onClick={handleSubmit}
         >
           記録を保存
         </Button>
       </div>
-    </div>
+    </form>
   )
 }
