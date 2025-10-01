@@ -408,7 +408,7 @@ export default function WorldClassSoulCareApp() {
   }, [selectedUser])
 
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
+    const handleKeyDown = (event: globalThis.KeyboardEvent) => {
       if (event.ctrlKey || event.metaKey) {
         switch (event.key) {
           case "1":
