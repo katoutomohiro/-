@@ -185,8 +185,7 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`
   }
 
-  const handleSave = (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = () => {
     // Build payload and delegate saving to parent (CareFormModal)
     const payload = {
       eventType: "seizure",
@@ -496,7 +495,6 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
             />
           </CardContent>
         </Card>
-        </div>
       </div>
     </CareFormLayout>
   )
