@@ -238,7 +238,7 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
   }
 
   return (
-    <CareFormLayout title="⚡ 発作記録テスト" onSubmit={handleSubmit} onCancel={onCancel}>
+    <CareFormLayout title="⚡ 発作記録" onSubmit={handleSubmit} onCancel={onCancel}>
       <div className="space-y-6">
         <Card className="border-blue-200 bg-blue-50/30">
           <CardContent className="p-4">

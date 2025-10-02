@@ -24,13 +24,12 @@ export function CareFormLayout({
 }: CareFormLayoutProps) {
   return (
     <form onSubmit={onSubmit} className="flex flex-col min-h-0 h-full" data-build={dataBuild}>
-      <div className="flex flex-col h-full w-full">
+      <div className="flex flex-col h-full w-full min-h-0">
         {/* ヘッダー - 固定 */}
         <div className="shrink-0 bg-gradient-to-r from-blue-50 to-purple-50 border-b px-6 py-4">
           <h2 className="text-2xl font-bold text-gray-800">{title}</h2>
         </div>
 
-        {/* コンテンツ - スクロール可能 */}
         <div className="flex-1 overflow-y-auto px-6 py-6 min-h-0">{children}</div>
 
         {/* フッター - 固定 */}
