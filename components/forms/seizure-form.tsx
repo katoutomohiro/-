@@ -500,7 +500,7 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
       </div>
 
       {/* フッター（固定、保存ボタン） */}
-      <div className="border-t bg-white/95 backdrop-blur-sm p-4 flex gap-3 justify-end shadow-lg">
+  <div className="sticky bottom-0 z-20 border-t bg-white/95 backdrop-blur-sm p-4 flex gap-3 justify-end shadow-lg">
         <Button
           type="button"
           variant="outline"

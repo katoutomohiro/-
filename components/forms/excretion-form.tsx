@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
-import CareFormLayout from "@/components/care-form-layout"
 
 interface ExcretionFormData {
   timestamp: string
@@ -109,15 +108,13 @@ export function ExcretionForm({ onSubmit, onCancel }: ExcretionFormProps) {
     time: new Date().toTimeString().slice(0, 5),
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSave = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("[v0] Excretion form submitted with data:", formData)
     const submitData = {
       ...formData,
       timestamp: new Date().toISOString(),
       eventType: "excretion",
     }
-    console.log("[v0] Final submit data:", submitData)
     onSubmit(submitData)
   }
 
@@ -128,8 +125,14 @@ export function ExcretionForm({ onSubmit, onCancel }: ExcretionFormProps) {
   }
 
   return (
-    <CareFormLayout title="🚽 排泄記録" onSubmit={handleSubmit} onCancel={onCancel}>
-      <div className="space-y-6">
+    <form className="h-full grid grid-rows-[auto,1fr,auto]" onSubmit={handleSave}>
+      {/* ヘッダー（固定） */}
+      <div className="bg-gradient-to-r from-purple-50 to-pink-50 border-b p-4">
+        <h2 className="text-xl font-bold text-gray-800">🚽 排泄記録</h2>
+      </div>
+
+      {/* スクロール可能コンテンツ */}
+      <div className="min-h-0 overflow-y-auto p-6 pb-32 space-y-6 overscroll-contain" style={{ scrollbarWidth: 'thin', scrollbarColor: '#d1d5db #f3f4f6' }}>
         <div className="border-blue-200 bg-blue-50/30 border rounded-lg p-4">
           <Label htmlFor="time" className="text-blue-700 font-medium">
             ⏰ 記録時刻
@@ -368,6 +371,16 @@ export function ExcretionForm({ onSubmit, onCancel }: ExcretionFormProps) {
           />
         </div>
       </div>
-    </CareFormLayout>
+
+      {/* フッター（固定・保存） */}
+      <div className="sticky bottom-0 z-20 border-t bg-white/95 backdrop-blur-sm p-4 flex gap-3 justify-end shadow-lg">
+        <Button type="button" variant="outline" onClick={onCancel} className="px-6 bg-transparent">
+          キャンセル
+        </Button>
+        <Button type="submit" className="px-6 bg-green-600 hover:bg-green-700">
+          記録を保存
+        </Button>
+      </div>
+    </form>
   )
 }
