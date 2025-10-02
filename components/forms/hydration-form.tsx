@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import CareFormLayout from "@/components/care-form-layout"
+// CareFormLayout は使用せず、フォーム内で3層レイアウト（ヘッダー固定／スクロール／フッター固定）を実装します
 
 interface HydrationFormProps {
   onSubmit: (data: any) => void
@@ -158,8 +158,15 @@ export function HydrationForm({ onSubmit, onCancel }: HydrationFormProps) {
   }
 
   return (
-    <CareFormLayout title="💧 水分補給記録" onSubmit={handleSubmit} onCancel={onCancel}>
-      <div className="space-y-6">
+    <div className="flex flex-col h-full">
+      {/* 1. ヘッダー - 固定（shrink-0） */}
+      <div className="shrink-0 border-b bg-gradient-to-r from-cyan-50 to-blue-50 px-6 py-4">
+        <h2 className="text-2xl font-bold text-gray-800">💧 水分補給記録</h2>
+      </div>
+
+      {/* 2. スクロール可能なコンテンツ（flex-1 overflow-y-auto） */}
+      <div className="flex-1 overflow-y-auto px-6 py-6">
+        <form id="hydration-form" onSubmit={handleSubmit} className="space-y-6">
         <div className="border-blue-200 bg-blue-50/30 border rounded-lg p-4">
           <Label htmlFor="time" className="text-blue-700 font-medium">
             ⏰ 補給時刻
@@ -359,7 +366,18 @@ export function HydrationForm({ onSubmit, onCancel }: HydrationFormProps) {
             className="mt-2"
           />
         </div>
+        </form>
       </div>
-    </CareFormLayout>
+
+      {/* 3. フッター - 固定（shrink-0） */}
+      <div className="shrink-0 border-t bg-white/95 backdrop-blur-sm px-6 py-4 flex gap-3 justify-end shadow-lg">
+        <Button type="button" variant="outline" onClick={onCancel} className="px-6 bg-transparent">
+          キャンセル
+        </Button>
+        <Button type="submit" form="hydration-form" className="px-6 bg-blue-600 hover:bg-blue-700">
+          保存
+        </Button>
+      </div>
+    </div>
   )
 }

@@ -218,7 +218,15 @@ export function SwallowingForm({ selectedUser, onSubmit, onCancel }: SwallowingF
   ])
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <div className="flex flex-col h-full">
+      {/* 1. ヘッダー - 固定（shrink-0） */}
+      <div className="shrink-0 border-b bg-gradient-to-r from-teal-50 to-green-50 px-6 py-4">
+        <h2 className="text-2xl font-bold text-gray-800">🍽️ 嚥下支援記録</h2>
+      </div>
+
+      {/* 2. スクロール可能なコンテンツ（flex-1 overflow-y-auto） */}
+      <div className="flex-1 overflow-y-auto px-6 py-6">
+        <form id="swallowing-form" onSubmit={handleSubmit} className="space-y-6">
       {/* 記録時刻 */}
       <Card>
         <CardHeader className="pb-3">
@@ -438,15 +446,18 @@ export function SwallowingForm({ selectedUser, onSubmit, onCancel }: SwallowingF
         </CardContent>
       </Card>
 
-      {/* 送信ボタン */}
-      <div className="flex gap-3 pt-4">
-        <Button type="submit" className="flex-1 bg-blue-600 hover:bg-blue-700">
-          記録する
-        </Button>
-        <Button type="button" variant="outline" onClick={onCancel} className="flex-1 bg-transparent">
+        </form>
+      </div>
+
+      {/* 3. フッター - 固定（shrink-0） */}
+      <div className="shrink-0 border-t bg-white/95 backdrop-blur-sm px-6 py-4 flex gap-3 justify-end shadow-lg">
+        <Button type="button" variant="outline" onClick={onCancel}>
           キャンセル
         </Button>
+        <Button type="submit" form="swallowing-form">
+          保存
+        </Button>
       </div>
-    </form>
+    </div>
   )
 }

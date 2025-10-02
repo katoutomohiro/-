@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
-import CareFormLayout from "@/components/care-form-layout"
 
 interface ExpressionFormData {
   timestamp: string
@@ -161,8 +160,15 @@ export function ExpressionForm({ onSubmit, onCancel }: ExpressionFormProps) {
   }
 
   return (
-    <CareFormLayout title="😊 表情・反応記録" onSubmit={handleSubmit} onCancel={onCancel}>
-      <div className="space-y-6">
+    <div className="flex flex-col h-full">
+      {/* 1. ヘッダー - 固定（shrink-0） */}
+      <div className="shrink-0 border-b bg-gradient-to-r from-yellow-50 to-orange-50 px-6 py-4">
+        <h2 className="text-2xl font-bold text-gray-800">😊 表情・反応記録</h2>
+      </div>
+
+      {/* 2. スクロール可能なコンテンツ（flex-1 overflow-y-auto） */}
+      <div className="flex-1 overflow-y-auto px-6 py-6">
+        <form id="expression-form" onSubmit={handleSubmit} className="space-y-6">
         <div className="border-emerald-200 bg-emerald-50/30 border rounded-lg p-4">
           <h3 className="text-lg font-semibold text-emerald-800 mb-4">📅 基本情報</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -433,7 +439,18 @@ export function ExpressionForm({ onSubmit, onCancel }: ExpressionFormProps) {
             />
           </div>
         </div>
+        </form>
       </div>
-    </CareFormLayout>
+
+      {/* 3. フッター - 固定（shrink-0） */}
+      <div className="shrink-0 border-t bg-white/95 backdrop-blur-sm px-6 py-4 flex gap-3 justify-end shadow-lg">
+        <Button type="button" variant="outline" onClick={onCancel}>
+          キャンセル
+        </Button>
+        <Button type="submit" form="expression-form">
+          保存
+        </Button>
+      </div>
+    </div>
   )
 }

@@ -82,7 +82,7 @@ export function CareFormModal({ isOpen, onClose, formType, onSubmit, selectedUse
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-white border-2 border-gray-200 shadow-2xl p-0 max-w-6xl w-[98vw] h-[90vh] flex flex-col z-[100] relative overflow-hidden">
+  <DialogContent className="bg-white border-2 border-gray-200 shadow-2xl p-0 max-w-6xl w-[98vw] h-[90vh] flex flex-col z-[100] relative overflow-hidden">
         <DialogTitle className="sr-only">
           {formType ? `${formType}の記録フォーム` : "ケア記録フォーム"}
         </DialogTitle>
