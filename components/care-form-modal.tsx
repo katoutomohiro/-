@@ -82,14 +82,12 @@ export function CareFormModal({ isOpen, onClose, formType, onSubmit, selectedUse
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-  <DialogContent className="bg-white border-2 border-gray-200 shadow-2xl p-0 max-w-6xl w-[98vw] h-[90vh] flex flex-col z-[100] relative overflow-hidden">
-        <DialogTitle className="sr-only">
-          {formType ? `${formType}の記録フォーム` : "ケア記録フォーム"}
-        </DialogTitle>
+      <DialogContent className="bg-white border-2 border-gray-200 shadow-2xl p-0 max-w-6xl w-[98vw] max-h-[90vh] flex flex-col overflow-hidden z-[100]">
+        <DialogTitle className="sr-only">{formType ? `${formType}の記録フォーム` : "ケア記録フォーム"}</DialogTitle>
         <DialogDescription className="sr-only">
           {formType ? `${formType}に関する詳細な記録を入力してください` : "ケア記録の詳細情報を入力してください"}
         </DialogDescription>
-  <div className="flex-1 min-h-0">{renderForm()}</div>
+        {renderForm()}
       </DialogContent>
     </Dialog>
   )

@@ -4,7 +4,7 @@ export interface CareEvent {
   timestamp: string
   userId: string
   time: string
-  timeOfDay?: "morning" | "afternoon" | "evening" | "night" // 朝・昼・夕・夜の選択
+  timeOfDay?: "morning" | "afternoon" | "evening" | "night"
   notes?: string
   [key: string]: any
 }

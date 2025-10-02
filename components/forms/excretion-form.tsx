@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
+import CareFormLayout from "@/components/care-form-layout"
 
 interface ExcretionFormData {
   timestamp: string
@@ -108,13 +109,15 @@ export function ExcretionForm({ onSubmit, onCancel }: ExcretionFormProps) {
     time: new Date().toTimeString().slice(0, 5),
   })
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    console.log("[v0] Excretion form submitted with data:", formData)
     const submitData = {
       ...formData,
       timestamp: new Date().toISOString(),
       eventType: "excretion",
     }
+    console.log("[v0] Final submit data:", submitData)
     onSubmit(submitData)
   }
 
@@ -125,15 +128,8 @@ export function ExcretionForm({ onSubmit, onCancel }: ExcretionFormProps) {
   }
 
   return (
-    <div className="flex flex-col h-full">
-      {/* 1. ヘッダー - 固定（shrink-0） */}
-      <div className="shrink-0 border-b bg-gradient-to-r from-green-50 to-emerald-50 px-6 py-4">
-        <h2 className="text-2xl font-bold text-gray-800">🚽 排泄記録</h2>
-      </div>
-
-      {/* 2. スクロール可能なコンテンツ（flex-1 overflow-y-auto） */}
-      <div className="flex-1 overflow-y-auto px-6 py-6">
-        <form id="excretion-form" onSubmit={handleSave} className="space-y-6">
+    <CareFormLayout title="🚽 排泄記録" onSubmit={handleSubmit} onCancel={onCancel}>
+      <div className="space-y-6">
         <div className="border-blue-200 bg-blue-50/30 border rounded-lg p-4">
           <Label htmlFor="time" className="text-blue-700 font-medium">
             ⏰ 記録時刻
@@ -371,18 +367,7 @@ export function ExcretionForm({ onSubmit, onCancel }: ExcretionFormProps) {
             className="mt-2"
           />
         </div>
-        </form>
       </div>
-
-      {/* 3. フッター - 固定（shrink-0） */}
-      <div className="shrink-0 border-t bg-white/95 backdrop-blur-sm px-6 py-4 flex gap-3 justify-end shadow-lg">
-        <Button type="button" variant="outline" onClick={onCancel} className="px-6 bg-transparent">
-          キャンセル
-        </Button>
-        <Button type="submit" form="excretion-form" className="px-6 bg-blue-600 hover:bg-blue-700">
-          保存
-        </Button>
-      </div>
-    </div>
+    </CareFormLayout>
   )
 }

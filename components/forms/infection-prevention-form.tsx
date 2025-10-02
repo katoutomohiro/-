@@ -204,15 +204,7 @@ export function InfectionPreventionForm({ selectedUser, onSubmit, onCancel }: In
   ])
 
   return (
-    <div className="flex flex-col h-full">
-      {/* 1. ヘッダー - 固定（shrink-0） */}
-      <div className="shrink-0 border-b bg-gradient-to-r from-purple-50 to-indigo-50 px-6 py-4">
-        <h2 className="text-2xl font-bold text-gray-800">🛡️ 感染予防記録</h2>
-      </div>
-
-      {/* 2. スクロール可能なコンテンツ（flex-1 overflow-y-auto） */}
-      <div className="flex-1 overflow-y-auto px-6 py-6">
-        <form id="infection-prevention-form" onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6">
       {/* 記録時刻 */}
       <Card>
         <CardHeader className="pb-3">
@@ -400,18 +392,15 @@ export function InfectionPreventionForm({ selectedUser, onSubmit, onCancel }: In
         </CardContent>
       </Card>
 
-        </form>
-      </div>
-
-      {/* 3. フッター - 固定（shrink-0） */}
-      <div className="shrink-0 border-t bg-white/95 backdrop-blur-sm px-6 py-4 flex gap-3 justify-end shadow-lg">
-        <Button type="button" variant="outline" onClick={onCancel}>
+      {/* 送信ボタン */}
+      <div className="flex gap-3 pt-4">
+        <Button type="submit" className="flex-1 bg-blue-600 hover:bg-blue-700">
+          記録する
+        </Button>
+        <Button type="button" variant="outline" onClick={onCancel} className="flex-1 bg-transparent">
           キャンセル
         </Button>
-        <Button type="submit" form="infection-prevention-form">
-          保存
-        </Button>
       </div>
-    </div>
+    </form>
   )
 }

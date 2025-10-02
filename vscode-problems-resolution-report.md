@@ -19,20 +19,20 @@
 ### 修正方法
 各フォームコンポーネントで`selectedUser`が不要なものから削除：
 
-```tsx
+\`\`\`tsx
 // 修正前
 <VitalsForm selectedUser={selectedUser} onSubmit={handleSubmit} onCancel={onClose} />
 
 // 修正後  
 <VitalsForm onSubmit={handleSubmit} onCancel={onClose} />
-```
+\`\`\`
 
 ## ✅ 検証結果
 
 ### VSCodeエラー確認
-```bash
+\`\`\`bash
 get_errors() → No errors found.
-```
+\`\`\`
 
 **VSCode内の7個の問題が完全に解消されました！** 🎉
 

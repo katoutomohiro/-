@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import CareFormLayout from "@/components/care-form-layout"
 
 interface VitalsFormProps {
   onSubmit: (data: any) => void
@@ -171,15 +172,8 @@ export function VitalsForm({ onSubmit, onCancel }: VitalsFormProps) {
   }
 
   return (
-    <div className="flex flex-col h-full">
-      {/* 1. ヘッダー - 固定（shrink-0） */}
-      <div className="shrink-0 border-b bg-gradient-to-r from-red-50 to-pink-50 px-6 py-4">
-        <h2 className="text-2xl font-bold text-gray-800">❤️ バイタルサイン記録</h2>
-      </div>
-
-      {/* 2. スクロール可能なコンテンツ（flex-1 overflow-y-auto） */}
-      <div className="flex-1 overflow-y-auto px-6 py-6">
-        <form id="vitals-form" onSubmit={handleSubmit} className="space-y-6">
+    <CareFormLayout title="❤️ バイタルサイン記録" onSubmit={handleSubmit} onCancel={onCancel}>
+      <div className="space-y-6">
         <div className="border-blue-200 bg-blue-50/30 border rounded-lg p-4">
           <Label htmlFor="time" className="text-blue-700 font-medium">
             ⏰ 測定時刻
@@ -204,24 +198,23 @@ export function VitalsForm({ onSubmit, onCancel }: VitalsFormProps) {
           </div>
         </div>
 
-        <div className="border-indigo-200 bg-indigo-50/30 border rounded-lg p-4">
-          <Label className="text-indigo-700 font-medium">
-            🌅 測定時間帯
-          </Label>
-          <div className="mt-2">
-            <ClickableDropdown
-              value={formData.timeOfDay}
-              onValueChange={(value) => setFormData({ ...formData, timeOfDay: value })}
-              placeholder="時間帯を選択してください"
-              options={[
-                { value: "morning", label: "🌅 朝（6:00-11:59）" },
-                { value: "afternoon", label: "☀️ 昼（12:00-17:59）" },
-                { value: "evening", label: "🌆 夕（18:00-23:59）" },
-                { value: "night", label: "🌙 夜（0:00-5:59）" },
-              ]}
-              className="w-full"
-            />
-          </div>
+        <div className="border-amber-200 bg-amber-50/30 border rounded-lg p-4">
+          <Label className="text-amber-700 font-medium mb-3 block">🌅 測定時間帯</Label>
+          <ClickableDropdown
+            value={formData.timeOfDay}
+            onValueChange={(value) => setFormData({ ...formData, timeOfDay: value })}
+            placeholder="測定時間帯を選択してください"
+            options={[
+              { value: "morning", label: "朝（6:00-11:59）" },
+              { value: "afternoon", label: "昼（12:00-17:59）" },
+              { value: "evening", label: "夕（18:00-23:59）" },
+              { value: "night", label: "夜（0:00-5:59）" },
+            ]}
+            className="text-lg"
+          />
+          <p className="text-xs text-amber-600 mt-2">
+            ※ A4記録用紙の朝・昼・夕の列に正しく表示するため、時間帯を選択してください
+          </p>
         </div>
 
         <div className="border-red-200 bg-red-50/30 border rounded-lg p-4">
@@ -469,18 +462,7 @@ export function VitalsForm({ onSubmit, onCancel }: VitalsFormProps) {
             className="mt-2"
           />
         </div>
-        </form>
       </div>
-
-      {/* 3. フッター - 固定（shrink-0） */}
-      <div className="shrink-0 border-t bg-white/95 backdrop-blur-sm px-6 py-4 flex gap-3 justify-end shadow-lg">
-        <Button type="button" variant="outline" onClick={onCancel}>
-          キャンセル
-        </Button>
-        <Button type="submit" form="vitals-form">
-          保存
-        </Button>
-      </div>
-    </div>
+    </CareFormLayout>
   )
 }

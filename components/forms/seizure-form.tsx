@@ -1,9 +1,8 @@
-'use client'
+"use client"
 
 import type React from "react"
 
 import { useState, useEffect } from "react"
-import { Activity } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
@@ -11,12 +10,12 @@ import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { NowButton } from "@/components/NowButton"
 import { SEIZURE_TYPES } from "@/app/(records)/options"
-import { CareFormLayout } from '@/components/care-form-layout'
-// Saving is delegated to parent via onSubmit
-
+import { DataStorageService } from "@/services/data-storage-service"
+import { useToast } from "@/hooks/use-toast"
+import CareFormLayout from "@/components/care-form-layout"
 
 interface SeizureFormProps {
-  selectedUser: string // Added selectedUser prop to get current user
+  selectedUser: string
   onSubmit: (data: any) => void
   onCancel: () => void
 }
@@ -95,6 +94,7 @@ const defaultMeasurementIssues = [
 ]
 
 export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormProps) {
+  const { toast } = useToast()
 
   const [formData, setFormData] = useState({
     type: "",
@@ -185,6 +185,7 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`
   }
 
+<<<<<<< HEAD
   const handleSubmit = () => {
     // Build payload and delegate saving to parent (CareFormModal)
     const payload = {
@@ -205,8 +206,50 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
       observedSymptoms: formData.observedSymptoms,
       measurementIssues: formData.measurementIssues,
       notes: formData.notes || "",
+=======
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    try {
+      const careEvent = await DataStorageService.saveCareEvent({
+        eventType: "seizure",
+        timestamp: new Date().toISOString(),
+        userId: selectedUser,
+        time: formData.time,
+        type: formData.type,
+        seizureType: formData.type,
+        duration: formData.duration,
+        severity: formData.severity,
+        consciousness: formData.consciousness,
+        skinColor: formData.skinColor,
+        muscleResponse: formData.muscleResponse,
+        eyeMovement: formData.eyeMovement,
+        breathing: formData.breathing,
+        triggers: formData.triggers,
+        response: formData.response,
+        postSeizureState: formData.postSeizureState,
+        observedSymptoms: formData.observedSymptoms,
+        measurementIssues: formData.measurementIssues,
+        notes: formData.notes || "",
+      })
+
+      onSubmit(careEvent)
+
+      toast({
+        title: "発作記録を保存しました",
+        description: "記録が正常に保存されました。",
+      })
+
+      onCancel()
+    } catch (error) {
+      console.error("[v0] Failed to save seizure record:", error)
+      toast({
+        title: "保存に失敗しました",
+        description: "記録の保存中にエラーが発生しました。",
+        variant: "destructive",
+      })
+>>>>>>> ef31abaaddb189bb10e4eb6afe67da5eb6eef922
     }
-    onSubmit(payload)
   }
 
   const handleSymptomChange = (symptom: string, checked: boolean) => {
@@ -218,13 +261,7 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
   }
 
   return (
-    <CareFormLayout
-      title="⚡ 発作記録"
-      icon={<Activity className="h-5 w-5 text-red-500" />}
-      onSave={handleSubmit}
-      onCancel={onCancel}
-      isSaving={false}
-    >
+    <CareFormLayout title="⚡ 発作記録" onSubmit={handleSubmit} onCancel={onCancel}>
       <div className="space-y-6">
         <Card className="border-blue-200 bg-blue-50/30">
           <CardContent className="p-4">
@@ -240,14 +277,13 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
                 required
                 className="text-lg flex-1"
               />
-              {/* Convert ISO string to HH:mm for time input */}
-              <NowButton onNow={(iso) => setFormData((prev) => ({ ...prev, time: new Date(iso).toTimeString().slice(0, 5) }))} />
+              <NowButton onNow={(iso) => setFormData((prev) => ({ ...prev, time: iso }))} />
             </div>
           </CardContent>
         </Card>
 
         <Card className="border-red-200 bg-red-50/30">
-          <CardContent className="p-4 pb-16">
+          <CardContent className="p-4">
             <Label className="text-red-700 font-medium mb-3 block">⚡ 発作の種類</Label>
             <ClickableDropdown
               value={formData.type}
