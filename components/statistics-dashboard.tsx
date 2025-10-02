@@ -108,7 +108,7 @@ export function StatisticsDashboard({ selectedUser }: StatisticsDashboardProps) 
     return <div>統計データを読み込み中...</div>
   }
 
-  const maxCount = Math.max(...Object.values(stats.eventsByType))
+const maxCount = Math.max(...Object.values(stats.eventsByType), 1)
 
   return (
     <div className="space-y-6">
