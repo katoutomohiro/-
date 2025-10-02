@@ -22,7 +22,7 @@ export function AdminSettings({ onUserNamesUpdate, onAppTitleUpdate }: AdminSett
   const [isEditingTitle, setIsEditingTitle] = useState(false)
   const [tempAppTitle, setTempAppTitle] = useState("")
   const [tempAppSubtitle, setTempAppSubtitle] = useState("")
-  const { addToast } = useToast()
+  const { toast } = useToast()
 
   useEffect(() => {
     const savedUserNames = DataStorageService.getCustomUserNames()
@@ -74,15 +74,15 @@ export function AdminSettings({ onUserNamesUpdate, onAppTitleUpdate }: AdminSett
         onAppTitleUpdate(newTitle, newSubtitle)
       }
 
-      addToast({
-        type: "success",
+      toast({
+        variant: "default",
         title: "保存完了",
         description: "アプリタイトルを更新しました",
       })
     } catch (error) {
       console.error("[v0] Failed to save app title:", error)
-      addToast({
-        type: "error",
+      toast({
+        variant: "destructive",
         title: "保存エラー",
         description: "アプリタイトルの保存に失敗しました",
       })
@@ -105,15 +105,15 @@ export function AdminSettings({ onUserNamesUpdate, onAppTitleUpdate }: AdminSett
         onAppTitleUpdate(defaultTitle, defaultSubtitle)
       }
 
-      addToast({
-        type: "success",
+      toast({
+        variant: "default",
         title: "リセット完了",
         description: "アプリタイトルをデフォルトに戻しました",
       })
     } catch (error) {
       console.error("[v0] Failed to reset app title:", error)
-      addToast({
-        type: "error",
+      toast({
+        variant: "destructive",
         title: "リセットエラー",
         description: "アプリタイトルのリセットに失敗しました",
       })
@@ -134,8 +134,8 @@ export function AdminSettings({ onUserNamesUpdate, onAppTitleUpdate }: AdminSett
     // Validate that no names are empty
     const filteredNames = tempUserNames.filter((name) => name.trim() !== "")
     if (filteredNames.length === 0) {
-      addToast({
-        type: "error",
+      toast({
+        variant: "destructive",
         title: "エラー",
         description: "少なくとも1つの利用者名を入力してください",
       })
@@ -162,15 +162,15 @@ export function AdminSettings({ onUserNamesUpdate, onAppTitleUpdate }: AdminSett
       // Notify parent component
       onUserNamesUpdate(filteredNames)
 
-      addToast({
-        type: "success",
+      toast({
+        variant: "default",
         title: "保存完了",
         description: `${filteredNames.length}名の利用者名を保存しました。既存の記録データも更新されました。`,
       })
     } catch (error) {
       console.error("[v0] Failed to save user names:", error)
-      addToast({
-        type: "error",
+      toast({
+        variant: "destructive",
         title: "保存エラー",
         description: "利用者名の保存に失敗しました。もう一度お試しください。",
       })
@@ -212,15 +212,15 @@ export function AdminSettings({ onUserNamesUpdate, onAppTitleUpdate }: AdminSett
       onUserNamesUpdate(defaultNames)
       setIsEditing(false)
 
-      addToast({
-        type: "success",
+      toast({
+        variant: "default",
         title: "リセット完了",
         description: "利用者名をデフォルト（A～X）に戻しました。既存の記録データも更新されました。",
       })
     } catch (error) {
       console.error("[v0] Failed to reset user names:", error)
-      addToast({
-        type: "error",
+      toast({
+        variant: "destructive",
         title: "リセットエラー",
         description: "利用者名のリセットに失敗しました。もう一度お試しください。",
       })
