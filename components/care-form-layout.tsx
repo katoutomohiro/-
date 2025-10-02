@@ -1,52 +1,51 @@
-"use client"
+'use client'
 
-import type React from "react"
+import { ReactNode } from 'react'
+import { Button } from '@/components/ui/button'
 
-import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-
-type CareFormLayoutProps = {
+interface CareFormLayoutProps {
   title: string
-  onSubmit: (e: React.FormEvent) => void
+  icon: ReactNode
+  children: ReactNode
+  onSave: () => void
   onCancel: () => void
-  children: React.ReactNode
-  isSubmitting?: boolean
+  isSaving?: boolean
 }
 
-export function CareFormLayout({ title, onSubmit, onCancel, children, isSubmitting = false }: CareFormLayoutProps) {
+export function CareFormLayout({
+  title,
+  icon,
+  children,
+  onSave,
+  onCancel,
+  isSaving = false,
+}: CareFormLayoutProps) {
   return (
-    <div className="h-full flex flex-col">
-      <Card className="flex flex-col h-full w-full">
-        <CardHeader className="shrink-0 bg-gradient-to-r from-blue-50 to-purple-50 border-b">
-          <h2 className="text-xl font-bold text-gray-800">{title}</h2>
-        </CardHeader>
-
-        <div className="flex-1 flex flex-col overflow-hidden">
-          <CardContent className="flex-1 overflow-y-auto space-y-6 p-6 pb-24 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-            {children}
-          </CardContent>
-
-          <CardFooter className="sticky bottom-0 shrink-0 border-t bg-white/95 backdrop-blur-sm p-4 flex gap-3 justify-end shadow-lg z-10">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onCancel}
-              disabled={isSubmitting}
-              className="px-6 bg-transparent"
-            >
-              キャンセル
-            </Button>
-            <Button 
-              type="submit" 
-              disabled={isSubmitting} 
-              className="px-6 bg-green-600 hover:bg-green-700"
-              onClick={onSubmit}
-            >
-              {isSubmitting ? "保存中..." : "記録を保存"}
-            </Button>
-          </CardFooter>
+    <div className="flex h-full flex-col">
+      {/* ヘッダー（固定） */}
+      <div className="flex-shrink-0 border-b bg-background px-6 py-4">
+        <div className="flex items-center gap-2">
+          {icon}
+          <h2 className="text-xl font-semibold">{title}</h2>
         </div>
-      </Card>
+      </div>
+
+      {/* コンテンツ（スクロール可能） */}
+      <div className="min-h-0 flex-1 overflow-y-auto px-6 py-4">
+        {children}
+      </div>
+
+      {/* フッター（固定） */}
+      <div className="flex-shrink-0 border-t bg-background px-6 py-4">
+        <div className="flex justify-end gap-2">
+          <Button variant="outline" onClick={onCancel} disabled={isSaving}>
+            キャンセル
+          </Button>
+          <Button onClick={onSave} disabled={isSaving}>
+            {isSaving ? '保存中...' : '保存'}
+          </Button>
+        </div>
+      </div>
     </div>
   )
 }

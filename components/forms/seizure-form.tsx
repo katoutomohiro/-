@@ -1,8 +1,9 @@
-"use client"
+'use client'
 
 import type React from "react"
 
 import { useState, useEffect } from "react"
+import { Activity } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
@@ -10,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { NowButton } from "@/components/NowButton"
 import { SEIZURE_TYPES } from "@/app/(records)/options"
+import { CareFormLayout } from '@/components/care-form-layout'
 // Saving is delegated to parent via onSubmit
 
 
@@ -217,15 +219,14 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
   }
 
   return (
-    <div className="flex flex-col h-full">
-      {/* 1. ヘッダー - 固定（shrink-0） */}
-      <div className="shrink-0 border-b bg-gradient-to-r from-red-50 to-orange-50 px-6 py-4">
-        <h2 className="text-2xl font-bold text-gray-800">⚡ 発作記録</h2>
-      </div>
-
-      {/* 2. スクロール可能なコンテンツ（flex-1 overflow-y-auto） */}
-      <div className="flex-1 overflow-y-auto px-6 py-6">
-        <form id="seizure-form" onSubmit={handleSave} className="space-y-6">
+    <CareFormLayout
+      title="⚡ 発作記録"
+      icon={<Activity className="h-5 w-5 text-red-500" />}
+      onSave={handleSubmit}
+      onCancel={onCancel}
+      isSaving={false}
+    >
+      <div className="space-y-6">
         <Card className="border-blue-200 bg-blue-50/30">
           <CardContent className="p-4">
             <Label htmlFor="time" className="text-blue-700 font-medium">
@@ -495,18 +496,8 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
             />
           </CardContent>
         </Card>
-        </form>
+        </div>
       </div>
-
-      {/* 3. フッター - 固定（shrink-0） */}
-      <div className="shrink-0 border-t bg-white/95 backdrop-blur-sm px-6 py-4 flex gap-3 justify-end shadow-lg">
-        <Button type="button" variant="outline" onClick={onCancel}>
-          キャンセル
-        </Button>
-        <Button type="submit" form="seizure-form">
-          保存
-        </Button>
-      </div>
-    </div>
+    </CareFormLayout>
   )
 }
