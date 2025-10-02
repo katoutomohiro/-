@@ -23,7 +23,7 @@ export function CareFormLayout({
   "data-build": dataBuild,
 }: CareFormLayoutProps) {
   return (
-    <form onSubmit={onSubmit} className="h-full flex flex-col" data-build={dataBuild}>
+    <form onSubmit={onSubmit} className="flex flex-col min-h-0 h-full" data-build={dataBuild}>
       <div className="flex flex-col h-full w-full">
         {/* ヘッダー - 固定 */}
         <div className="shrink-0 bg-gradient-to-r from-blue-50 to-purple-50 border-b px-6 py-4">
