@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { ClickableDropdown } from "@/components/clickable-dropdown"
 import { NumberSelector } from "@/components/number-selector"
 import { DataStorageService } from "@/services/data-storage-service"
-// CareFormLayout は使用せず、フォーム内で3層レイアウトを実装します
+import CareFormLayout from "@/components/care-form-layout"
 
 interface PositioningFormData {
   time: string
@@ -174,15 +174,8 @@ export function PositioningForm({ selectedUser, onSubmit, onCancel }: Positionin
   ])
 
   return (
-    <div className="flex flex-col h-full">
-      {/* 1. ヘッダー - 固定（shrink-0） */}
-      <div className="shrink-0 border-b bg-gradient-to-r from-purple-50 to-pink-50 px-6 py-4">
-        <h2 className="text-2xl font-bold text-gray-800">🛏️ 体位変換・姿勢管理記録</h2>
-      </div>
-
-      {/* 2. スクロール可能なコンテンツ（flex-1 overflow-y-auto） */}
-      <div className="flex-1 overflow-y-auto px-6 py-6">
-        <form id="positioning-form" onSubmit={handleSubmit} className="space-y-6">
+    <CareFormLayout title="🛏️ 体位変換・姿勢管理記録" onSubmit={handleSubmit} onCancel={onCancel}>
+      <div className="space-y-6">
         <div className="border-pink-200 bg-pink-50/30 border rounded-lg p-4">
           <h3 className="text-sm font-medium text-pink-600 mb-3">🕐 記録時刻</h3>
           <div className="flex gap-2">
@@ -299,18 +292,7 @@ export function PositioningForm({ selectedUser, onSubmit, onCancel }: Positionin
             rows={3}
           />
         </div>
-        </form>
       </div>
-
-      {/* 3. フッター - 固定（shrink-0） */}
-      <div className="shrink-0 border-t bg-white/95 backdrop-blur-sm px-6 py-4 flex gap-3 justify-end shadow-lg">
-        <Button type="button" variant="outline" onClick={onCancel} className="px-6 bg-transparent">
-          キャンセル
-        </Button>
-        <Button type="submit" form="positioning-form" className="px-6 bg-blue-600 hover:bg-blue-700">
-          保存
-        </Button>
-      </div>
-    </div>
+    </CareFormLayout>
   )
 }

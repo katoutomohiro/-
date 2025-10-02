@@ -1,52 +1,55 @@
-'use client'
+"use client"
 
-import { ReactNode } from 'react'
-import { Button } from '@/components/ui/button'
+import type React from "react"
+import { Button } from "@/components/ui/button"
 
-interface CareFormLayoutProps {
+type CareFormLayoutProps = {
   title: string
-  icon: ReactNode
-  children: ReactNode
-  onSave: () => void
+  onSubmit: (e: React.FormEvent) => void
   onCancel: () => void
-  isSaving?: boolean
+  children: React.ReactNode
+  isSubmitting?: boolean
+  className?: string
+  "data-build"?: string
 }
 
 export function CareFormLayout({
   title,
-  icon,
-  children,
-  onSave,
+  onSubmit,
   onCancel,
-  isSaving = false,
+  children,
+  isSubmitting = false,
+  className = "",
+  "data-build": dataBuild,
 }: CareFormLayoutProps) {
   return (
-    <div className="flex h-full flex-col">
-      {/* ヘッダー（固定） */}
-      <div className="flex-shrink-0 border-b bg-background px-6 py-4">
-        <div className="flex items-center gap-2">
-          {icon}
-          <h2 className="text-xl font-semibold">{title}</h2>
+    <form onSubmit={onSubmit} className="h-full flex flex-col" data-build={dataBuild}>
+      <div className="flex flex-col h-full w-full">
+        {/* ヘッダー - 固定 */}
+        <div className="shrink-0 bg-gradient-to-r from-blue-50 to-purple-50 border-b px-6 py-4">
+          <h2 className="text-2xl font-bold text-gray-800">{title}</h2>
         </div>
-      </div>
 
-      {/* コンテンツ（スクロール可能） */}
-      <div className="min-h-0 flex-1 overflow-y-auto px-6 py-4">
-        {children}
-      </div>
+        {/* コンテンツ - スクロール可能 */}
+        <div className="flex-1 overflow-y-auto px-6 py-6 min-h-0">{children}</div>
 
-      {/* フッター（固定） */}
-      <div className="flex-shrink-0 border-t bg-background px-6 py-4">
-        <div className="flex justify-end gap-2">
-          <Button variant="outline" onClick={onCancel} disabled={isSaving}>
+        {/* フッター - 固定 */}
+        <div className="shrink-0 border-t bg-white/95 backdrop-blur-sm px-6 py-4 flex gap-3 justify-end shadow-lg">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onCancel}
+            disabled={isSubmitting}
+            className="px-6 bg-transparent"
+          >
             キャンセル
           </Button>
-          <Button onClick={onSave} disabled={isSaving}>
-            {isSaving ? '保存中...' : '保存'}
+          <Button type="submit" disabled={isSubmitting} className="px-6 bg-blue-600 hover:bg-blue-700">
+            {isSubmitting ? "保存中..." : "保存"}
           </Button>
         </div>
       </div>
-    </div>
+    </form>
   )
 }
 

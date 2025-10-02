@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import CareFormLayout from "@/components/care-form-layout"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -162,15 +163,8 @@ export function TubeFeedingForm({ onSubmit, onCancel }: TubeFeedingFormProps) {
   }
 
   return (
-    <div className="flex flex-col h-full">
-      {/* 1. ヘッダー - 固定（shrink-0） */}
-      <div className="shrink-0 border-b bg-gradient-to-r from-amber-50 to-yellow-50 px-6 py-4">
-        <h2 className="text-2xl font-bold text-gray-800">🍼 経管栄養記録</h2>
-      </div>
-
-      {/* 2. スクロール可能なコンテンツ（flex-1 overflow-y-auto） */}
-      <div className="flex-1 overflow-y-auto px-6 py-6">
-        <form id="tube-feeding-form" onSubmit={handleSubmit} className="space-y-6">
+    <CareFormLayout title="🍼 経管栄養記録" onSubmit={handleSubmit} onCancel={onCancel}>
+      <div className="space-y-6">
         <div className="border-blue-200 bg-blue-50/30 border rounded-lg p-4">
           <Label htmlFor="time" className="text-blue-700 font-medium">
             ⏰ 実施時刻
@@ -456,18 +450,7 @@ export function TubeFeedingForm({ onSubmit, onCancel }: TubeFeedingFormProps) {
             className="mt-2"
           />
         </div>
-        </form>
       </div>
-
-      {/* 3. フッター - 固定（shrink-0） */}
-      <div className="shrink-0 border-t bg-white/95 backdrop-blur-sm px-6 py-4 flex gap-3 justify-end shadow-lg">
-        <Button type="button" variant="outline" onClick={onCancel}>
-          キャンセル
-        </Button>
-        <Button type="submit" form="tube-feeding-form">
-          保存
-        </Button>
-      </div>
-    </div>
+    </CareFormLayout>
   )
 }

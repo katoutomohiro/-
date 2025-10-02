@@ -26,7 +26,7 @@ GitHub Copilot主導の多AI連携開発システム
 
 ## 連携フロー
 
-```
+\`\`\`
 GitHub Issue作成 (Main AI)
     ↓
 Task分解・配布 (Main AI)  
@@ -38,7 +38,7 @@ Documentation作成 (Documentation AI)
 統合・レビュー (Main AI)
     ↓  
 デプロイ・監視 (Main AI)
-```
+\`\`\`
 
 ## 実装計画
 

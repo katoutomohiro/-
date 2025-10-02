@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { ClickableDropdown } from "@/components/clickable-dropdown"
 import { NumberSelector } from "@/components/number-selector"
 import { DataStorageService } from "@/services/data-storage-service"
+import { CareFormLayout } from "@/components/care-form-layout"
 
 interface CommunicationFormData {
   time: string
@@ -204,15 +205,7 @@ export function CommunicationForm({ selectedUser, onSubmit, onCancel }: Communic
   ])
 
   return (
-    <div className="flex flex-col h-full">
-      {/* 1. ヘッダー - 固定（shrink-0） */}
-      <div className="shrink-0 border-b bg-gradient-to-r from-pink-50 to-rose-50 px-6 py-4">
-        <h2 className="text-2xl font-bold text-gray-800">💬 コミュニケーション支援</h2>
-      </div>
-
-      {/* 2. スクロール可能なコンテンツ（flex-1 overflow-y-auto） */}
-      <div className="flex-1 overflow-y-auto px-6 py-6">
-        <form id="communication-form" onSubmit={handleSubmit} className="space-y-6">
+    <CareFormLayout title="💬 コミュニケーション支援" onSubmit={handleSubmit} onCancel={onCancel}>
       {/* 記録時刻 */}
       <div className="bg-pink-50 border border-pink-200 rounded-lg p-4">
         <h3 className="text-sm font-medium text-pink-600 mb-3">🕐 記録時刻</h3>
@@ -364,18 +357,6 @@ export function CommunicationForm({ selectedUser, onSubmit, onCancel }: Communic
           rows={3}
         />
       </div>
-        </form>
-      </div>
-
-      {/* 3. フッター - 固定（shrink-0） */}
-      <div className="shrink-0 border-t bg-white/95 backdrop-blur-sm px-6 py-4 flex gap-3 justify-end shadow-lg">
-        <Button type="button" variant="outline" onClick={onCancel}>
-          キャンセル
-        </Button>
-        <Button type="submit" form="communication-form">
-          保存
-        </Button>
-      </div>
-    </div>
+    </CareFormLayout>
   )
 }
