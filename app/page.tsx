@@ -12,7 +12,7 @@ import { SettingsPanel } from "@/components/settings-panel"
 import { A4RecordSheet } from "@/components/a4-record-sheet"
 import { DailyLogExportService } from "@/services/daily-log-export-service"
 import { DataStorageService } from "@/services/data-storage-service"
-import { useToast } from "@/components/ui/toast"
+import { useToast } from "@/components/ui/use-toast"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import { AdminPasswordAuth } from "@/components/admin-password-auth"
 import AIDashboard from "@/components/ai-dashboard"
@@ -24,35 +24,35 @@ const eventCategories = [
     icon: "⚡",
     color: "bg-red-50 text-red-700 border-red-200 hover:bg-red-100",
     iconBg: "bg-red-100 text-red-600",
-    description: "発作の種類・時間・対応を記録",
+    description: "発作�E種類�E時間・対応を記録",
   },
   {
     id: "expression",
-    name: "表情・反応",
-    icon: "😊",
+    name: "表惁E�E反忁E,
+    icon: "�E",
     color: "bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100",
     iconBg: "bg-amber-100 text-amber-600",
-    description: "表情や反応の変化を記録",
+    description: "表惁E��反応�E変化を記録",
   },
   {
     id: "vitals",
     name: "バイタル",
-    icon: "❤️",
+    icon: "❤�E�E,
     color: "bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100",
     iconBg: "bg-rose-100 text-rose-600",
     description: "体温・血圧・脈拍を記録",
   },
   {
     id: "hydration",
-    name: "水分補給",
+    name: "水刁E��給",
     icon: "💧",
     color: "bg-sky-50 text-sky-700 border-sky-200 hover:bg-sky-100",
     iconBg: "bg-sky-100 text-sky-600",
-    description: "水分摂取量・方法を記録",
+    description: "水刁E��取量・方法を記録",
   },
   {
     id: "excretion",
-    name: "排泄",
+    name: "排況E,
     icon: "🚽",
     color: "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100",
     iconBg: "bg-emerald-100 text-emerald-600",
@@ -60,39 +60,39 @@ const eventCategories = [
   },
   {
     id: "activity",
-    name: "活動",
+    name: "活勁E,
     icon: "🏃",
     color: "bg-violet-50 text-violet-700 border-violet-200 hover:bg-violet-100",
     iconBg: "bg-violet-100 text-violet-600",
-    description: "日常活動・リハビリを記録",
+    description: "日常活動�Eリハビリを記録",
   },
   {
     id: "skin_oral_care",
-    name: "皮膚・口腔ケア",
-    icon: "🛡️",
+    name: "皮膚�E口腔ケア",
+    icon: "🛡�E�E,
     color: "bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100",
     iconBg: "bg-indigo-100 text-indigo-600",
-    description: "皮膚状態・口腔ケアを記録",
+    description: "皮膚状態�E口腔ケアを記録",
   },
   {
     id: "tube_feeding",
-    name: "経管栄養",
-    icon: "🍽️",
+    name: "経管栁E��E,
+    icon: "🍽�E�E,
     color: "bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100",
     iconBg: "bg-orange-100 text-orange-600",
-    description: "経管栄養の実施状況を記録",
+    description: "経管栁E���E実施状況を記録",
   },
   {
     id: "respiratory",
-    name: "呼吸管理",
-    icon: "🫁",
+    name: "呼吸管琁E,
+    icon: "🫁E,
     color: "bg-cyan-50 text-cyan-700 border-cyan-200 hover:bg-cyan-100",
     iconBg: "bg-cyan-100 text-cyan-600",
-    description: "呼吸状態・人工呼吸器管理を記録",
+    description: "呼吸状態�E人工呼吸器管琁E��記録",
   },
   {
     id: "positioning",
-    name: "体位変換・姿勢管理",
+    name: "体位変換・姿勢管琁E,
     icon: "🔄",
     color: "bg-lime-50 text-lime-700 border-lime-200 hover:bg-lime-100",
     iconBg: "bg-lime-100 text-lime-600",
@@ -100,19 +100,19 @@ const eventCategories = [
   },
   {
     id: "swallowing",
-    name: "摂食嚥下管理",
-    icon: "🍽️",
+    name: "摂食嚥下管琁E,
+    icon: "🍽�E�E,
     color: "bg-pink-50 text-pink-700 border-pink-200 hover:bg-pink-100",
     iconBg: "bg-pink-100 text-pink-600",
-    description: "嚥下機能・誤嚥リスク管理を記録",
+    description: "嚥下機�E・誤嚥リスク管琁E��記録",
   },
   {
     id: "infection-prevention",
-    name: "感染予防管理",
-    icon: "🛡️",
+    name: "感染予防管琁E,
+    icon: "🛡�E�E,
     color: "bg-yellow-50 text-yellow-700 border-yellow-200 hover:bg-yellow-100",
     iconBg: "bg-yellow-100 text-yellow-600",
-    description: "感染兆候・予防策実施を記録",
+    description: "感染允E���E予防策実施を記録",
   },
   {
     id: "communication",
@@ -120,35 +120,35 @@ const eventCategories = [
     icon: "💬",
     color: "bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100",
     iconBg: "bg-purple-100 text-purple-600",
-    description: "意思疎通・支援機器使用を記録",
+    description: "意思疎通�E支援機器使用を記録",
   },
 ]
 
 const users = [
-  "利用者A",
-  "利用者B",
-  "利用者C",
-  "利用者D",
-  "利用者E",
-  "利用者F",
-  "利用者G",
-  "利用者H",
-  "利用者I",
-  "利用者J",
-  "利用者K",
-  "利用者L",
-  "利用者M",
-  "利用者N",
-  "利用者O",
-  "利用者P",
-  "利用者Q",
-  "利用者R",
-  "利用者S",
-  "利用者T",
-  "利用者U",
-  "利用者V",
-  "利用者W",
-  "利用者X",
+  "利用老E",
+  "利用老E",
+  "利用老E",
+  "利用老E",
+  "利用老E",
+  "利用老E",
+  "利用老E",
+  "利用老E",
+  "利用老E",
+  "利用老E",
+  "利用老E",
+  "利用老E",
+  "利用老E",
+  "利用老E",
+  "利用老E",
+  "利用老E",
+  "利用老E",
+  "利用老E",
+  "利用老E",
+  "利用老E",
+  "利用老E",
+  "利用老E",
+  "利用老E",
+  "利用老E",
 ]
 
 const welfareServices = [
@@ -157,31 +157,31 @@ const welfareServices = [
     name: "生活介護",
     icon: "🏥",
     color: "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100",
-    description: "日中活動・創作活動・生産活動の記録と支援計画管理",
-    features: ["個別支援計画", "活動記録", "健康管理", "家族連携"],
+    description: "日中活動�E創作活動�E生産活動�E記録と支援計画管琁E,
+    features: ["個別支援計画", "活動記録", "健康管琁E, "家族連携"],
   },
   {
     id: "after-school",
     name: "放課後等デイサービス",
     icon: "🎓",
     color: "bg-green-50 text-green-700 border-green-200 hover:bg-green-100",
-    description: "学齢期の療育・集団活動・個別支援の記録",
-    features: ["療育プログラム", "発達支援", "学習支援", "社会性育成"],
+    description: "学齢期�E療育・雁E��活動�E個別支援の記録",
+    features: ["療育プログラム", "発達支援", "学習支援", "社会性育戁E],
   },
   {
     id: "day-support",
     name: "日中一時支援",
     icon: "⏰",
     color: "bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100",
-    description: "短期預かり・見守り支援の状況記録",
-    features: ["安全管理", "活動支援", "緊急対応", "家族支援"],
+    description: "短期預かり�E見守り支援の状況記録",
+    features: ["安�E管琁E, "活動支援", "緊急対忁E, "家族支援"],
   },
   {
     id: "group-home",
-    name: "グループホーム",
+    name: "グループ�Eーム",
     icon: "🏠",
     color: "bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100",
-    description: "共同生活援助・夜間支援・生活相談の記録",
+    description: "共同生活援助・夜間支援・生活相諁E�E記録",
     features: ["生活支援", "夜間ケア", "自立支援", "地域連携"],
   },
   {
@@ -189,8 +189,8 @@ const welfareServices = [
     name: "重度訪問介護",
     icon: "🚑",
     color: "bg-red-50 text-red-700 border-red-200 hover:bg-red-100",
-    description: "在宅支援・外出支援・身体介護の記録",
-    features: ["身体介護", "家事支援", "外出支援", "医療連携"],
+    description: "在宁E��援・外�E支援・身体介護の記録",
+    features: ["身体介護", "家事支援", "外�E支援", "医療連携"],
   },
 ]
 
@@ -198,19 +198,19 @@ const enhancedEventCategories = [
   ...eventCategories,
   {
     id: "medication",
-    name: "服薬管理",
+    name: "服薬管琁E,
     icon: "💊",
     color: "bg-teal-50 text-teal-700 border-teal-200 hover:bg-teal-100",
     iconBg: "bg-teal-100 text-teal-600",
-    description: "処方薬の服薬状況・副作用・効果の記録",
+    description: "処方薬の服薬状況�E副作用・効果�E記録",
   },
   {
     id: "therapy",
-    name: "リハビリテーション",
-    icon: "🏃‍♂️",
+    name: "リハビリチE�Eション",
+    icon: "🏃‍♂�E�E,
     color: "bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100",
     iconBg: "bg-indigo-100 text-indigo-600",
-    description: "理学療法・作業療法・言語療法の実施記録",
+    description: "琁E��療法�E作業療法�E言語療法�E実施記録",
   },
   {
     id: "family-communication",
@@ -218,13 +218,13 @@ const enhancedEventCategories = [
     icon: "👨‍👩‍👧‍👦",
     color: "bg-pink-50 text-pink-700 border-pink-200 hover:bg-pink-100",
     iconBg: "bg-pink-100 text-pink-600",
-    description: "家族との情報共有・相談・支援計画の調整",
+    description: "家族との惁E��共有�E相諁E�E支援計画の調整",
   },
 ]
 
 export default function WorldClassSoulCareApp() {
   const [customUserNames, setCustomUserNames] = useState<string[]>([])
-  const [selectedUser, setSelectedUser] = useState<string>("利用者A")
+  const [selectedUser, setSelectedUser] = useState<string>("利用老E")
   const [dailyLog, setDailyLog] = useState<any>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [currentFormType, setCurrentFormType] = useState<string | null>(null)
@@ -234,10 +234,10 @@ export default function WorldClassSoulCareApp() {
   const [currentView, setCurrentView] = useState<"dashboard" | "statistics" | "settings" | "ai-analysis">("dashboard")
   const [isLoading, setIsLoading] = useState(false)
   const [isExporting, setIsExporting] = useState(false)
-  const [appTitle, setAppTitle] = useState("日常ケア記録システム")
-  const [appSubtitle, setAppSubtitle] = useState("重症心身障がい児者支援アプリ - PROJECT SOUL")
+  const [appTitle, setAppTitle] = useState("日常ケア記録シスチE��")
+  const [appSubtitle, setAppSubtitle] = useState("重症忁E��障がぁE�E老E��援アプリ - PROJECT SOUL")
   const [isClient, setIsClient] = useState(false)
-  const { addToast } = useToast()
+  const { toast } = useToast()
 
   // Client-side only initialization to prevent hydration mismatch
   useEffect(() => {
@@ -261,7 +261,7 @@ export default function WorldClassSoulCareApp() {
   }
 
   const handleFormSubmit = (data: any) => {
-    addToast({
+    toast({
       type: "success",
       title: "記録を保存しました",
       description: `${data.eventType}の記録が正常に保存されました`,
@@ -274,20 +274,20 @@ export default function WorldClassSoulCareApp() {
     try {
       generateDailyLog()
       setIsPdfPreviewOpen(true)
-      addToast({
+      toast({
         type: "success",
         title: "PDFプレビューを開きました",
       })
     } catch (error) {
-      addToast({
+      toast({
         type: "error",
-        title: "PDFプレビューの生成に失敗しました",
+        title: "PDFプレビューの生�Eに失敗しました",
         description: "もう一度お試しください",
       })
     } finally {
       setIsLoading(false)
     }
-  }, [generateDailyLog, addToast])
+  }, [generateDailyLog, toast])
 
   const handleExcelExport = useCallback(async () => {
     try {
@@ -296,13 +296,13 @@ export default function WorldClassSoulCareApp() {
 
       await DailyLogExportService.exportToCsv(dailyLog, careEvents)
 
-      addToast({
+      toast({
         type: "success",
-        title: "CSV出力が完了しました",
+        title: "CSV出力が完亁E��ました",
         description: "ファイルがダウンロードされました",
       })
     } catch (error) {
-      addToast({
+      toast({
         type: "error",
         title: "CSV出力に失敗しました",
         description: "もう一度お試しください",
@@ -310,27 +310,27 @@ export default function WorldClassSoulCareApp() {
     } finally {
       setIsExporting(false)
     }
-  }, [generateDailyLog, dailyLog, careEvents, addToast])
+  }, [generateDailyLog, dailyLog, careEvents, toast])
 
   const handleA4RecordSheetPreview = useCallback(() => {
     setIsLoading(true)
     try {
       generateDailyLog()
       setIsA4RecordSheetOpen(true)
-      addToast({
+      toast({
         type: "success",
         title: "A4記録用紙を開きました",
       })
     } catch (error) {
-      addToast({
+      toast({
         type: "error",
-        title: "A4記録用紙の生成に失敗しました",
+        title: "A4記録用紙�E生�Eに失敗しました",
         description: "もう一度お試しください",
       })
     } finally {
       setIsLoading(false)
     }
-  }, [generateDailyLog, addToast])
+  }, [generateDailyLog, toast])
 
   const handleA4RecordSheetPrint = useCallback(() => {
     const printWindow = window.open("", "_blank")
@@ -341,7 +341,7 @@ export default function WorldClassSoulCareApp() {
           <!DOCTYPE html>
           <html>
             <head>
-              <title>介護記録用紙 - ${selectedUser}</title>
+              <title>介護記録用紁E- ${selectedUser}</title>
               <style>
                 @media print {
                   @page { margin: 0; size: A4; }
@@ -371,9 +371,9 @@ export default function WorldClassSoulCareApp() {
         setSelectedUser(savedUserNames[0])
       }
     }
-    addToast({
+    toast({
       type: "success",
-      title: "データが更新されました",
+      title: "チE�Eタが更新されました",
     })
   }, [generateDailyLog, addToast, selectedUser])
 
@@ -381,7 +381,7 @@ export default function WorldClassSoulCareApp() {
     setCustomUserNames(newUserNames)
     // Update selected user if current selection doesn't exist in new names
     if (!newUserNames.includes(selectedUser)) {
-      setSelectedUser(newUserNames[0] || "利用者A")
+      setSelectedUser(newUserNames[0] || "利用老E")
     }
   }
 
@@ -398,7 +398,7 @@ export default function WorldClassSoulCareApp() {
       setCustomUserNames(savedUserNames)
       // Update selected user if current selection doesn't exist in custom names
       if (!savedUserNames.includes(selectedUser)) {
-        setSelectedUser(savedUserNames[0] || "利用者A")
+        setSelectedUser(savedUserNames[0] || "利用老E")
       }
     } else {
       setCustomUserNames(users)
@@ -462,13 +462,13 @@ export default function WorldClassSoulCareApp() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="space-y-1">
-              <h1 className="text-3xl font-bold text-foreground tracking-tight">重心ケアアプリ - PROJECT SOUL</h1>
-              <p className="text-muted-foreground font-medium">重症心身障がい児者の包括的福祉支援システム</p>
+              <h1 className="text-3xl font-bold text-foreground tracking-tight">重忁E��アアプリ - PROJECT SOUL</h1>
+              <p className="text-muted-foreground font-medium">重症忁E��障がぁE�E老E�E匁E��皁E��祉支援シスチE��</p>
             </div>
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
               <select className="px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary">
-                <option value="">サービス種別を選択</option>
+                <option value="">サービス種別を選抁E/option>
                 {welfareServices.map((service) => (
                   <option key={service.id} value={service.id}>
                     {service.name}
@@ -480,7 +480,7 @@ export default function WorldClassSoulCareApp() {
                 value={selectedUser}
                 onChange={(e) => setSelectedUser(e.target.value)}
                 className="px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 shadow-sm hover:shadow-md min-w-[120px]"
-                aria-label="利用者を選択"
+                aria-label="利用老E��選抁E
               >
                 {currentUsers.map((user) => (
                   <option key={user} value={user}>
@@ -498,7 +498,7 @@ export default function WorldClassSoulCareApp() {
             </div>
           </div>
 
-          {/* ビュー切り替えナビゲーション */}
+          {/* ビュー刁E��替えナビゲーション */}
           <div className="border-t border-border/50 pt-4 mt-6">
             <div className="flex flex-wrap gap-2">
               <Button
@@ -507,7 +507,7 @@ export default function WorldClassSoulCareApp() {
                 onClick={() => setCurrentView("dashboard")}
                 className="flex items-center gap-2"
               >
-                🏠 ダッシュボード
+                🏠 ダチE��ュボ�EチE
               </Button>
               <Button
                 variant={currentView === "statistics" ? "default" : "outline"}
@@ -515,7 +515,7 @@ export default function WorldClassSoulCareApp() {
                 onClick={() => setCurrentView("statistics")}
                 className="flex items-center gap-2"
               >
-                📊 統計・分析
+                📊 統計�E刁E��
               </Button>
               <Button
                 variant={currentView === "ai-analysis" ? "default" : "outline"}
@@ -523,7 +523,7 @@ export default function WorldClassSoulCareApp() {
                 onClick={() => setCurrentView("ai-analysis")}
                 className="flex items-center gap-2"
               >
-                🤖 AI分析
+                🤁EAI刁E��
               </Button>
               <Button
                 variant={currentView === "settings" ? "default" : "outline"}
@@ -531,7 +531,7 @@ export default function WorldClassSoulCareApp() {
                 onClick={() => setCurrentView("settings")}
                 className="flex items-center gap-2"
               >
-                ⚙️ 設定
+                ⚙︁E設宁E
               </Button>
             </div>
           </div>
@@ -612,7 +612,7 @@ export default function WorldClassSoulCareApp() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-3 text-lg">
                     <div className="p-2 bg-primary/10 rounded-lg">📄</div>
-                    記録の出力
+                    記録の出劁E
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -621,10 +621,10 @@ export default function WorldClassSoulCareApp() {
                       onClick={handleA4RecordSheetPreview}
                       className="flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-lg w-full"
                       disabled={isLoading}
-                      title="A4記録用紙プレビュー (Ctrl+A)"
+                      title="A4記録用紙�Eレビュー (Ctrl+A)"
                     >
                       {isLoading ? <LoadingSpinner size="sm" /> : "📋"}
-                      A4記録用紙
+                      A4記録用紁E
                     </Button>
                     <div className="flex flex-col sm:flex-row gap-3">
                       <Button
@@ -633,7 +633,7 @@ export default function WorldClassSoulCareApp() {
                         disabled={isLoading}
                         title="PDFプレビュー (Ctrl+P)"
                       >
-                        {isLoading ? <LoadingSpinner size="sm" /> : "👁️"}
+                        {isLoading ? <LoadingSpinner size="sm" /> : "👁�E�E}
                         PDFプレビュー
                       </Button>
                       <Button
@@ -641,10 +641,10 @@ export default function WorldClassSoulCareApp() {
                         onClick={handleExcelExport}
                         className="flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-lg flex-1 bg-transparent"
                         disabled={isExporting}
-                        title="CSV出力 (Ctrl+E)"
+                        title="CSV出劁E(Ctrl+E)"
                       >
                         {isExporting ? <LoadingSpinner size="sm" /> : "📥"}
-                        CSV出力
+                        CSV出劁E
                       </Button>
                     </div>
                   </div>
@@ -671,7 +671,7 @@ export default function WorldClassSoulCareApp() {
                       >
                         <div className="text-3xl font-bold text-primary mb-1">{event.count}</div>
                         <div className="text-sm font-medium text-foreground mb-1">{event.name}</div>
-                        <div className="text-xs text-muted-foreground">最終: {event.lastRecorded}</div>
+                        <div className="text-xs text-muted-foreground">最絁E {event.lastRecorded}</div>
                       </div>
                     ))}
                   </div>
@@ -709,13 +709,13 @@ export default function WorldClassSoulCareApp() {
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
               <div className="flex items-center justify-between p-4 border-b">
-                <h2 className="text-xl font-bold text-gray-900">A4記録用紙 - {selectedUser}</h2>
+                <h2 className="text-xl font-bold text-gray-900">A4記録用紁E- {selectedUser}</h2>
                 <div className="flex gap-2">
                   <Button onClick={handleA4RecordSheetPrint} className="flex items-center gap-2" size="sm">
-                    🖨️ 印刷
+                    🖨�E�E印刷
                   </Button>
                   <Button onClick={() => setIsA4RecordSheetOpen(false)} variant="outline" size="sm">
-                    閉じる
+                    閉じめE
                   </Button>
                 </div>
               </div>
