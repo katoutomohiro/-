@@ -185,28 +185,6 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`
   }
 
-<<<<<<< HEAD
-  const handleSubmit = () => {
-    // Build payload and delegate saving to parent (CareFormModal)
-    const payload = {
-      eventType: "seizure",
-      time: formData.time,
-      type: formData.type,
-      seizureType: formData.type, // backward compatibility
-      duration: formData.duration,
-      severity: formData.severity,
-      consciousness: formData.consciousness,
-      skinColor: formData.skinColor,
-      muscleResponse: formData.muscleResponse,
-      eyeMovement: formData.eyeMovement,
-      breathing: formData.breathing,
-      triggers: formData.triggers,
-      response: formData.response,
-      postSeizureState: formData.postSeizureState,
-      observedSymptoms: formData.observedSymptoms,
-      measurementIssues: formData.measurementIssues,
-      notes: formData.notes || "",
-=======
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -248,7 +226,6 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
         description: "記録の保存中にエラーが発生しました。",
         variant: "destructive",
       })
->>>>>>> ef31abaaddb189bb10e4eb6afe67da5eb6eef922
     }
   }
 

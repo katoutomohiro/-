@@ -118,7 +118,6 @@ export function SkinOralCareForm({ onSubmit, onCancel }: SkinOralCareFormProps) 
     onSubmit({
       ...formData,
       timestamp: new Date().toISOString(),
-      eventType: "skin_oral_care",
     })
   }
 

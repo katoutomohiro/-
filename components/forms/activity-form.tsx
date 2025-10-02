@@ -116,7 +116,6 @@ export function ActivityForm({ onSubmit, onCancel }: ActivityFormProps) {
     onSubmit({
       ...formData,
       timestamp: new Date().toISOString(),
-      eventType: "activity",
     })
   }
 
