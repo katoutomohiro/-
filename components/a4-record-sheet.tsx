@@ -388,6 +388,55 @@ export function A4RecordSheet({
           </div>
         </div>
 
+        {/* バイタルサイン詳細情報 */}
+        <div className="mb-4">
+          <div className="bg-primary text-primary-foreground p-2 text-center font-bold text-sm mb-2">バイタルサイン詳細情報</div>
+          <table className="w-full border-collapse border border-foreground text-xs">
+            <tbody>
+              <tr>
+                <td className="border border-foreground p-1 font-medium bg-muted w-1/4">意識レベル</td>
+                <td className="border border-foreground p-1">
+                  {morningVitals[0]?.consciousnessLevel && `朝: ${translateToJapanese(morningVitals[0].consciousnessLevel)}`}
+                  {afternoonVitals[0]?.consciousnessLevel && ` / 昼: ${translateToJapanese(afternoonVitals[0].consciousnessLevel)}`}
+                  {eveningVitals[0]?.consciousnessLevel && ` / 夕: ${translateToJapanese(eveningVitals[0].consciousnessLevel)}`}
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-foreground p-1 font-medium bg-muted">皮膚状態</td>
+                <td className="border border-foreground p-1">
+                  {morningVitals[0]?.skinCondition && `朝: ${translateToJapanese(morningVitals[0].skinCondition)}`}
+                  {afternoonVitals[0]?.skinCondition && ` / 昼: ${translateToJapanese(afternoonVitals[0].skinCondition)}`}
+                  {eveningVitals[0]?.skinCondition && ` / 夕: ${translateToJapanese(eveningVitals[0].skinCondition)}`}
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-foreground p-1 font-medium bg-muted">測定時の状態</td>
+                <td className="border border-foreground p-1">
+                  {morningVitals[0]?.measurementCondition && `朝: ${translateToJapanese(morningVitals[0].measurementCondition)}`}
+                  {afternoonVitals[0]?.measurementCondition && ` / 昼: ${translateToJapanese(afternoonVitals[0].measurementCondition)}`}
+                  {eveningVitals[0]?.measurementCondition && ` / 夕: ${translateToJapanese(eveningVitals[0].measurementCondition)}`}
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-foreground p-1 font-medium bg-muted">測定困難な要因</td>
+                <td className="border border-foreground p-1">
+                  {morningVitals[0]?.measurementDifficulties?.length > 0 && `朝: ${morningVitals[0].measurementDifficulties.join(", ")}`}
+                  {afternoonVitals[0]?.measurementDifficulties?.length > 0 && ` / 昼: ${afternoonVitals[0].measurementDifficulties.join(", ")}`}
+                  {eveningVitals[0]?.measurementDifficulties?.length > 0 && ` / 夕: ${eveningVitals[0].measurementDifficulties.join(", ")}`}
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-foreground p-1 font-medium bg-muted">備考</td>
+                <td className="border border-foreground p-1">
+                  {morningVitals[0]?.notes && `朝: ${morningVitals[0].notes}`}
+                  {afternoonVitals[0]?.notes && ` / 昼: ${afternoonVitals[0].notes}`}
+                  {eveningVitals[0]?.notes && ` / 夕: ${eveningVitals[0].notes}`}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
         <div className="mb-6">
           <div className="bg-primary text-primary-foreground p-2 text-center font-bold mb-2">バイタルサイン</div>
           <table className="w-full border-collapse border border-foreground text-xs">
@@ -405,17 +454,23 @@ export function A4RecordSheet({
                 <td className="border border-foreground p-1 font-medium text-xs">体温 (℃)</td>
                 <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {morningVitals.length > 0
-                    ? morningVitals.map((v, i) => `${v.time || v.timestamp?.slice(11, 16)} ${v.temperature ?? ""}℃`).join("\n")
+                    ? morningVitals.map((v, i) => (
+                        <div key={i}>{`${v.time || v.timestamp?.slice(11, 16)} ${v.temperature ?? ""}℃`}</div>
+                      ))
                     : ""}
                 </td>
                 <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {afternoonVitals.length > 0
-                    ? afternoonVitals.map((v, i) => `${v.time || v.timestamp?.slice(11, 16)} ${v.temperature ?? ""}℃`).join("\n")
+                    ? afternoonVitals.map((v, i) => (
+                        <div key={i}>{`${v.time || v.timestamp?.slice(11, 16)} ${v.temperature ?? ""}℃`}</div>
+                      ))
                     : ""}
                 </td>
                 <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {eveningVitals.length > 0
-                    ? eveningVitals.map((v, i) => `${v.time || v.timestamp?.slice(11, 16)} ${v.temperature ?? ""}℃`).join("\n")
+                    ? eveningVitals.map((v, i) => (
+                        <div key={i}>{`${v.time || v.timestamp?.slice(11, 16)} ${v.temperature ?? ""}℃`}</div>
+                      ))
                     : ""}
                 </td>
                 <td className="border border-foreground p-1 text-xs">
@@ -428,23 +483,23 @@ export function A4RecordSheet({
                 <td className="border border-foreground p-1 font-medium text-xs">血圧 (mmHg)</td>
                 <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {morningVitals.length > 0
-                    ? morningVitals
-                        .map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.bloodPressureSystolic ?? ""}/${v.bloodPressureDiastolic ?? ""}`)
-                        .join("\n")
+                    ? morningVitals.map((v, i) => (
+                        <div key={i}>{`${v.time || v.timestamp?.slice(11, 16)} ${v.bloodPressureSystolic ?? ""}/${v.bloodPressureDiastolic ?? ""}`}</div>
+                      ))
                     : ""}
                 </td>
                 <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {afternoonVitals.length > 0
-                    ? afternoonVitals
-                        .map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.bloodPressureSystolic ?? ""}/${v.bloodPressureDiastolic ?? ""}`)
-                        .join("\n")
+                    ? afternoonVitals.map((v, i) => (
+                        <div key={i}>{`${v.time || v.timestamp?.slice(11, 16)} ${v.bloodPressureSystolic ?? ""}/${v.bloodPressureDiastolic ?? ""}`}</div>
+                      ))
                     : ""}
                 </td>
                 <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {eveningVitals.length > 0
-                    ? eveningVitals
-                        .map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.bloodPressureSystolic ?? ""}/${v.bloodPressureDiastolic ?? ""}`)
-                        .join("\n")
+                    ? eveningVitals.map((v, i) => (
+                        <div key={i}>{`${v.time || v.timestamp?.slice(11, 16)} ${v.bloodPressureSystolic ?? ""}/${v.bloodPressureDiastolic ?? ""}`}</div>
+                      ))
                     : ""}
                 </td>
                 <td className="border border-foreground p-1 text-xs">
@@ -457,17 +512,23 @@ export function A4RecordSheet({
                 <td className="border border-foreground p-1 font-medium text-xs">脈拍 (回/分)</td>
                 <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {morningVitals.length > 0
-                    ? morningVitals.map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.heartRate ?? ""}`).join("\n")
+                    ? morningVitals.map((v, i) => (
+                        <div key={i}>{`${v.time || v.timestamp?.slice(11, 16)} ${v.heartRate ?? ""}`}</div>
+                      ))
                     : ""}
                 </td>
                 <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {afternoonVitals.length > 0
-                    ? afternoonVitals.map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.heartRate ?? ""}`).join("\n")
+                    ? afternoonVitals.map((v, i) => (
+                        <div key={i}>{`${v.time || v.timestamp?.slice(11, 16)} ${v.heartRate ?? ""}`}</div>
+                      ))
                     : ""}
                 </td>
                 <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {eveningVitals.length > 0
-                    ? eveningVitals.map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.heartRate ?? ""}`).join("\n")
+                    ? eveningVitals.map((v, i) => (
+                        <div key={i}>{`${v.time || v.timestamp?.slice(11, 16)} ${v.heartRate ?? ""}`}</div>
+                      ))
                     : ""}
                 </td>
                 <td className="border border-foreground p-1 text-xs">
@@ -480,17 +541,23 @@ export function A4RecordSheet({
                 <td className="border border-foreground p-1 font-medium text-xs">呼吸数 (回/分)</td>
                 <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {morningVitals.length > 0
-                    ? morningVitals.map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.respiratoryRate ?? ""}`).join("\n")
+                    ? morningVitals.map((v, i) => (
+                        <div key={i}>{`${v.time || v.timestamp?.slice(11, 16)} ${v.respiratoryRate ?? ""}`}</div>
+                      ))
                     : ""}
                 </td>
                 <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {afternoonVitals.length > 0
-                    ? afternoonVitals.map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.respiratoryRate ?? ""}`).join("\n")
+                    ? afternoonVitals.map((v, i) => (
+                        <div key={i}>{`${v.time || v.timestamp?.slice(11, 16)} ${v.respiratoryRate ?? ""}`}</div>
+                      ))
                     : ""}
                 </td>
                 <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {eveningVitals.length > 0
-                    ? eveningVitals.map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.respiratoryRate ?? ""}`).join("\n")
+                    ? eveningVitals.map((v, i) => (
+                        <div key={i}>{`${v.time || v.timestamp?.slice(11, 16)} ${v.respiratoryRate ?? ""}`}</div>
+                      ))
                     : ""}
                 </td>
                 <td className="border border-foreground p-1 text-xs">
@@ -503,17 +570,23 @@ export function A4RecordSheet({
                 <td className="border border-foreground p-1 font-medium text-xs">SpO2 (%)</td>
                 <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {morningVitals.length > 0
-                    ? morningVitals.map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.oxygenSaturation ?? ""}`).join("\n")
+                    ? morningVitals.map((v, i) => (
+                        <div key={i}>{`${v.time || v.timestamp?.slice(11, 16)} ${v.oxygenSaturation ?? ""}`}</div>
+                      ))
                     : ""}
                 </td>
                 <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {afternoonVitals.length > 0
-                    ? afternoonVitals.map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.oxygenSaturation ?? ""}`).join("\n")
+                    ? afternoonVitals.map((v, i) => (
+                        <div key={i}>{`${v.time || v.timestamp?.slice(11, 16)} ${v.oxygenSaturation ?? ""}`}</div>
+                      ))
                     : ""}
                 </td>
                 <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {eveningVitals.length > 0
-                    ? eveningVitals.map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.oxygenSaturation ?? ""}`).join("\n")
+                    ? eveningVitals.map((v, i) => (
+                        <div key={i}>{`${v.time || v.timestamp?.slice(11, 16)} ${v.oxygenSaturation ?? ""}`}</div>
+                      ))
                     : ""}
                 </td>
                 <td className="border border-foreground p-1 text-xs">
@@ -643,23 +716,7 @@ export function A4RecordSheet({
                 </div>
               </div>
             </div>
-            <div>
-              <div className="border border-foreground">
-                <div className="bg-muted p-2 font-bold text-center">バイタルサイン</div>
-                <div className="p-3 min-h-[80px]">
-                  {getCareRecordsByType("vitals").map((record, index) => (
-                    <div key={index} className="text-xs mb-1">
-                      ✓ {record.time} - 測定完了
-                      {record.measurementCondition && (
-                        <div className="ml-2 text-gray-600">
-                          状態: {translateToJapanese(record.measurementCondition)}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+            {/* バイタルサインの重複表示を削除しました（詳細は上の表と詳細情報にて表示） */}
             <div>
               <div className="border border-foreground">
                 <div className="bg-muted p-2 font-bold text-center">呼吸管理</div>
