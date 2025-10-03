@@ -11,7 +11,6 @@ export interface CareEvent {
 
 export interface UserProfile {
   id: string
-  serviceType?: "daily-care" | "after-school" | "day-support" | "group-home" | "home-care"
   name: string
   dateOfBirth?: string
   medicalNumber?: string
