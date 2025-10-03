@@ -27,6 +27,44 @@ export interface UserProfile {
   updatedAt: string
 }
 
+// ケース記録・サービス実績表の型定義
+export interface CaseRecord {
+  id: string
+  userId: string
+  date: string
+  dayOfWeek: string
+  staff: string[]
+  vitals: { time: string; temperature: number }[]
+  excretion: { time: string; urine: string; stool: string }[]
+  hydration: { time: string; content: string; amount?: string }[]
+  oralIntake: { time: string; food: string; amount: string; notes: string }[]
+  eyeDrops: { time: string; medication: string; eye: string }[]
+  bathing: boolean
+  seizures: { occurred: boolean; details?: string }
+  other: string
+  posture: { am: string; pm: string }
+  choking: boolean
+  expression: "明るい" | "暗い" | ""
+  lipPursing: boolean
+  otherObservations: string
+  massage: { areas: string[]; condition: string; content: string }
+  healthManagement: {
+    abdominalDistension: "－" | "軽" | "＋" | ""
+    bowelSounds: "弱" | "良" | "亢進" | ""
+    gastrostomyAbnormality: boolean
+    skinTrouble: boolean
+  }
+  physicalFunction: string
+  contracturePrevention: { progressingContractures: string[]; careDetails: string }
+  physicalRestraint: { buggy: boolean; bedCushion: boolean; details: string }
+  specialNotes: string
+  activities: string
+  staffSignatures: string[]
+  createdAt: string
+  updatedAt: string
+  [key: string]: any
+}
+
 export class DataStorageService {
   private static readonly CARE_EVENTS_KEY = "careEvents"
   private static readonly USER_PROFILES_KEY = "userProfiles"
@@ -236,6 +274,94 @@ export class DataStorageService {
     } catch (error) {
       console.error("[v0] Failed to save form options:", error)
       throw new Error("フォーム選択項目の保存に失敗しました")
+    }
+  }
+
+  // Case Records Management
+  private static readonly CASE_RECORDS_KEY = "caseRecords"
+  // CaseRecord type is defined at top-level
+
+  static saveCaseRecord(record: Partial<CaseRecord>): CaseRecord {
+    try {
+      const records: CaseRecord[] = this.getAllCaseRecords()
+      const now = new Date().toISOString()
+
+      const newRecord: CaseRecord = {
+        id: (record as any).id || `case-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        userId: record.userId || "",
+        date: record.date || new Date().toISOString().split("T")[0],
+        dayOfWeek: record.dayOfWeek || "",
+        staff: record.staff || [],
+        vitals: record.vitals || [],
+        excretion: record.excretion || [],
+        hydration: record.hydration || [],
+        oralIntake: record.oralIntake || [],
+        eyeDrops: record.eyeDrops || [],
+        bathing: record.bathing || false,
+        seizures: record.seizures || { occurred: false },
+        other: record.other || "",
+        posture: record.posture || { am: "", pm: "" },
+        choking: record.choking || false,
+        expression: (record as any).expression || "",
+        lipPursing: record.lipPursing || false,
+        otherObservations: record.otherObservations || "",
+        massage: record.massage || { areas: [], condition: "", content: "" },
+        healthManagement:
+          record.healthManagement ||
+          ({ abdominalDistension: "", bowelSounds: "", gastrostomyAbnormality: false, skinTrouble: false } as any),
+        physicalFunction: record.physicalFunction || "",
+        contracturePrevention: record.contracturePrevention || { progressingContractures: [], careDetails: "" },
+        physicalRestraint: record.physicalRestraint || { buggy: false, bedCushion: false, details: "" },
+        specialNotes: record.specialNotes || "",
+        activities: record.activities || "",
+        staffSignatures: record.staffSignatures || [],
+        createdAt: record.createdAt || now,
+        updatedAt: now,
+      }
+
+      const existingIndex = records.findIndex((r) => r.id === newRecord.id)
+      if (existingIndex >= 0) {
+        records[existingIndex] = newRecord
+      } else {
+        records.push(newRecord)
+      }
+
+      localStorage.setItem(this.CASE_RECORDS_KEY, JSON.stringify(records))
+      return newRecord
+    } catch (error) {
+      console.error("[v0] Failed to save case record:", error)
+      throw new Error("ケース記録の保存に失敗しました")
+    }
+  }
+
+  static getAllCaseRecords(): CaseRecord[] {
+    try {
+      const data = localStorage.getItem(this.CASE_RECORDS_KEY)
+      return data ? JSON.parse(data) : []
+    } catch (error) {
+      console.error("[v0] Failed to load case records:", error)
+      return []
+    }
+  }
+
+  static getCaseRecordsByUserId(userId: string): CaseRecord[] {
+    return this.getAllCaseRecords().filter((record) => record.userId === userId)
+  }
+
+  static getCaseRecordByDate(userId: string, date: string): CaseRecord | null {
+    const records = this.getCaseRecordsByUserId(userId)
+    return records.find((record) => record.date === date) || null
+  }
+
+  static deleteCaseRecord(recordId: string): boolean {
+    try {
+      const records = this.getAllCaseRecords()
+      const filtered = records.filter((r) => r.id !== recordId)
+      localStorage.setItem(this.CASE_RECORDS_KEY, JSON.stringify(filtered))
+      return true
+    } catch (error) {
+      console.error("[v0] Failed to delete case record:", error)
+      return false
     }
   }
 
