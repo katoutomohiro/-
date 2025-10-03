@@ -329,33 +329,10 @@ export default function WorldClassSoulCareApp() {
   }, [generateDailyLog, toast])
 
   const handleA4RecordSheetPrint = useCallback(() => {
-    const printWindow = window.open("", "_blank")
-    if (printWindow) {
-      const recordSheetElement = document.getElementById("a4-record-sheet")
-      if (recordSheetElement) {
-        printWindow.document.write(`
-          <!DOCTYPE html>
-          <html>
-            <head>
-              <title>介護記録用紙 - ${selectedUser}</title>
-              <style>
-                @media print {
-                  @page { margin: 0; size: A4; }
-                  body { margin: 0; font-family: sans-serif; }
-                }
-                ${document.head.querySelector("style")?.innerHTML || ""}
-              </style>
-            </head>
-            <body>
-              ${recordSheetElement.outerHTML}
-            </body>
-          </html>
-        `)
-        printWindow.document.close()
-        printWindow.print()
-      }
-    }
-  }, [selectedUser])
+    // 印刷は現在表示しているモーダルの内容に対して行う
+    // 表示中の #a4-record-sheet 要素に print 用スタイルが適用されるよう window.print() を使う
+    window.print()
+  }, [])
 
   const handleDataChange = useCallback(() => {
     generateDailyLog()

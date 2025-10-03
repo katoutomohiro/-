@@ -359,7 +359,15 @@ export function A4RecordSheet({
   const eveningVitals = getVitalsByTimeOfDay("evening")
 
   return (
-    <div className="w-full max-w-[210mm] mx-auto bg-white text-black print:shadow-none shadow-lg">
+    <div className="w-full max-w-[210mm] mx-auto bg-white text-black print:shadow-none shadow-lg" aria-hidden={false}>
+      <style>{`@media print {
+        @page { size: A4; margin: 10mm }
+        html, body { height: auto; }
+        /* モーダルやボタンなど印刷に不要な要素を非表示にするためのユーティリティ */
+        .no-print { display: none !important }
+        /* テーブルセルの改行を確実に表示 */
+        .whitespace-pre-line { white-space: pre-line }
+      }`}</style>
       <div className="min-h-[297mm] p-6 font-sans text-sm leading-tight">
         <div className="border-2 border-foreground mb-4">
           <div className="bg-muted p-2 border-b border-foreground">
