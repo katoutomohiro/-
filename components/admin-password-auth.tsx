@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useToast } from "@/components/ui/toast"
+import { useToast } from "@/hooks/use-toast"
 import { AdminSettings } from "@/components/admin-settings"
 import { FormOptionsManager } from "@/components/form-options-manager"
 
@@ -25,7 +25,6 @@ export function AdminPasswordAuth({ onUserNamesUpdate, onAppTitleUpdate }: Admin
   const [currentPassword, setCurrentPassword] = useState("")
   const { toast } = useToast()
 
-  // デフォルトパスワード: 1122
   const getStoredPassword = () => {
     return localStorage.getItem("admin-password") || "1122"
   }
@@ -36,15 +35,14 @@ export function AdminPasswordAuth({ onUserNamesUpdate, onAppTitleUpdate }: Admin
       setIsAuthenticated(true)
       setPassword("")
       toast({
-        variant: "default",
         title: "認証成功",
         description: "管理者機能にアクセスできます",
       })
     } else {
       toast({
-        variant: "destructive",
         title: "認証失敗",
         description: "パスワードが正しくありません",
+        variant: "destructive",
       })
       setPassword("")
     }
@@ -53,7 +51,6 @@ export function AdminPasswordAuth({ onUserNamesUpdate, onAppTitleUpdate }: Admin
   const handleLogout = () => {
     setIsAuthenticated(false)
     toast({
-      variant: "default",
       title: "ログアウト",
       description: "管理者機能からログアウトしました",
     })
@@ -64,27 +61,27 @@ export function AdminPasswordAuth({ onUserNamesUpdate, onAppTitleUpdate }: Admin
 
     if (currentPassword !== storedPassword) {
       toast({
-        variant: "destructive",
         title: "パスワード変更失敗",
         description: "現在のパスワードが正しくありません",
+        variant: "destructive",
       })
       return
     }
 
     if (newPassword.length < 4) {
       toast({
-        variant: "destructive",
         title: "パスワード変更失敗",
         description: "新しいパスワードは4文字以上で入力してください",
+        variant: "destructive",
       })
       return
     }
 
     if (newPassword !== confirmPassword) {
       toast({
-        variant: "destructive",
         title: "パスワード変更失敗",
         description: "新しいパスワードと確認用パスワードが一致しません",
+        variant: "destructive",
       })
       return
     }
@@ -96,7 +93,6 @@ export function AdminPasswordAuth({ onUserNamesUpdate, onAppTitleUpdate }: Admin
     setConfirmPassword("")
 
     toast({
-      variant: "default",
       title: "パスワード変更完了",
       description: "管理者パスワードが正常に変更されました",
     })

@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useToast } from "@/components/ui/toast"
+import { useToast } from "@/hooks/use-toast"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface FormOption {
@@ -441,16 +441,15 @@ export function FormOptionsManager() {
       localStorage.setItem("form-options", JSON.stringify(newOptions))
       setFormOptions(newOptions)
       toast({
-        variant: "default",
         title: "保存完了",
         description: "フォーム選択項目を保存しました",
       })
     } catch (error) {
       console.error("[v0] Failed to save form options:", error)
       toast({
-        variant: "destructive",
         title: "保存エラー",
         description: "フォーム選択項目の保存に失敗しました",
+        variant: "destructive",
       })
     }
   }
@@ -458,9 +457,9 @@ export function FormOptionsManager() {
   const addOption = (fieldKey: keyof FormOptionsData) => {
     if (!newOption.label.trim() || !newOption.value.trim()) {
       toast({
-        variant: "destructive",
         title: "入力エラー",
         description: "ラベルと値の両方を入力してください",
+        variant: "destructive",
       })
       return
     }
@@ -489,7 +488,6 @@ export function FormOptionsManager() {
   const resetAllToDefault = () => {
     saveFormOptions(defaultFormOptions)
     toast({
-      variant: "default",
       title: "リセット完了",
       description: "全ての選択項目をデフォルトに戻しました",
     })
