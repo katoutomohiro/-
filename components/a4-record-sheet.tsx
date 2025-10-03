@@ -85,14 +85,48 @@ export function A4RecordSheet({
       "semi-fowler": "半座位",
       fowler: "座位",
 
-      // Measurement sites and methods
+      // Measurement sites - Temperature
       oral: "口腔",
       axillary: "腋窩",
       rectal: "直腸",
       tympanic: "鼓膜",
       temporal: "側頭",
+      "non-contact-forehead": "額（非接触）",
+      forehead: "額",
       room: "室温",
       body: "体温",
+
+      // Measurement sites - Blood Pressure
+      "upper-arm": "上腕",
+      forearm: "前腕",
+      wrist: "手首",
+      thigh: "大腿",
+      calf: "下腿",
+
+      // Heart Rhythm
+      regular: "整",
+      irregular: "不整",
+      "regularly-irregular": "規則的不整",
+      "irregularly-irregular": "不規則的不整",
+
+      // Respiratory Pattern
+      "normal-breathing": "正常",
+      tachypnea: "頻呼吸",
+      bradypnea: "徐呼吸",
+      apnea: "無呼吸",
+      "cheyne-stokes": "チェーンストークス",
+      kussmaul: "クスマウル",
+      biot: "ビオー",
+      shallow: "浅い",
+      deep: "深い",
+      labored: "努力性",
+
+      // Oxygenation Level
+      "normal-oxygenation": "正常",
+      "mild-hypoxia": "軽度低酸素",
+      "moderate-hypoxia": "中等度低酸素",
+      "severe-hypoxia": "重度低酸素",
+      hyperoxia: "高酸素",
 
       // Tube feeding specifics
       syringe: "シリンジ",
@@ -136,8 +170,6 @@ export function A4RecordSheet({
       "oxygen-saturation": "酸素飽和度",
       pulse: "脈拍",
       rhythm: "リズム",
-      regular: "整",
-      irregular: "不整",
       strong: "強",
       weak: "弱",
       rapid: "頻",
@@ -349,9 +381,9 @@ export function A4RecordSheet({
     return details.join(" / ")
   }
 
-  // Return all vitals records for a given timeOfDay (may be multiple entries)
   const getVitalsByTimeOfDay = (timeOfDay: string) => {
-    return vitalsRecords.filter((record) => record.timeOfDay === timeOfDay)
+    const filtered = vitalsRecords.filter((record) => record.timeOfDay === timeOfDay)
+    return filtered.length > 0 ? filtered[filtered.length - 1] : null
   }
 
   const morningVitals = getVitalsByTimeOfDay("morning")
@@ -359,15 +391,7 @@ export function A4RecordSheet({
   const eveningVitals = getVitalsByTimeOfDay("evening")
 
   return (
-    <div className="w-full max-w-[210mm] mx-auto bg-white text-black print:shadow-none shadow-lg" aria-hidden={false}>
-      <style>{`@media print {
-        @page { size: A4; margin: 10mm }
-        html, body { height: auto; }
-        /* モーダルやボタンなど印刷に不要な要素を非表示にするためのユーティリティ */
-        .no-print { display: none !important }
-        /* テーブルセルの改行を確実に表示 */
-        .whitespace-pre-line { white-space: pre-line }
-      }`}</style>
+    <div className="w-full max-w-[210mm] mx-auto bg-white text-black print:shadow-none shadow-lg">
       <div className="min-h-[297mm] p-6 font-sans text-sm leading-tight">
         <div className="border-2 border-foreground mb-4">
           <div className="bg-muted p-2 border-b border-foreground">
@@ -390,212 +414,94 @@ export function A4RecordSheet({
 
         <div className="mb-6">
           <div className="bg-primary text-primary-foreground p-2 text-center font-bold mb-2">バイタルサイン</div>
-          <table className="w-full border-collapse border border-foreground text-xs">
+          <table className="w-full border-collapse border border-foreground">
             <thead>
               <tr className="bg-muted">
-                <th className="border border-foreground p-1 text-left w-36">項目</th>
-                <th className="border border-foreground p-1 text-center w-28">朝</th>
-                <th className="border border-foreground p-1 text-center w-28">昼</th>
-                <th className="border border-foreground p-1 text-center w-28">夕</th>
-                <th className="border border-foreground p-1 text-center w-40">備考</th>
+                <th className="border border-foreground p-2 text-left">項目</th>
+                <th className="border border-foreground p-2 text-center">朝</th>
+                <th className="border border-foreground p-2 text-center">昼</th>
+                <th className="border border-foreground p-2 text-center">夕</th>
+                <th className="border border-foreground p-2 text-center">備考</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td className="border border-foreground p-1 font-medium text-xs">
-                  体温 (℃)
-                  <br />体温測定部位
+                <td className="border border-foreground p-2 font-medium">体温 (℃)</td>
+                <td className="border border-foreground p-2 text-center">{morningVitals?.temperature || ""}</td>
+                <td className="border border-foreground p-2 text-center">{afternoonVitals?.temperature || ""}</td>
+                <td className="border border-foreground p-2 text-center">{eveningVitals?.temperature || ""}</td>
+                <td className="border border-foreground p-2 text-xs">
+                  {translateToJapanese(
+                    morningVitals?.temperatureSite ||
+                      afternoonVitals?.temperatureSite ||
+                      eveningVitals?.temperatureSite,
+                  ) || ""}
                 </td>
-                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
-                  {morningVitals.length > 0
-                    ? morningVitals.map((v, i) => (
-                        <div key={i}>
-                          {(v.temperatureSite || v.temperaturePosition) ? `${translateToJapanese(v.temperatureSite || v.temperaturePosition)} | ` : ""}
-                          {v.time || v.timestamp?.slice(11, 16)} {v.temperature ?? ""}℃
-                        </div>
-                      ))
-                    : ""}
-                </td>
-                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
-                  {afternoonVitals.length > 0
-                    ? afternoonVitals.map((v, i) => (
-                        <div key={i}>
-                          {(v.temperatureSite || v.temperaturePosition) ? `${translateToJapanese(v.temperatureSite || v.temperaturePosition)} | ` : ""}
-                          {v.time || v.timestamp?.slice(11, 16)} {v.temperature ?? ""}℃
-                        </div>
-                      ))
-                    : ""}
-                </td>
-                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
-                  {eveningVitals.length > 0
-                    ? eveningVitals.map((v, i) => (
-                        <div key={i}>
-                          {(v.temperatureSite || v.temperaturePosition) ? `${translateToJapanese(v.temperatureSite || v.temperaturePosition)} | ` : ""}
-                          {v.time || v.timestamp?.slice(11, 16)} {v.temperature ?? ""}℃
-                        </div>
-                      ))
-                    : ""}
-                </td>
-                <td className="border border-foreground p-1 text-xs"></td>
               </tr>
-
               <tr className="bg-muted/30">
-                <td className="border border-foreground p-1 font-medium text-xs">
-                  血圧 (mmHg)
-                  <br />測定部位
-                </td>
-                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
-                  {morningVitals.length > 0
-                    ? morningVitals.map((v, i) => (
-                        <div key={i}>
-                          {(v.bloodPressureSite || v.bloodPressurePosition) ? `${translateToJapanese(v.bloodPressureSite || v.bloodPressurePosition)} | ` : ""}
-                          {v.time || v.timestamp?.slice(11, 16)} {v.bloodPressureSystolic ?? v.systolicBP ?? ""}/{v.bloodPressureDiastolic ?? v.diastolicBP ?? ""}
-                        </div>
-                      ))
+                <td className="border border-foreground p-2 font-medium">血圧 (mmHg)</td>
+                <td className="border border-foreground p-2 text-center">
+                  {morningVitals?.bloodPressureSystolic && morningVitals?.bloodPressureDiastolic
+                    ? `${morningVitals.bloodPressureSystolic}/${morningVitals.bloodPressureDiastolic}`
                     : ""}
                 </td>
-                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
-                  {afternoonVitals.length > 0
-                    ? afternoonVitals.map((v, i) => (
-                        <div key={i}>
-                          {(v.bloodPressureSite || v.bloodPressurePosition) ? `${translateToJapanese(v.bloodPressureSite || v.bloodPressurePosition)} | ` : ""}
-                          {v.time || v.timestamp?.slice(11, 16)} {v.bloodPressureSystolic ?? v.systolicBP ?? ""}/{v.bloodPressureDiastolic ?? v.diastolicBP ?? ""}
-                        </div>
-                      ))
+                <td className="border border-foreground p-2 text-center">
+                  {afternoonVitals?.bloodPressureSystolic && afternoonVitals?.bloodPressureDiastolic
+                    ? `${afternoonVitals.bloodPressureSystolic}/${afternoonVitals.bloodPressureDiastolic}`
                     : ""}
                 </td>
-                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
-                  {eveningVitals.length > 0
-                    ? eveningVitals.map((v, i) => (
-                        <div key={i}>
-                          {(v.bloodPressureSite || v.bloodPressurePosition) ? `${translateToJapanese(v.bloodPressureSite || v.bloodPressurePosition)} | ` : ""}
-                          {v.time || v.timestamp?.slice(11, 16)} {v.bloodPressureSystolic ?? v.systolicBP ?? ""}/{v.bloodPressureDiastolic ?? v.diastolicBP ?? ""}
-                        </div>
-                      ))
+                <td className="border border-foreground p-2 text-center">
+                  {eveningVitals?.bloodPressureSystolic && eveningVitals?.bloodPressureDiastolic
+                    ? `${eveningVitals.bloodPressureSystolic}/${eveningVitals.bloodPressureDiastolic}`
                     : ""}
                 </td>
-                <td className="border border-foreground p-1 text-xs"></td>
+                <td className="border border-foreground p-2 text-xs">
+                  {translateToJapanese(
+                    morningVitals?.bloodPressureSite ||
+                      afternoonVitals?.bloodPressureSite ||
+                      eveningVitals?.bloodPressureSite,
+                  ) || ""}
+                </td>
               </tr>
-
               <tr>
-                <td className="border border-foreground p-1 font-medium text-xs">
-                  脈拍 (回/分)
-                  <br />心拍リズム
-                </td>
-                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
-                  {morningVitals.length > 0
-                    ? morningVitals.map((v, i) => (
-                        <div key={i}>
-                          {v.heartRhythm ? `${translateToJapanese(v.heartRhythm)} | ` : ""}
-                          {v.time || v.timestamp?.slice(11, 16)} {v.heartRate ?? ""}
-                        </div>
-                      ))
-                    : ""}
-                </td>
-                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
-                  {afternoonVitals.length > 0
-                    ? afternoonVitals.map((v, i) => (
-                        <div key={i}>
-                          {v.heartRhythm ? `${translateToJapanese(v.heartRhythm)} | ` : ""}
-                          {v.time || v.timestamp?.slice(11, 16)} {v.heartRate ?? ""}
-                        </div>
-                      ))
-                    : ""}
-                </td>
-                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
-                  {eveningVitals.length > 0
-                    ? eveningVitals.map((v, i) => (
-                        <div key={i}>
-                          {v.heartRhythm ? `${translateToJapanese(v.heartRhythm)} | ` : ""}
-                          {v.time || v.timestamp?.slice(11, 16)} {v.heartRate ?? ""}
-                        </div>
-                      ))
-                    : ""}
-                </td>
-                <td className="border border-foreground p-1 text-xs">
-                  {translateToJapanese(morningVitals[0]?.heartRhythm || afternoonVitals[0]?.heartRhythm || eveningVitals[0]?.heartRhythm) || ""}
+                <td className="border border-foreground p-2 font-medium">脈拍 (回/分)</td>
+                <td className="border border-foreground p-2 text-center">{morningVitals?.heartRate || ""}</td>
+                <td className="border border-foreground p-2 text-center">{afternoonVitals?.heartRate || ""}</td>
+                <td className="border border-foreground p-2 text-center">{eveningVitals?.heartRate || ""}</td>
+                <td className="border border-foreground p-2 text-xs">
+                  {translateToJapanese(
+                    morningVitals?.heartRhythm || afternoonVitals?.heartRhythm || eveningVitals?.heartRhythm,
+                  ) || ""}
                 </td>
               </tr>
-
               <tr className="bg-muted/30">
-                <td className="border border-foreground p-1 font-medium text-xs">
-                  呼吸数 (回/分)
-                  <br />呼吸パターン
+                <td className="border border-foreground p-2 font-medium">呼吸数 (回/分)</td>
+                <td className="border border-foreground p-2 text-center">{morningVitals?.respiratoryRate || ""}</td>
+                <td className="border border-foreground p-2 text-center">{afternoonVitals?.respiratoryRate || ""}</td>
+                <td className="border border-foreground p-2 text-center">{eveningVitals?.respiratoryRate || ""}</td>
+                <td className="border border-foreground p-2 text-xs">
+                  {translateToJapanese(
+                    morningVitals?.breathingPattern ||
+                      afternoonVitals?.breathingPattern ||
+                      eveningVitals?.breathingPattern,
+                  ) || ""}
                 </td>
-                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
-                  {morningVitals.length > 0
-                    ? morningVitals.map((v, i) => (
-                        <div key={i}>
-                          {(v.breathingPattern || v.respiratoryPattern) ? `${translateToJapanese(v.breathingPattern || v.respiratoryPattern)} | ` : ""}
-                          {v.time || v.timestamp?.slice(11, 16)} {v.respiratoryRate ?? ""}
-                        </div>
-                      ))
-                    : ""}
-                </td>
-                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
-                  {afternoonVitals.length > 0
-                    ? afternoonVitals.map((v, i) => (
-                        <div key={i}>
-                          {(v.breathingPattern || v.respiratoryPattern) ? `${translateToJapanese(v.breathingPattern || v.respiratoryPattern)} | ` : ""}
-                          {v.time || v.timestamp?.slice(11, 16)} {v.respiratoryRate ?? ""}
-                        </div>
-                      ))
-                    : ""}
-                </td>
-                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
-                  {eveningVitals.length > 0
-                    ? eveningVitals.map((v, i) => (
-                        <div key={i}>
-                          {(v.breathingPattern || v.respiratoryPattern) ? `${translateToJapanese(v.breathingPattern || v.respiratoryPattern)} | ` : ""}
-                          {v.time || v.timestamp?.slice(11, 16)} {v.respiratoryRate ?? ""}
-                        </div>
-                      ))
-                    : ""}
-                </td>
-                <td className="border border-foreground p-1 text-xs"></td>
               </tr>
-
               <tr>
-                <td className="border border-foreground p-1 font-medium text-xs">
-                  SpO2 (%)
-                  <br />酸素化レベル
+                <td className="border border-foreground p-2 font-medium">SpO2 (%)</td>
+                <td className="border border-foreground p-2 text-center">{morningVitals?.oxygenSaturation || ""}</td>
+                <td className="border border-foreground p-2 text-center">{afternoonVitals?.oxygenSaturation || ""}</td>
+                <td className="border border-foreground p-2 text-center">{eveningVitals?.oxygenSaturation || ""}</td>
+                <td className="border border-foreground p-2 text-xs">
+                  {translateToJapanese(
+                    morningVitals?.oxygenLevel || afternoonVitals?.oxygenLevel || eveningVitals?.oxygenLevel,
+                  ) || ""}
                 </td>
-                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
-                  {morningVitals.length > 0
-                    ? morningVitals.map((v, i) => (
-                        <div key={i}>
-                          {(v.oxygenationLevel || v.oxygenLevel || v.oxygenSaturation) ? `${translateToJapanese(v.oxygenationLevel || v.oxygenLevel || v.oxygenSaturation)} | ` : ""}
-                          {v.time || v.timestamp?.slice(11, 16)} {v.oxygenSaturation ?? v.spo2 ?? ""}
-                        </div>
-                      ))
-                    : ""}
-                </td>
-                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
-                  {afternoonVitals.length > 0
-                    ? afternoonVitals.map((v, i) => (
-                        <div key={i}>
-                          {(v.oxygenationLevel || v.oxygenLevel || v.oxygenSaturation) ? `${translateToJapanese(v.oxygenationLevel || v.oxygenLevel || v.oxygenSaturation)} | ` : ""}
-                          {v.time || v.timestamp?.slice(11, 16)} {v.oxygenSaturation ?? v.spo2 ?? ""}
-                        </div>
-                      ))
-                    : ""}
-                </td>
-                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
-                  {eveningVitals.length > 0
-                    ? eveningVitals.map((v, i) => (
-                        <div key={i}>
-                          {(v.oxygenationLevel || v.oxygenLevel || v.oxygenSaturation) ? `${translateToJapanese(v.oxygenationLevel || v.oxygenLevel || v.oxygenSaturation)} | ` : ""}
-                          {v.time || v.timestamp?.slice(11, 16)} {v.oxygenSaturation ?? v.spo2 ?? ""}
-                        </div>
-                      ))
-                    : ""}
-                </td>
-                <td className="border border-foreground p-1 text-xs"></td>
               </tr>
             </tbody>
           </table>
         </div>
-        {/* バイタルサイン詳細情報セクションは削除済み */}
+
         <div className="mb-6">
           <div className="bg-secondary text-secondary-foreground p-2 text-center font-bold mb-2">ケア記録</div>
           <div className="grid grid-cols-2 gap-4">
@@ -713,7 +619,23 @@ export function A4RecordSheet({
                 </div>
               </div>
             </div>
-            {/* バイタルサインの重複表示を削除しました（詳細は上の表と詳細情報にて表示） */}
+            <div>
+              <div className="border border-foreground">
+                <div className="bg-muted p-2 font-bold text-center">バイタルサイン</div>
+                <div className="p-3 min-h-[80px]">
+                  {getCareRecordsByType("vitals").map((record, index) => (
+                    <div key={index} className="text-xs mb-1">
+                      ✓ {record.time} - 測定完了
+                      {record.measurementCondition && (
+                        <div className="ml-2 text-gray-600">
+                          状態: {translateToJapanese(record.measurementCondition)}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
             <div>
               <div className="border border-foreground">
                 <div className="bg-muted p-2 font-bold text-center">呼吸管理</div>
