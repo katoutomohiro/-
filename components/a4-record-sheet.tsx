@@ -383,7 +383,7 @@ export function A4RecordSheet({
 
   const getVitalsByTimeOfDay = (timeOfDay: string) => {
     const filtered = vitalsRecords.filter((record) => record.timeOfDay === timeOfDay)
-    return filtered.length > 0 ? filtered[filtered.length - 1] : null
+    return filtered
   }
 
   const morningVitals = getVitalsByTimeOfDay("morning")
@@ -417,85 +417,188 @@ export function A4RecordSheet({
           <table className="w-full border-collapse border border-foreground">
             <thead>
               <tr className="bg-muted">
-                <th className="border border-foreground p-2 text-left">項目</th>
-                <th className="border border-foreground p-2 text-center">朝</th>
-                <th className="border border-foreground p-2 text-center">昼</th>
-                <th className="border border-foreground p-2 text-center">夕</th>
-                <th className="border border-foreground p-2 text-center">備考</th>
+                <th className="border border-foreground p-2 text-left text-xs">項目</th>
+                <th className="border border-foreground p-2 text-center text-xs">朝</th>
+                <th className="border border-foreground p-2 text-center text-xs">昼</th>
+                <th className="border border-foreground p-2 text-center text-xs">夕</th>
+                <th className="border border-foreground p-2 text-center text-xs">備考</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td className="border border-foreground p-2 font-medium">体温 (℃)</td>
-                <td className="border border-foreground p-2 text-center">{morningVitals?.temperature || ""}</td>
-                <td className="border border-foreground p-2 text-center">{afternoonVitals?.temperature || ""}</td>
-                <td className="border border-foreground p-2 text-center">{eveningVitals?.temperature || ""}</td>
-                <td className="border border-foreground p-2 text-xs">
-                  {translateToJapanese(
-                    morningVitals?.temperatureSite ||
-                      afternoonVitals?.temperatureSite ||
-                      eveningVitals?.temperatureSite,
-                  ) || ""}
+                <td className="border border-foreground p-1 font-medium text-xs">
+                  体温 (℃)
+                  <br />
+                  体温測定部位
+                </td>
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
+                  {morningVitals.map((v, i) => (
+                    <div key={i}>
+                      {v.temperatureSite ? `${translateToJapanese(v.temperatureSite)} | ` : ""}
+                      {v.time} {v.temperature}℃
+                    </div>
+                  ))}
+                </td>
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
+                  {afternoonVitals.map((v, i) => (
+                    <div key={i}>
+                      {v.temperatureSite ? `${translateToJapanese(v.temperatureSite)} | ` : ""}
+                      {v.time} {v.temperature}℃
+                    </div>
+                  ))}
+                </td>
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
+                  {eveningVitals.map((v, i) => (
+                    <div key={i}>
+                      {v.temperatureSite ? `${translateToJapanese(v.temperatureSite)} | ` : ""}
+                      {v.time} {v.temperature}℃
+                    </div>
+                  ))}
+                </td>
+                <td className="border border-foreground p-1 text-xs"></td>
+              </tr>
+              <tr className="bg-muted/30">
+                <td className="border border-foreground p-1 font-medium text-xs">
+                  血圧 (mmHg)
+                  <br />
+                  測定部位
+                </td>
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
+                  {morningVitals.map((v, i) => (
+                    <div key={i}>
+                      {v.bloodPressureSite ? `${translateToJapanese(v.bloodPressureSite)} | ` : ""}
+                      {v.time} {v.bloodPressureSystolic}/{v.bloodPressureDiastolic}
+                    </div>
+                  ))}
+                </td>
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
+                  {afternoonVitals.map((v, i) => (
+                    <div key={i}>
+                      {v.bloodPressureSite ? `${translateToJapanese(v.bloodPressureSite)} | ` : ""}
+                      {v.time} {v.bloodPressureSystolic}/{v.bloodPressureDiastolic}
+                    </div>
+                  ))}
+                </td>
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
+                  {eveningVitals.map((v, i) => (
+                    <div key={i}>
+                      {v.bloodPressureSite ? `${translateToJapanese(v.bloodPressureSite)} | ` : ""}
+                      {v.time} {v.bloodPressureSystolic}/{v.bloodPressureDiastolic}
+                    </div>
+                  ))}
+                </td>
+                <td className="border border-foreground p-1 text-xs"></td>
+              </tr>
+              <tr>
+                <td className="border border-foreground p-1 font-medium text-xs">
+                  脈拍 (回/分)
+                  <br />
+                  心拍リズム
+                </td>
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
+                  {morningVitals.map((v, i) => (
+                    <div key={i}>
+                      {v.heartRhythm ? `${translateToJapanese(v.heartRhythm)} | ` : ""}
+                      {v.time} {v.heartRate}
+                    </div>
+                  ))}
+                </td>
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
+                  {afternoonVitals.map((v, i) => (
+                    <div key={i}>
+                      {v.heartRhythm ? `${translateToJapanese(v.heartRhythm)} | ` : ""}
+                      {v.time} {v.heartRate}
+                    </div>
+                  ))}
+                </td>
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
+                  {eveningVitals.map((v, i) => (
+                    <div key={i}>
+                      {v.heartRhythm ? `${translateToJapanese(v.heartRhythm)} | ` : ""}
+                      {v.time} {v.heartRate}
+                    </div>
+                  ))}
+                </td>
+                <td className="border border-foreground p-1 text-xs">
+                  {morningVitals[0]?.heartRhythm || afternoonVitals[0]?.heartRhythm || eveningVitals[0]?.heartRhythm
+                    ? translateToJapanese(
+                        morningVitals[0]?.heartRhythm ||
+                          afternoonVitals[0]?.heartRhythm ||
+                          eveningVitals[0]?.heartRhythm,
+                      )
+                    : ""}
                 </td>
               </tr>
               <tr className="bg-muted/30">
-                <td className="border border-foreground p-2 font-medium">血圧 (mmHg)</td>
-                <td className="border border-foreground p-2 text-center">
-                  {morningVitals?.bloodPressureSystolic && morningVitals?.bloodPressureDiastolic
-                    ? `${morningVitals.bloodPressureSystolic}/${morningVitals.bloodPressureDiastolic}`
-                    : ""}
+                <td className="border border-foreground p-1 font-medium text-xs">
+                  呼吸数 (回/分)
+                  <br />
+                  呼吸パターン
                 </td>
-                <td className="border border-foreground p-2 text-center">
-                  {afternoonVitals?.bloodPressureSystolic && afternoonVitals?.bloodPressureDiastolic
-                    ? `${afternoonVitals.bloodPressureSystolic}/${afternoonVitals.bloodPressureDiastolic}`
-                    : ""}
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
+                  {morningVitals.map((v, i) => (
+                    <div key={i}>
+                      {v.breathingPattern ? `${translateToJapanese(v.breathingPattern)} | ` : ""}
+                      {v.time} {v.respiratoryRate}
+                    </div>
+                  ))}
                 </td>
-                <td className="border border-foreground p-2 text-center">
-                  {eveningVitals?.bloodPressureSystolic && eveningVitals?.bloodPressureDiastolic
-                    ? `${eveningVitals.bloodPressureSystolic}/${eveningVitals.bloodPressureDiastolic}`
-                    : ""}
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
+                  {afternoonVitals.map((v, i) => (
+                    <div key={i}>
+                      {v.breathingPattern ? `${translateToJapanese(v.breathingPattern)} | ` : ""}
+                      {v.time} {v.respiratoryRate}
+                    </div>
+                  ))}
                 </td>
-                <td className="border border-foreground p-2 text-xs">
-                  {translateToJapanese(
-                    morningVitals?.bloodPressureSite ||
-                      afternoonVitals?.bloodPressureSite ||
-                      eveningVitals?.bloodPressureSite,
-                  ) || ""}
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
+                  {eveningVitals.map((v, i) => (
+                    <div key={i}>
+                      {v.breathingPattern ? `${translateToJapanese(v.breathingPattern)} | ` : ""}
+                      {v.time} {v.respiratoryRate}
+                    </div>
+                  ))}
                 </td>
+                <td className="border border-foreground p-1 text-xs"></td>
               </tr>
               <tr>
-                <td className="border border-foreground p-2 font-medium">脈拍 (回/分)</td>
-                <td className="border border-foreground p-2 text-center">{morningVitals?.heartRate || ""}</td>
-                <td className="border border-foreground p-2 text-center">{afternoonVitals?.heartRate || ""}</td>
-                <td className="border border-foreground p-2 text-center">{eveningVitals?.heartRate || ""}</td>
-                <td className="border border-foreground p-2 text-xs">
-                  {translateToJapanese(
-                    morningVitals?.heartRhythm || afternoonVitals?.heartRhythm || eveningVitals?.heartRhythm,
-                  ) || ""}
+                <td className="border border-foreground p-1 font-medium text-xs">
+                  SpO2 (%)
+                  <br />
+                  酸素化レベル
                 </td>
-              </tr>
-              <tr className="bg-muted/30">
-                <td className="border border-foreground p-2 font-medium">呼吸数 (回/分)</td>
-                <td className="border border-foreground p-2 text-center">{morningVitals?.respiratoryRate || ""}</td>
-                <td className="border border-foreground p-2 text-center">{afternoonVitals?.respiratoryRate || ""}</td>
-                <td className="border border-foreground p-2 text-center">{eveningVitals?.respiratoryRate || ""}</td>
-                <td className="border border-foreground p-2 text-xs">
-                  {translateToJapanese(
-                    morningVitals?.breathingPattern ||
-                      afternoonVitals?.breathingPattern ||
-                      eveningVitals?.breathingPattern,
-                  ) || ""}
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
+                  {morningVitals.map((v, i) => (
+                    <div key={i}>
+                      {v.oxygenLevel ? `${translateToJapanese(v.oxygenLevel)} | ` : ""}
+                      {v.time} {v.oxygenSaturation}
+                    </div>
+                  ))}
                 </td>
-              </tr>
-              <tr>
-                <td className="border border-foreground p-2 font-medium">SpO2 (%)</td>
-                <td className="border border-foreground p-2 text-center">{morningVitals?.oxygenSaturation || ""}</td>
-                <td className="border border-foreground p-2 text-center">{afternoonVitals?.oxygenSaturation || ""}</td>
-                <td className="border border-foreground p-2 text-center">{eveningVitals?.oxygenSaturation || ""}</td>
-                <td className="border border-foreground p-2 text-xs">
-                  {translateToJapanese(
-                    morningVitals?.oxygenLevel || afternoonVitals?.oxygenLevel || eveningVitals?.oxygenLevel,
-                  ) || ""}
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
+                  {afternoonVitals.map((v, i) => (
+                    <div key={i}>
+                      {v.oxygenLevel ? `${translateToJapanese(v.oxygenLevel)} | ` : ""}
+                      {v.time} {v.oxygenSaturation}
+                    </div>
+                  ))}
+                </td>
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
+                  {eveningVitals.map((v, i) => (
+                    <div key={i}>
+                      {v.oxygenLevel ? `${translateToJapanese(v.oxygenLevel)} | ` : ""}
+                      {v.time} {v.oxygenSaturation}
+                    </div>
+                  ))}
+                </td>
+                <td className="border border-foreground p-1 text-xs">
+                  {morningVitals[0]?.oxygenLevel || afternoonVitals[0]?.oxygenLevel || eveningVitals[0]?.oxygenLevel
+                    ? translateToJapanese(
+                        morningVitals[0]?.oxygenLevel ||
+                          afternoonVitals[0]?.oxygenLevel ||
+                          eveningVitals[0]?.oxygenLevel,
+                      )
+                    : ""}
                 </td>
               </tr>
             </tbody>
