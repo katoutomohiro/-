@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -225,6 +226,7 @@ const enhancedEventCategories = [
 export default function WorldClassSoulCareApp() {
   const [customUserNames, setCustomUserNames] = useState<string[]>([])
   const [selectedUser, setSelectedUser] = useState<string>("利用者A")
+  const router = useRouter()
   const [dailyLog, setDailyLog] = useState<any>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [currentFormType, setCurrentFormType] = useState<string | null>(null)
@@ -533,7 +535,17 @@ export default function WorldClassSoulCareApp() {
                     </Badge>
                   ))}
                 </div>
-                <Button size="sm" className="w-full">
+                <Button
+                  size="sm"
+                  className="w-full"
+                  onClick={() => {
+                    if (service.id === "life-care") {
+                      router.push("/daily-care/users")
+                    } else if (service.id === "after-school") {
+                      router.push("/after-school/users")
+                    }
+                  }}
+                >
                   {service.name}記録
                 </Button>
               </CardContent>
