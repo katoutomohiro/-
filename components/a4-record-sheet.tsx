@@ -390,139 +390,133 @@ export function A4RecordSheet({
 
         <div className="mb-6">
           <div className="bg-primary text-primary-foreground p-2 text-center font-bold mb-2">バイタルサイン</div>
-          <table className="w-full border-collapse border border-foreground">
+          <table className="w-full border-collapse border border-foreground text-xs">
             <thead>
               <tr className="bg-muted">
-                <th className="border border-foreground p-2 text-left">項目</th>
-                <th className="border border-foreground p-2 text-center">朝</th>
-                <th className="border border-foreground p-2 text-center">昼</th>
-                <th className="border border-foreground p-2 text-center">夕</th>
-                <th className="border border-foreground p-2 text-center">備考</th>
+                <th className="border border-foreground p-1 text-left w-36">項目</th>
+                <th className="border border-foreground p-1 text-center w-28">朝</th>
+                <th className="border border-foreground p-1 text-center w-28">昼</th>
+                <th className="border border-foreground p-1 text-center w-28">夕</th>
+                <th className="border border-foreground p-1 text-center w-40">備考</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td className="border border-foreground p-2 font-medium">体温 (℃)</td>
-                <td className="border border-foreground p-2 text-center whitespace-pre-line">
+                <td className="border border-foreground p-1 font-medium text-xs">体温 (℃)</td>
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {morningVitals.length > 0
-                    ? morningVitals
-                        .map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.temperature ?? ""}℃`)
-                        .join("\n")
+                    ? morningVitals.map((v, i) => `${v.time || v.timestamp?.slice(11, 16)} ${v.temperature ?? ""}℃`).join("\n")
                     : ""}
                 </td>
-                <td className="border border-foreground p-2 text-center whitespace-pre-line">
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {afternoonVitals.length > 0
-                    ? afternoonVitals
-                        .map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.temperature ?? ""}℃`)
-                        .join("\n")
+                    ? afternoonVitals.map((v, i) => `${v.time || v.timestamp?.slice(11, 16)} ${v.temperature ?? ""}℃`).join("\n")
                     : ""}
                 </td>
-                <td className="border border-foreground p-2 text-center whitespace-pre-line">
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {eveningVitals.length > 0
-                    ? eveningVitals
-                        .map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.temperature ?? ""}℃`)
-                        .join("\n")
+                    ? eveningVitals.map((v, i) => `${v.time || v.timestamp?.slice(11, 16)} ${v.temperature ?? ""}℃`).join("\n")
                     : ""}
                 </td>
-                <td className="border border-foreground p-2 text-xs">
+                <td className="border border-foreground p-1 text-xs">
                   {translateToJapanese(
                     morningVitals[0]?.temperatureSite || afternoonVitals[0]?.temperatureSite || eveningVitals[0]?.temperatureSite,
                   ) || ""}
                 </td>
               </tr>
               <tr className="bg-muted/30">
-                <td className="border border-foreground p-2 font-medium">血圧 (mmHg)</td>
-                <td className="border border-foreground p-2 text-center whitespace-pre-line">
+                <td className="border border-foreground p-1 font-medium text-xs">血圧 (mmHg)</td>
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {morningVitals.length > 0
                     ? morningVitals
                         .map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.bloodPressureSystolic ?? ""}/${v.bloodPressureDiastolic ?? ""}`)
                         .join("\n")
                     : ""}
                 </td>
-                <td className="border border-foreground p-2 text-center whitespace-pre-line">
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {afternoonVitals.length > 0
                     ? afternoonVitals
                         .map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.bloodPressureSystolic ?? ""}/${v.bloodPressureDiastolic ?? ""}`)
                         .join("\n")
                     : ""}
                 </td>
-                <td className="border border-foreground p-2 text-center whitespace-pre-line">
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {eveningVitals.length > 0
                     ? eveningVitals
                         .map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.bloodPressureSystolic ?? ""}/${v.bloodPressureDiastolic ?? ""}`)
                         .join("\n")
                     : ""}
                 </td>
-                <td className="border border-foreground p-2 text-xs">
+                <td className="border border-foreground p-1 text-xs">
                   {translateToJapanese(
                     morningVitals[0]?.bloodPressureSite || afternoonVitals[0]?.bloodPressureSite || eveningVitals[0]?.bloodPressureSite,
                   ) || ""}
                 </td>
               </tr>
               <tr>
-                <td className="border border-foreground p-2 font-medium">脈拍 (回/分)</td>
-                <td className="border border-foreground p-2 text-center whitespace-pre-line">
+                <td className="border border-foreground p-1 font-medium text-xs">脈拍 (回/分)</td>
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {morningVitals.length > 0
                     ? morningVitals.map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.heartRate ?? ""}`).join("\n")
                     : ""}
                 </td>
-                <td className="border border-foreground p-2 text-center whitespace-pre-line">
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {afternoonVitals.length > 0
                     ? afternoonVitals.map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.heartRate ?? ""}`).join("\n")
                     : ""}
                 </td>
-                <td className="border border-foreground p-2 text-center whitespace-pre-line">
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {eveningVitals.length > 0
                     ? eveningVitals.map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.heartRate ?? ""}`).join("\n")
                     : ""}
                 </td>
-                <td className="border border-foreground p-2 text-xs">
+                <td className="border border-foreground p-1 text-xs">
                   {translateToJapanese(
                     morningVitals[0]?.heartRhythm || afternoonVitals[0]?.heartRhythm || eveningVitals[0]?.heartRhythm,
                   ) || ""}
                 </td>
               </tr>
               <tr className="bg-muted/30">
-                <td className="border border-foreground p-2 font-medium">呼吸数 (回/分)</td>
-                <td className="border border-foreground p-2 text-center whitespace-pre-line">
+                <td className="border border-foreground p-1 font-medium text-xs">呼吸数 (回/分)</td>
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {morningVitals.length > 0
                     ? morningVitals.map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.respiratoryRate ?? ""}`).join("\n")
                     : ""}
                 </td>
-                <td className="border border-foreground p-2 text-center whitespace-pre-line">
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {afternoonVitals.length > 0
                     ? afternoonVitals.map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.respiratoryRate ?? ""}`).join("\n")
                     : ""}
                 </td>
-                <td className="border border-foreground p-2 text-center whitespace-pre-line">
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {eveningVitals.length > 0
                     ? eveningVitals.map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.respiratoryRate ?? ""}`).join("\n")
                     : ""}
                 </td>
-                <td className="border border-foreground p-2 text-xs">
+                <td className="border border-foreground p-1 text-xs">
                   {translateToJapanese(
                     morningVitals[0]?.breathingPattern || afternoonVitals[0]?.breathingPattern || eveningVitals[0]?.breathingPattern,
                   ) || ""}
                 </td>
               </tr>
               <tr>
-                <td className="border border-foreground p-2 font-medium">SpO2 (%)</td>
-                <td className="border border-foreground p-2 text-center whitespace-pre-line">
+                <td className="border border-foreground p-1 font-medium text-xs">SpO2 (%)</td>
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {morningVitals.length > 0
                     ? morningVitals.map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.oxygenSaturation ?? ""}`).join("\n")
                     : ""}
                 </td>
-                <td className="border border-foreground p-2 text-center whitespace-pre-line">
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {afternoonVitals.length > 0
                     ? afternoonVitals.map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.oxygenSaturation ?? ""}`).join("\n")
                     : ""}
                 </td>
-                <td className="border border-foreground p-2 text-center whitespace-pre-line">
+                <td className="border border-foreground p-1 text-center text-xs whitespace-pre-line">
                   {eveningVitals.length > 0
                     ? eveningVitals.map((v) => `${v.time || v.timestamp?.slice(11, 16)} ${v.oxygenSaturation ?? ""}`).join("\n")
                     : ""}
                 </td>
-                <td className="border border-foreground p-2 text-xs">
+                <td className="border border-foreground p-1 text-xs">
                   {translateToJapanese(
                     morningVitals[0]?.oxygenLevel || afternoonVitals[0]?.oxygenLevel || eveningVitals[0]?.oxygenLevel,
                   ) || ""}
