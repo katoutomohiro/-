@@ -1,15 +1,5 @@
-# v0-ピノキオ-統心のケアシステム
+# GitHub app development
 
-**メインリポジトリ** - このリポジトリが現在使用中です。
-
-## デプロイ
-- 本番環境: https://v0-ピノキオ-統心のケアシステム.vercel.app
-- Vercel: https://vercel.com/pinokiotomo-7421s-projects/v0-pinocchio-jyushin-caresystem
-
-## 開発
-```bash
-npm install
-npm run dev
 *Automatically synced with your [v0.app](https://v0.app) deployments*
 
 [![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/pinokiotomo-7421s-projects/v0-git-hub-app-development)
