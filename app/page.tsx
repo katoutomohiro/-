@@ -11,11 +11,12 @@ import { StatisticsDashboard } from "@/components/statistics-dashboard"
 import { SettingsPanel } from "@/components/settings-panel"
 import { A4RecordSheet } from "@/components/a4-record-sheet"
 import { DailyLogExportService } from "@/services/daily-log-export-service"
-import { DataStorageService } from "@/services/data-storage-service"
+import { DataStorageService, initializeSampleData } from "@/services/data-storage-service"
 import { useToast } from "@/hooks/use-toast"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import { AdminPasswordAuth } from "@/components/admin-password-auth"
 import AIDashboard from "@/components/ai-dashboard"
+import Link from "next/link"
 
 const eventCategories = [
   {
@@ -386,6 +387,9 @@ export default function WorldClassSoulCareApp() {
   useEffect(() => {
     if (!isClient) return
 
+    // Initialize sample data if no users exist
+    initializeSampleData()
+
     const savedUserNames = DataStorageService.getCustomUserNames()
     if (savedUserNames.length > 0) {
       setCustomUserNames(savedUserNames)
@@ -395,7 +399,7 @@ export default function WorldClassSoulCareApp() {
     } else {
       setCustomUserNames(users)
     }
-  }, [selectedUser, isClient])
+  }, [isClient])
 
   useEffect(() => {
     const handleKeyDown = (event: globalThis.KeyboardEvent) => {
@@ -556,9 +560,23 @@ export default function WorldClassSoulCareApp() {
                     </Badge>
                   ))}
                 </div>
-                <Button size="sm" className="w-full">
-                  {service.name}記録
-                </Button>
+                {service.id === "life-care" ? (
+                  <Link href="/daily-care/users">
+                    <Button size="sm" className="w-full">
+                      {service.name}記録
+                    </Button>
+                  </Link>
+                ) : service.id === "after-school" ? (
+                  <Link href="/after-school/users">
+                    <Button size="sm" className="w-full">
+                      {service.name}記録
+                    </Button>
+                  </Link>
+                ) : (
+                  <Button size="sm" className="w-full">
+                    {service.name}記録
+                  </Button>
+                )}
               </CardContent>
             </Card>
           ))}
