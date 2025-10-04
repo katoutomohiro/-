@@ -1,88 +1,85 @@
 "use client"
 
-import Link from "next/link"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { getDailyCareUsers } from "@/lib/data/users-data"
+import { DataStorageService, type UserProfile } from "@/services/data-storage-service"
+import { useRouter } from "next/navigation"
+import Link from "next/link"
+import { initializeRealUsersData } from "@/lib/data/users-data"
 
 export default function DailyCareUsersPage() {
-  const users = getDailyCareUsers()
+  const [users, setUsers] = useState<UserProfile[]>([])
+  const router = useRouter()
+
+  useEffect(() => {
+    initializeRealUsersData()
+
+    const allUsers = DataStorageService.getAllUserProfiles()
+    const dailyCareUsers = allUsers.filter((user) => user.serviceType === "daily-care")
+
+    setUsers(dailyCareUsers)
+  }, [])
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">生活介護 - 利用者一覧</h1>
-          <p className="text-muted-foreground mt-2">登録利用者数: {users.length}名</p>
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      <header className="bg-card/80 backdrop-blur-sm border-b border-border/50 sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <h1 className="text-3xl font-bold text-foreground tracking-tight">生活介護 - 利用者一覧</h1>
+              <p className="text-muted-foreground font-medium">
+                日中活動・創作活動・生産活動の記録と支援計画管理（{users.length}名）
+              </p>
+            </div>
+            <Link href="/">
+              <Button variant="outline">ダッシュボードに戻る</Button>
+            </Link>
+          </div>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={() => window.location.href = "/"}>
-            ダッシュボードに戻る
-          </Button>
-          <Button onClick={() => window.location.reload()}>更新</Button>
-        </div>
-      </div>
+      </header>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {users.map((user) => (
-          <Card key={user.id} className="hover:shadow-md transition-shadow cursor-pointer">
-            <Link href={`/daily-care/users/${user.id}`}>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg">{user.name}</CardTitle>
-                <div className="flex flex-wrap gap-1">
-                  <Badge variant="secondary">{user.age}歳</Badge>
-                  <Badge variant="outline">{user.gender === "male" ? "男性" : "女性"}</Badge>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {users.map((user) => (
+            <Card
+              key={user.id}
+              className="group hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-primary/30 hover:scale-[1.02]"
+              onClick={() => router.push(`/daily-care/users/${user.id}`)}
+            >
+              <CardHeader className="pb-4">
+                <div className="flex items-start gap-4">
+                  <div className="p-3 rounded-xl bg-blue-100 text-blue-600 text-2xl transition-all duration-300 group-hover:scale-110">
+                    👤
+                  </div>
+                  <div className="flex-1">
+                    <CardTitle className="text-base font-semibold">{user.name}</CardTitle>
+                    {user.furigana && <p className="text-xs text-muted-foreground mt-1">{user.furigana}</p>}
+                    <Badge variant="secondary" className="mt-2">
+                      生活介護
+                    </Badge>
+                  </div>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-3">
-                <div>
-                  <p className="text-sm font-medium text-foreground">障害</p>
-                  <p className="text-sm text-muted-foreground">{user.disability}</p>
+              <CardContent className="space-y-4">
+                <div className="text-sm text-muted-foreground space-y-1">
+                  {user.age && <p>年齢: {user.age}歳</p>}
+                  {user.careLevel && <p>介護度: {user.careLevel}</p>}
+                  {user.medicalCareNeeds && user.medicalCareNeeds.length > 0 && (
+                    <p className="text-xs">
+                      医療的ケア: <span className="font-medium">{user.medicalCareNeeds.join("・")}</span>
+                    </p>
+                  )}
                 </div>
-                
-                <div>
-                  <p className="text-sm font-medium text-foreground">介護度</p>
-                  <Badge variant="destructive" className="text-xs">
-                    {user.nursingLevel}
-                  </Badge>
-                </div>
-
-                {user.medicalCare.length > 0 && (
-                  <div>
-                    <p className="text-sm font-medium text-foreground">医療的ケア</p>
-                    <div className="flex flex-wrap gap-1 mt-1">
-                      {user.medicalCare.map((care, index) => (
-                        <Badge key={index} variant="default" className="text-xs">
-                          {care}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {user.notes && (
-                  <div>
-                    <p className="text-sm font-medium text-foreground">備考</p>
-                    <p className="text-xs text-muted-foreground line-clamp-2">{user.notes}</p>
-                  </div>
-                )}
+                <Button size="sm" className="w-full">
+                  ケース記録を見る
+                </Button>
               </CardContent>
-            </Link>
-          </Card>
-        ))}
-      </div>
-
-      {users.length === 0 && (
-        <Card className="mt-8">
-          <CardHeader>
-            <CardTitle>利用者が見つかりません</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">生活介護の利用者データがまだ登録されていません。</p>
-          </CardContent>
-        </Card>
-      )}
+            </Card>
+          ))}
+        </div>
+      </main>
     </div>
   )
 }

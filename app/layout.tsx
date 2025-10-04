@@ -1,5 +1,5 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Inter, Work_Sans } from "next/font/google"
 import "./globals.css"
 import { ToastProvider, ToastContainer } from "@/components/ui/toast"
@@ -21,17 +21,10 @@ export const metadata: Metadata = {
   description: "重症心身障がい児者の支援アプリ",
   generator: "v0.app",
   manifest: "/manifest.json",
-  themeColor: "#3b82f6",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
     title: "ケア記録",
-  },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
   },
   icons: {
     icon: [
@@ -40,6 +33,14 @@ export const metadata: Metadata = {
     ],
     apple: [{ url: "/icon-192.png", sizes: "192x192", type: "image/png" }],
   },
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: "#3b82f6",
 }
 
 export default function RootLayout({

@@ -12,7 +12,16 @@ export interface CareEvent {
 export interface UserProfile {
   id: string
   name: string
+  furigana?: string
+  age?: number
+  gender?: "male" | "female" | "other"
   dateOfBirth?: string
+  serviceType?: "daily-care" | "after-school" | "day-support" | "group-home" | "home-care"
+  disabilityLevel?: string
+  medicalCareNeeds?: string[]
+  guardianName?: string
+  guardianPhone?: string
+  address?: string
   medicalNumber?: string
   careLevel?: string
   allergies?: string[]
@@ -22,46 +31,100 @@ export interface UserProfile {
     phone: string
     relationship: string
   }
+  notes?: string
   createdAt: string
   updatedAt: string
 }
 
-// ケース記録・サービス実績表の型定義
 export interface CaseRecord {
   id: string
   userId: string
   date: string
   dayOfWeek: string
   staff: string[]
-  vitals: { time: string; temperature: number }[]
-  excretion: { time: string; urine: string; stool: string }[]
-  hydration: { time: string; content: string; amount?: string }[]
-  oralIntake: { time: string; food: string; amount: string; notes: string }[]
-  eyeDrops: { time: string; medication: string; eye: string }[]
+
+  vitals: {
+    time: string
+    temperature: number
+  }[]
+
+  excretion: {
+    time: string
+    urine: string
+    stool: string
+  }[]
+
+  hydration: {
+    time: string
+    content: string
+    amount?: string
+  }[]
+
+  oralIntake: {
+    time: string
+    food: string
+    amount: string
+    notes: string
+  }[]
+
+  eyeDrops: {
+    time: string
+    medication: string
+    eye: string
+  }[]
+
   bathing: boolean
-  seizures: { occurred: boolean; details?: string }
+
+  seizures: {
+    occurred: boolean
+    details?: string
+  }
+
   other: string
-  posture: { am: string; pm: string }
+
+  posture: {
+    am: string
+    pm: string
+  }
+
   choking: boolean
   expression: "明るい" | "暗い" | ""
   lipPursing: boolean
   otherObservations: string
-  massage: { areas: string[]; condition: string; content: string }
+
+  massage: {
+    areas: string[]
+    condition: string
+    content: string
+  }
+
   healthManagement: {
     abdominalDistension: "－" | "軽" | "＋" | ""
     bowelSounds: "弱" | "良" | "亢進" | ""
     gastrostomyAbnormality: boolean
     skinTrouble: boolean
   }
+
   physicalFunction: string
-  contracturePrevention: { progressingContractures: string[]; careDetails: string }
-  physicalRestraint: { buggy: boolean; bedCushion: boolean; details: string }
+
+  contracturePrevention: {
+    progressingContractures: string[]
+    careDetails: string
+  }
+
+  physicalRestraint: {
+    buggy: boolean
+    bedCushion: boolean
+    details: string
+  }
+
   specialNotes: string
   activities: string
+
   staffSignatures: string[]
+
   createdAt: string
   updatedAt: string
-  [key: string]: any
 }
 
 export class DataStorageService {
@@ -70,6 +133,7 @@ export class DataStorageService {
   private static readonly APP_SETTINGS_KEY = "appSettings"
   private static readonly CUSTOM_USER_NAMES_KEY = "customUserNames"
   private static readonly FORM_OPTIONS_KEY = "form-options"
+  private static readonly CASE_RECORDS_KEY = "caseRecords"
 
   // Care Events Management
   static saveCareEvent(event: Omit<CareEvent, "id">): CareEvent {
@@ -276,17 +340,24 @@ export class DataStorageService {
     }
   }
 
-  // Case Records Management
-  private static readonly CASE_RECORDS_KEY = "caseRecords"
-  // CaseRecord type is defined at top-level
+  static resetFormOptions(): void {
+    try {
+      localStorage.removeItem(this.FORM_OPTIONS_KEY)
+      // Form options reset to default successfully
+    } catch (error) {
+      console.error("[v0] Failed to reset form options:", error)
+      throw new Error("フォーム選択項目のリセットに失敗しました")
+    }
+  }
 
+  // Case Record Management
   static saveCaseRecord(record: Partial<CaseRecord>): CaseRecord {
     try {
-      const records: CaseRecord[] = this.getAllCaseRecords()
+      const records = this.getAllCaseRecords()
       const now = new Date().toISOString()
 
       const newRecord: CaseRecord = {
-        id: (record as any).id || `case-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        id: record.id || this.generateId(),
         userId: record.userId || "",
         date: record.date || new Date().toISOString().split("T")[0],
         dayOfWeek: record.dayOfWeek || "",
@@ -301,16 +372,26 @@ export class DataStorageService {
         other: record.other || "",
         posture: record.posture || { am: "", pm: "" },
         choking: record.choking || false,
-        expression: (record as any).expression || "",
+        expression: record.expression || "",
         lipPursing: record.lipPursing || false,
         otherObservations: record.otherObservations || "",
         massage: record.massage || { areas: [], condition: "", content: "" },
-        healthManagement:
-          record.healthManagement ||
-          ({ abdominalDistension: "", bowelSounds: "", gastrostomyAbnormality: false, skinTrouble: false } as any),
+        healthManagement: record.healthManagement || {
+          abdominalDistension: "",
+          bowelSounds: "",
+          gastrostomyAbnormality: false,
+          skinTrouble: false,
+        },
         physicalFunction: record.physicalFunction || "",
-        contracturePrevention: record.contracturePrevention || { progressingContractures: [], careDetails: "" },
-        physicalRestraint: record.physicalRestraint || { buggy: false, bedCushion: false, details: "" },
+        contracturePrevention: record.contracturePrevention || {
+          progressingContractures: [],
+          careDetails: "",
+        },
+        physicalRestraint: record.physicalRestraint || {
+          buggy: false,
+          bedCushion: false,
+          details: "",
+        },
         specialNotes: record.specialNotes || "",
         activities: record.activities || "",
         staffSignatures: record.staffSignatures || [],
@@ -335,8 +416,8 @@ export class DataStorageService {
 
   static getAllCaseRecords(): CaseRecord[] {
     try {
-      const data = localStorage.getItem(this.CASE_RECORDS_KEY)
-      return data ? JSON.parse(data) : []
+      const records = localStorage.getItem(this.CASE_RECORDS_KEY)
+      return records ? JSON.parse(records) : []
     } catch (error) {
       console.error("[v0] Failed to load case records:", error)
       return []
@@ -352,25 +433,14 @@ export class DataStorageService {
     return records.find((record) => record.date === date) || null
   }
 
-  static deleteCaseRecord(recordId: string): boolean {
+  static deleteCaseRecord(id: string): boolean {
     try {
-      const records = this.getAllCaseRecords()
-      const filtered = records.filter((r) => r.id !== recordId)
-      localStorage.setItem(this.CASE_RECORDS_KEY, JSON.stringify(filtered))
+      const records = this.getAllCaseRecords().filter((record) => record.id !== id)
+      localStorage.setItem(this.CASE_RECORDS_KEY, JSON.stringify(records))
       return true
     } catch (error) {
       console.error("[v0] Failed to delete case record:", error)
-      return false
-    }
-  }
-
-  static resetFormOptions(): void {
-    try {
-      localStorage.removeItem(this.FORM_OPTIONS_KEY)
-      // Form options reset to default successfully
-    } catch (error) {
-      console.error("[v0] Failed to reset form options:", error)
-      throw new Error("フォーム選択項目のリセットに失敗しました")
+      throw new Error("ケース記録の削除に失敗しました")
     }
   }
 
@@ -383,6 +453,7 @@ export class DataStorageService {
         appSettings: this.getAppSettings(),
         customUserNames: this.getCustomUserNames(),
         formOptions: this.getFormOptions(),
+        caseRecords: this.getAllCaseRecords(),
         exportDate: new Date().toISOString(),
         version: "1.1",
       }
@@ -426,6 +497,10 @@ export class DataStorageService {
 
       if (data.formOptions && typeof data.formOptions === "object") {
         localStorage.setItem(this.FORM_OPTIONS_KEY, JSON.stringify(data.formOptions))
+      }
+
+      if (data.caseRecords && Array.isArray(data.caseRecords)) {
+        localStorage.setItem(this.CASE_RECORDS_KEY, JSON.stringify(data.caseRecords))
       }
 
       // Data imported successfully
@@ -476,6 +551,7 @@ export class DataStorageService {
       localStorage.removeItem(this.APP_SETTINGS_KEY)
       localStorage.removeItem(this.CUSTOM_USER_NAMES_KEY)
       localStorage.removeItem(this.FORM_OPTIONS_KEY)
+      localStorage.removeItem(this.CASE_RECORDS_KEY)
       // All data cleared successfully
     } catch (error) {
       console.error("[v0] Failed to clear data:", error)
@@ -502,4 +578,130 @@ export class DataStorageService {
       return { used: 0, available: 0, percentage: 0 }
     }
   }
+}
+
+/**
+ * サンプルデータを初期化する関数
+ * 既にデータが存在する場合は何もしない
+ */
+export function initializeSampleData(): void {
+  // 既にデータが存在するかチェック
+  const existingUsers = DataStorageService.getAllUserProfiles()
+  if (existingUsers.length > 0) {
+    console.log("[v0] Sample data already exists, skipping initialization")
+    return
+  }
+
+  console.log("[v0] Initializing sample data...")
+
+  // 生活介護のサンプル利用者
+  const dailyCareUsers: Omit<UserProfile, "id" | "createdAt" | "updatedAt">[] = [
+    {
+      name: "山田 太郎",
+      furigana: "やまだ たろう",
+      dateOfBirth: "2010-04-15",
+      age: 14,
+      gender: "male",
+      serviceType: "daily-care",
+      disabilityLevel: "重度",
+      medicalCareNeeds: ["吸引", "経管栄養"],
+      guardianName: "山田 花子",
+      guardianPhone: "090-1234-5678",
+      address: "東京都渋谷区1-2-3",
+      emergencyContact: {
+        name: "山田 花子",
+        phone: "090-1234-5678",
+        relationship: "母",
+      },
+      notes: "吸引は1日3回必要です。",
+    },
+    {
+      name: "佐藤 花子",
+      furigana: "さとう はなこ",
+      dateOfBirth: "2012-08-22",
+      age: 12,
+      gender: "female",
+      serviceType: "daily-care",
+      disabilityLevel: "中度",
+      medicalCareNeeds: ["服薬管理"],
+      guardianName: "佐藤 一郎",
+      guardianPhone: "090-2345-6789",
+      address: "東京都新宿区4-5-6",
+      emergencyContact: {
+        name: "佐藤 一郎",
+        phone: "090-2345-6789",
+        relationship: "父",
+      },
+      notes: "食事は刻み食が必要です。",
+    },
+    {
+      name: "鈴木 健太",
+      furigana: "すずき けんた",
+      dateOfBirth: "2011-12-10",
+      age: 13,
+      gender: "male",
+      serviceType: "daily-care",
+      disabilityLevel: "重度",
+      medicalCareNeeds: ["吸引", "酸素療法"],
+      guardianName: "鈴木 美咲",
+      guardianPhone: "090-3456-7890",
+      address: "東京都世田谷区7-8-9",
+      emergencyContact: {
+        name: "鈴木 美咲",
+        phone: "090-3456-7890",
+        relationship: "母",
+      },
+      notes: "酸素濃度は常時モニタリングが必要です。",
+    },
+  ]
+
+  // 放課後等デイサービスのサンプル利用者
+  const afterSchoolUsers: Omit<UserProfile, "id" | "createdAt" | "updatedAt">[] = [
+    {
+      name: "田中 美咲",
+      furigana: "たなか みさき",
+      dateOfBirth: "2013-03-05",
+      age: 11,
+      gender: "female",
+      serviceType: "after-school",
+      disabilityLevel: "軽度",
+      medicalCareNeeds: ["服薬管理"],
+      guardianName: "田中 隆",
+      guardianPhone: "090-4567-8901",
+      address: "東京都品川区10-11-12",
+      emergencyContact: {
+        name: "田中 隆",
+        phone: "090-4567-8901",
+        relationship: "父",
+      },
+      notes: "集団活動が得意です。",
+    },
+    {
+      name: "高橋 翔太",
+      furigana: "たかはし しょうた",
+      dateOfBirth: "2014-07-18",
+      age: 10,
+      gender: "male",
+      serviceType: "after-school",
+      disabilityLevel: "中度",
+      medicalCareNeeds: ["経管栄養"],
+      guardianName: "高橋 由美",
+      guardianPhone: "090-5678-9012",
+      address: "東京都目黒区13-14-15",
+      emergencyContact: {
+        name: "高橋 由美",
+        phone: "090-5678-9012",
+        relationship: "母",
+      },
+      notes: "音楽療法が効果的です。",
+    },
+  ]
+
+  // サンプルデータを保存
+  const allSampleUsers = [...dailyCareUsers, ...afterSchoolUsers]
+  allSampleUsers.forEach((user) => {
+    DataStorageService.saveUserProfile(user)
+  })
+
+  console.log(`[v0] Sample data initialized: ${allSampleUsers.length} users created`)
 }
