@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -48,30 +48,25 @@ export default function AIDashboard({ selectedUserId }: AIDashboardProps) {
     // ユーザー一覧の取得
     const userList = DataStorageService.getUsers()
     setUsers(userList)
-    if (!currentUser && userList.length > 0) {
+    // selectedUserId が渡されていればそれを優先し、そうでなければ最初のユーザーを選択
+    if (selectedUserId) {
+      setCurrentUser(selectedUserId)
+    } else if (!currentUser && userList.length > 0) {
       setCurrentUser(userList[0].id)
     }
-  }, [currentUser])
+  }, [selectedUserId])
 
-  useEffect(() => {
-    if (currentUser) {
-      performAnalysis()
-    }
-  }, [currentUser])
-
-  /**
-   * AI分析実行
-   */
-  const performAnalysis = async () => {
-    if (!currentUser) return
+  const performAnalysis = useCallback(async (userId?: string) => {
+    const uid = userId || currentUser
+    if (!uid) return
 
     setLoading(true)
     try {
       // 並列で3種類の分析を実行
       const [healthData, behaviorData, optimizationData] = await Promise.all([
-        Promise.resolve(AICareAnalysisService.analyzeHealthTrends(currentUser)),
-        Promise.resolve(AICareAnalysisService.analyzeBehaviorPatterns(currentUser)),
-        Promise.resolve(AICareAnalysisService.analyzeCareOptimization(currentUser))
+        Promise.resolve(AICareAnalysisService.analyzeHealthTrends(uid)),
+        Promise.resolve(AICareAnalysisService.analyzeBehaviorPatterns(uid)),
+        Promise.resolve(AICareAnalysisService.analyzeCareOptimization(uid))
       ])
 
       setAnalysisData({
@@ -84,7 +79,18 @@ export default function AIDashboard({ selectedUserId }: AIDashboardProps) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [currentUser])
+
+  useEffect(() => {
+    if (currentUser) {
+      performAnalysis(currentUser)
+    }
+  }, [currentUser, performAnalysis])
+
+  /**
+   * AI分析実行
+   */
+  
 
   /**
    * トレンドアイコン取得
@@ -248,7 +254,7 @@ export default function AIDashboard({ selectedUserId }: AIDashboardProps) {
           </select>
           
           <Button 
-            onClick={performAnalysis} 
+            onClick={() => performAnalysis()} 
             disabled={loading || !currentUser}
             size="sm"
           >

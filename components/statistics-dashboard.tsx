@@ -34,73 +34,73 @@ export function StatisticsDashboard({ selectedUser }: StatisticsDashboardProps) 
     tube_feeding: "経管栄養",
   }
 
-  const calculateStatistics = () => {
-    const allEvents = selectedUser
-      ? DataStorageService.getCareEventsByUser(selectedUser)
-      : DataStorageService.getAllCareEvents()
+  useEffect(() => {
+    const calculateStatistics = () => {
+      const allEvents = selectedUser
+        ? DataStorageService.getCareEventsByUser(selectedUser)
+        : DataStorageService.getAllCareEvents()
 
-    // Filter by time range
-    const now = new Date()
-    const filteredEvents = allEvents.filter((event) => {
-      const eventDate = new Date(event.timestamp)
-      const daysDiff = Math.floor((now.getTime() - eventDate.getTime()) / (1000 * 60 * 60 * 24))
+      // Filter by time range
+      const now = new Date()
+      const filteredEvents = allEvents.filter((event) => {
+        const eventDate = new Date(event.timestamp)
+        const daysDiff = Math.floor((now.getTime() - eventDate.getTime()) / (1000 * 60 * 60 * 24))
 
-      switch (timeRange) {
-        case "week":
-          return daysDiff <= 7
-        case "month":
-          return daysDiff <= 30
-        case "all":
-        default:
-          return true
+        switch (timeRange) {
+          case "week":
+            return daysDiff <= 7
+          case "month":
+            return daysDiff <= 30
+          case "all":
+          default:
+            return true
+        }
+      })
+
+      // Calculate statistics
+      const eventsByType: { [key: string]: number } = {}
+      const eventsByDate: { [key: string]: number } = {}
+      const eventsByUser: { [key: string]: number } = {}
+
+      filteredEvents.forEach((event) => {
+        // By type
+        eventsByType[event.eventType] = (eventsByType[event.eventType] || 0) + 1
+
+        // By date
+        const date = new Date(event.timestamp).toDateString()
+        eventsByDate[date] = (eventsByDate[date] || 0) + 1
+
+        // By user
+        eventsByUser[event.userId] = (eventsByUser[event.userId] || 0) + 1
+      })
+
+      // Weekly trend (last 7 days)
+      const weeklyTrend = []
+      for (let i = 6; i >= 0; i--) {
+        const date = new Date()
+        date.setDate(date.getDate() - i)
+        const dateStr = date.toDateString()
+        weeklyTrend.push({
+          date: date.toLocaleDateString("ja-JP", { month: "short", day: "numeric" }),
+          count: eventsByDate[dateStr] || 0,
+        })
       }
-    })
 
-    // Calculate statistics
-    const eventsByType: { [key: string]: number } = {}
-    const eventsByDate: { [key: string]: number } = {}
-    const eventsByUser: { [key: string]: number } = {}
+      // Recent activity (last 10 events)
+      const recentActivity = filteredEvents
+        .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+        .slice(0, 10)
 
-    filteredEvents.forEach((event) => {
-      // By type
-      eventsByType[event.eventType] = (eventsByType[event.eventType] || 0) + 1
-
-      // By date
-      const date = new Date(event.timestamp).toDateString()
-      eventsByDate[date] = (eventsByDate[date] || 0) + 1
-
-      // By user
-      eventsByUser[event.userId] = (eventsByUser[event.userId] || 0) + 1
-    })
-
-    // Weekly trend (last 7 days)
-    const weeklyTrend = []
-    for (let i = 6; i >= 0; i--) {
-      const date = new Date()
-      date.setDate(date.getDate() - i)
-      const dateStr = date.toDateString()
-      weeklyTrend.push({
-        date: date.toLocaleDateString("ja-JP", { month: "short", day: "numeric" }),
-        count: eventsByDate[dateStr] || 0,
+      setStats({
+        totalEvents: filteredEvents.length,
+        eventsByType,
+        eventsByDate,
+        eventsByUser,
+        recentActivity,
+        weeklyTrend,
       })
     }
 
-    // Recent activity (last 10 events)
-    const recentActivity = filteredEvents
-      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-      .slice(0, 10)
-
-    setStats({
-      totalEvents: filteredEvents.length,
-      eventsByType,
-      eventsByDate,
-      eventsByUser,
-      recentActivity,
-      weeklyTrend,
-    })
-  }
-
-  useEffect(() => {
     calculateStatistics()
   }, [selectedUser, timeRange])
 
