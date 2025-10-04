@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { DataStorageService, type UserProfile, type CaseRecord } from "@/services/data-storage-service"
-import CaseRecordSheet from "@/components/case-record-sheet"
+import { CaseRecordSheet } from "@/components/case-record-sheet"
 import { format } from "date-fns"
 import { ja } from "date-fns/locale"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
