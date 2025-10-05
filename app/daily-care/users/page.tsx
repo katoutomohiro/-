@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import UserManagementModal from "@/components/user-management-modal"
+import { UserManagementModal } from "@/components/user-management-modal"
 import { Badge } from "@/components/ui/badge"
 import { DataStorageService, type UserProfile } from "@/services/data-storage-service"
 import { useRouter } from "next/navigation"
@@ -14,6 +14,7 @@ export default function DailyCareUsersPage() {
   const [users, setUsers] = useState<UserProfile[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingUserId, setEditingUserId] = useState<string | null>(null)
+  const [editingUser, setEditingUser] = useState<UserProfile | null>(null)
   const router = useRouter()
 
   useEffect(() => {
@@ -37,7 +38,7 @@ export default function DailyCareUsersPage() {
               </p>
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="default" onClick={() => { setEditingUserId(null); setIsModalOpen(true) }}>利用者を追加</Button>
+              <Button variant="default" onClick={() => { setEditingUserId(null); setEditingUser(null); setIsModalOpen(true) }}>利用者を追加</Button>
               <Link href="/">
                 <Button variant="outline">ダッシュボードに戻る</Button>
               </Link>
@@ -82,7 +83,7 @@ export default function DailyCareUsersPage() {
                   <Button size="sm" className="flex-1" onClick={() => router.push(`/daily-care/users/${user.id}`)}>
                     ケース記録を見る
                   </Button>
-                  <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); setEditingUserId(user.id); setIsModalOpen(true) }}>
+                  <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); setEditingUserId(user.id); setEditingUser(user); setIsModalOpen(true) }}>
                     編集
                   </Button>
                 </div>
@@ -92,10 +93,24 @@ export default function DailyCareUsersPage() {
         </div>
       </main>
       <UserManagementModal
-        isOpen={isModalOpen}
-        onClose={() => { setIsModalOpen(false); setEditingUserId(null); const all = DataStorageService.getAllUserProfiles(); setUsers(all.filter(u => u.serviceType === "daily-care")) }}
-        userId={editingUserId || undefined}
-        onSaved={(u) => { const all = DataStorageService.getAllUserProfiles(); setUsers(all.filter(us => us.serviceType === "daily-care")) }}
+        open={isModalOpen}
+        onOpenChange={(open) => {
+          if (!open) {
+            setIsModalOpen(false)
+            setEditingUserId(null)
+            setEditingUser(null)
+            const all = DataStorageService.getAllUserProfiles()
+            setUsers(all.filter((u) => u.serviceType === "daily-care"))
+          } else {
+            setIsModalOpen(true)
+          }
+        }}
+        user={editingUser}
+        serviceType="daily-care"
+        onSave={() => {
+          const all = DataStorageService.getAllUserProfiles()
+          setUsers(all.filter((us) => us.serviceType === "daily-care"))
+        }}
       />
     </div>
   )
