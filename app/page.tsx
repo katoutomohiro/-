@@ -561,21 +561,15 @@ export default function WorldClassSoulCareApp() {
                   ))}
                 </div>
                 {service.id === "life-care" ? (
-                  <Link href="/daily-care/users">
-                    <Button size="sm" className="w-full">
-                      {service.name}記録
-                    </Button>
-                  </Link>
-                ) : service.id === "after-school" ? (
-                  <Link href="/after-school/users">
-                    <Button size="sm" className="w-full">
-                      {service.name}記録
-                    </Button>
-                  </Link>
-                ) : (
-                  <Button size="sm" className="w-full">
-                    {service.name}記録
+                  <Button size="sm" className="w-full" asChild>
+                    <Link href="/daily-care/users">{service.name}記録</Link>
                   </Button>
+                ) : service.id === "after-school" ? (
+                  <Button size="sm" className="w-full" asChild>
+                    <Link href="/after-school/users">{service.name}記録</Link>
+                  </Button>
+                ) : (
+                  <Button size="sm" className="w-full">{service.name}記録</Button>
                 )}
               </CardContent>
             </Card>
@@ -637,11 +631,9 @@ export default function WorldClassSoulCareApp() {
                       A4記録用紙
                     </Button>
                           <div className="mt-3">
-                            <Link href="/family-signature">
-                              <Button size="sm" className="w-full">
-                                家族署名フォーム
-                              </Button>
-                            </Link>
+                            <Button size="sm" className="w-full" asChild>
+                              <Link href="/family-signature">家族署名フォーム</Link>
+                            </Button>
                           </div>
                     <div className="flex flex-col sm:flex-row gap-3">
                       <Button

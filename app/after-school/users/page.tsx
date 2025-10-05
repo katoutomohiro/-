@@ -39,9 +39,9 @@ export default function AfterSchoolUsersPage() {
             </div>
             <div className="flex items-center gap-3">
               <Button variant="default" onClick={() => { setEditingUserId(null); setEditingUser(null); setIsModalOpen(true) }}>利用者を追加</Button>
-              <Link href="/">
-                <Button variant="outline">ダッシュボードに戻る</Button>
-              </Link>
+              <Button asChild variant="outline">
+                <Link href="/">ダッシュボードに戻る</Link>
+              </Button>
             </div>
           </div>
         </div>

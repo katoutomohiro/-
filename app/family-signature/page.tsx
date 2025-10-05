@@ -23,9 +23,7 @@ export default function FamilySignaturePage() {
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold">家族署名フォーム</h1>
-          <Link href="/">
-            <a className="text-sm text-primary">← ホームへ戻る</a>
-          </Link>
+          <Link href="/" className="text-sm text-primary">← ホームへ戻る</Link>
         </div>
 
         {!user ? (
