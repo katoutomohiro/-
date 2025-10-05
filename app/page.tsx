@@ -636,6 +636,13 @@ export default function WorldClassSoulCareApp() {
                       {isLoading ? <LoadingSpinner size="sm" /> : "📋"}
                       A4記録用紙
                     </Button>
+                          <div className="mt-3">
+                            <Link href="/family-signature">
+                              <Button size="sm" className="w-full">
+                                家族署名フォーム
+                              </Button>
+                            </Link>
+                          </div>
                     <div className="flex flex-col sm:flex-row gap-3">
                       <Button
                         onClick={handlePdfPreview}
