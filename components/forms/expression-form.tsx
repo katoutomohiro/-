@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
 import CareFormLayout from "@/components/care-form-layout"
+import { VoiceInputButton } from "@/components/voice-input-button"
 
 interface ExpressionFormData {
   timestamp: string
@@ -356,25 +357,35 @@ export function ExpressionForm({ onSubmit, onCancel }: ExpressionFormProps) {
               <Label htmlFor="vocalResponse" className="text-sm font-medium text-gray-700">
                 声の反応
               </Label>
-              <Input
-                id="vocalResponse"
-                value={formData.vocalResponse}
-                onChange={(e) => setFormData({ ...formData, vocalResponse: e.target.value })}
-                placeholder="笑い声、うめき声、発語など"
-                className="h-12 text-base"
-              />
+              <div className="flex gap-2">
+                <Input
+                  id="vocalResponse"
+                  value={formData.vocalResponse}
+                  onChange={(e) => setFormData({ ...formData, vocalResponse: e.target.value })}
+                  placeholder="笑い声、うめき声、発語など"
+                  className="h-12 text-base flex-1"
+                />
+                <VoiceInputButton
+                  onTranscript={(text) => setFormData({ ...formData, vocalResponse: formData.vocalResponse + text })}
+                />
+              </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="bodyLanguage" className="text-sm font-medium text-gray-700">
                 身体の反応
               </Label>
-              <Input
-                id="bodyLanguage"
-                value={formData.bodyLanguage}
-                onChange={(e) => setFormData({ ...formData, bodyLanguage: e.target.value })}
-                placeholder="手の動き、体の向きなど"
-                className="h-12 text-base"
-              />
+              <div className="flex gap-2">
+                <Input
+                  id="bodyLanguage"
+                  value={formData.bodyLanguage}
+                  onChange={(e) => setFormData({ ...formData, bodyLanguage: e.target.value })}
+                  placeholder="手の動き、体の向きなど"
+                  className="h-12 text-base flex-1"
+                />
+                <VoiceInputButton
+                  onTranscript={(text) => setFormData({ ...formData, bodyLanguage: formData.bodyLanguage + text })}
+                />
+              </div>
             </div>
           </div>
 
@@ -382,26 +393,38 @@ export function ExpressionForm({ onSubmit, onCancel }: ExpressionFormProps) {
             <Label htmlFor="triggerEvent" className="text-sm font-medium text-gray-700">
               きっかけ・要因
             </Label>
-            <Input
-              id="triggerEvent"
-              value={formData.triggerEvent}
-              onChange={(e) => setFormData({ ...formData, triggerEvent: e.target.value })}
-              placeholder="音楽、声かけ、触れ合いなど"
-              className="h-12 text-base"
-            />
+            <div className="flex gap-2">
+              <Input
+                id="triggerEvent"
+                value={formData.triggerEvent}
+                onChange={(e) => setFormData({ ...formData, triggerEvent: e.target.value })}
+                placeholder="音楽、声かけ、触れ合いなど"
+                className="h-12 text-base flex-1"
+              />
+              <VoiceInputButton
+                onTranscript={(text) => setFormData({ ...formData, triggerEvent: formData.triggerEvent + text })}
+              />
+            </div>
           </div>
 
           <div className="mt-6 space-y-2">
             <Label htmlFor="facialExpression" className="text-sm font-medium text-gray-700">
               顔の表情詳細
             </Label>
-            <Input
-              id="facialExpression"
-              value={formData.facialExpression}
-              onChange={(e) => setFormData({ ...formData, facialExpression: e.target.value })}
-              placeholder="眉間のしわ、口角の動きなど"
-              className="h-12 text-base"
-            />
+            <div className="flex gap-2">
+              <Input
+                id="facialExpression"
+                value={formData.facialExpression}
+                onChange={(e) => setFormData({ ...formData, facialExpression: e.target.value })}
+                placeholder="眉間のしわ、口角の動きなど"
+                className="h-12 text-base flex-1"
+              />
+              <VoiceInputButton
+                onTranscript={(text) =>
+                  setFormData({ ...formData, facialExpression: formData.facialExpression + text })
+                }
+              />
+            </div>
           </div>
 
           <div className="mt-6 flex items-center space-x-3 p-4 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
@@ -423,14 +446,17 @@ export function ExpressionForm({ onSubmit, onCancel }: ExpressionFormProps) {
             <Label htmlFor="notes" className="text-sm font-medium text-gray-700">
               その他の観察事項
             </Label>
-            <Textarea
-              id="notes"
-              value={formData.notes}
-              onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              placeholder="その他の観察事項や特記事項を詳しく記録してください"
-              rows={4}
-              className="text-base resize-none"
-            />
+            <div className="flex gap-2">
+              <Textarea
+                id="notes"
+                value={formData.notes}
+                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                placeholder="その他の観察事項や特記事項を詳しく記録してください"
+                rows={4}
+                className="text-base resize-none flex-1"
+              />
+              <VoiceInputButton onTranscript={(text) => setFormData({ ...formData, notes: formData.notes + text })} />
+            </div>
           </div>
         </div>
       </div>

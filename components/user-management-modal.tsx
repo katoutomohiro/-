@@ -127,7 +127,7 @@ export function UserManagementModal({ open, onOpenChange, user, serviceType, onS
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-  <DialogContent className="max-w-5xl w-full max-h-[90vh] flex flex-col p-0 bg-white dark:bg-gray-950 shadow-2xl overflow-hidden">
+      <DialogContent className="max-w-5xl w-full flex flex-col p-0 bg-white dark:bg-gray-950 shadow-2xl overflow-hidden">
         <DialogHeader className="px-6 pt-6 pb-4 border-b bg-white dark:bg-gray-950">
           <DialogTitle className="text-xl">{user ? "利用者情報の編集" : "新しい利用者の追加"}</DialogTitle>
         </DialogHeader>

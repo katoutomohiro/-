@@ -111,11 +111,13 @@ export function ExcretionForm({ onSubmit, onCancel }: ExcretionFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    console.log("[v0] Excretion form submitted with data:", formData)
     const submitData = {
       ...formData,
       timestamp: new Date().toISOString(),
       eventType: "excretion",
     }
+    console.log("[v0] Final submit data:", submitData)
     onSubmit(submitData)
   }
 

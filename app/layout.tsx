@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next"
 import { Inter, Work_Sans } from "next/font/google"
 import "./globals.css"
 import { ToastProvider, ToastContainer } from "@/components/ui/toast"
+import { ThemeProvider } from "next-themes"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -49,7 +50,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ja" className={`${inter.variable} ${workSans.variable} antialiased`}>
+    <html lang="ja" className={`${inter.variable} ${workSans.variable} antialiased`} suppressHydrationWarning>
       <head>
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -58,10 +59,12 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icon-192.png" />
       </head>
       <body className="font-sans">
-        <ToastProvider>
-          {children}
-          <ToastContainer />
-        </ToastProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange={false}>
+          <ToastProvider>
+            {children}
+            <ToastContainer />
+          </ToastProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

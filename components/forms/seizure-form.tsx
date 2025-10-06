@@ -13,6 +13,7 @@ import { SEIZURE_TYPES } from "@/app/(records)/options"
 import { DataStorageService } from "@/services/data-storage-service"
 import { useToast } from "@/hooks/use-toast"
 import CareFormLayout from "@/components/care-form-layout"
+import { VoiceInputButton } from "@/components/voice-input-button"
 
 interface SeizureFormProps {
   selectedUser: string
@@ -466,14 +467,19 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
             <Label htmlFor="triggers" className="text-teal-700 font-medium">
               🎯 誘因・きっかけ
             </Label>
-            <Textarea
-              id="triggers"
-              value={formData.triggers}
-              onChange={(e) => setFormData({ ...formData, triggers: e.target.value })}
-              placeholder="光刺激、音、疲労など"
-              rows={3}
-              className="mt-2"
-            />
+            <div className="flex gap-2 mt-2">
+              <Textarea
+                id="triggers"
+                value={formData.triggers}
+                onChange={(e) => setFormData({ ...formData, triggers: e.target.value })}
+                placeholder="光刺激、音、疲労など"
+                rows={3}
+                className="flex-1"
+              />
+              <VoiceInputButton
+                onTranscript={(text) => setFormData({ ...formData, triggers: formData.triggers + text })}
+              />
+            </div>
           </CardContent>
         </Card>
 
@@ -482,14 +488,19 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
             <Label htmlFor="response" className="text-indigo-700 font-medium">
               🏥 対応・処置
             </Label>
-            <Textarea
-              id="response"
-              value={formData.response}
-              onChange={(e) => setFormData({ ...formData, response: e.target.value })}
-              placeholder="体位変換、酸素投与など"
-              rows={3}
-              className="mt-2"
-            />
+            <div className="flex gap-2 mt-2">
+              <Textarea
+                id="response"
+                value={formData.response}
+                onChange={(e) => setFormData({ ...formData, response: e.target.value })}
+                placeholder="体位変換、酸素投与など"
+                rows={3}
+                className="flex-1"
+              />
+              <VoiceInputButton
+                onTranscript={(text) => setFormData({ ...formData, response: formData.response + text })}
+              />
+            </div>
           </CardContent>
         </Card>
 
@@ -498,14 +509,17 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
             <Label htmlFor="notes" className="text-gray-700 font-medium">
               📝 備考
             </Label>
-            <Textarea
-              id="notes"
-              value={formData.notes}
-              onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              placeholder="その他の観察事項"
-              rows={3}
-              className="mt-2"
-            />
+            <div className="flex gap-2 mt-2">
+              <Textarea
+                id="notes"
+                value={formData.notes}
+                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                placeholder="その他の観察事項"
+                rows={3}
+                className="flex-1"
+              />
+              <VoiceInputButton onTranscript={(text) => setFormData({ ...formData, notes: formData.notes + text })} />
+            </div>
           </CardContent>
         </Card>
       </div>

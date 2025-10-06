@@ -10,6 +10,9 @@ import { DataBackupPanel } from "@/components/data-backup-panel"
 import { StatisticsDashboard } from "@/components/statistics-dashboard"
 import { SettingsPanel } from "@/components/settings-panel"
 import { A4RecordSheet } from "@/components/a4-record-sheet"
+import { FamilySignatureForm } from "@/components/family-signature-form"
+import { MedicalSummaryGenerator } from "@/components/medical-summary-generator"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { DailyLogExportService } from "@/services/daily-log-export-service"
 import { DataStorageService, initializeSampleData } from "@/services/data-storage-service"
 import { useToast } from "@/hooks/use-toast"
@@ -238,6 +241,8 @@ export default function WorldClassSoulCareApp() {
   const [appTitle, setAppTitle] = useState("日常ケア記録システム")
   const [appSubtitle, setAppSubtitle] = useState("重症心身障がい児者支援アプリ - PROJECT SOUL")
   const [isClient, setIsClient] = useState(false)
+  const [isFamilySignatureOpen, setIsFamilySignatureOpen] = useState(false)
+  const [isMedicalSummaryOpen, setIsMedicalSummaryOpen] = useState(false)
   const { toast } = useToast()
 
   // Client-side only initialization to prevent hydration mismatch
@@ -384,6 +389,44 @@ export default function WorldClassSoulCareApp() {
     setAppSubtitle(subtitle)
   }
 
+  const handleFamilySignaturePreview = useCallback(() => {
+    setIsLoading(true)
+    try {
+      generateDailyLog()
+      setIsFamilySignatureOpen(true)
+      toast({
+        title: "家族署名用フォームを開きました",
+      })
+    } catch (error) {
+      toast({
+        title: "家族署名用フォームの生成に失敗しました",
+        description: "もう一度お試しください",
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }, [generateDailyLog, toast])
+
+  const handleMedicalSummaryPreview = useCallback(() => {
+    setIsLoading(true)
+    try {
+      generateDailyLog()
+      setIsMedicalSummaryOpen(true)
+      toast({
+        title: "医療サマリーを開きました",
+      })
+    } catch (error) {
+      toast({
+        title: "医療サマリーの生成に失敗しました",
+        description: "もう一度お試しください",
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }, [generateDailyLog, toast])
+
   useEffect(() => {
     if (!isClient) return
 
@@ -433,13 +476,27 @@ export default function WorldClassSoulCareApp() {
             event.preventDefault()
             handleA4RecordSheetPreview()
             break
+          case "f":
+            event.preventDefault()
+            handleFamilySignaturePreview()
+            break
+          case "m":
+            event.preventDefault()
+            handleMedicalSummaryPreview()
+            break
         }
       }
     }
 
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [handlePdfPreview, handleExcelExport, handleA4RecordSheetPreview])
+  }, [
+    handlePdfPreview,
+    handleExcelExport,
+    handleA4RecordSheetPreview,
+    handleFamilySignaturePreview,
+    handleMedicalSummaryPreview,
+  ])
 
   const currentUsers = customUserNames.length > 0 ? customUserNames : users
 
@@ -463,6 +520,8 @@ export default function WorldClassSoulCareApp() {
             </div>
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
+              <ThemeToggle />
+
               <select className="px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary">
                 <option value="">サービス種別を選択</option>
                 {welfareServices.map((service) => (
@@ -569,7 +628,9 @@ export default function WorldClassSoulCareApp() {
                     <Link href="/after-school/users">{service.name}記録</Link>
                   </Button>
                 ) : (
-                  <Button size="sm" className="w-full">{service.name}記録</Button>
+                  <Button size="sm" className="w-full">
+                    {service.name}記録
+                  </Button>
                 )}
               </CardContent>
             </Card>
@@ -630,11 +691,26 @@ export default function WorldClassSoulCareApp() {
                       {isLoading ? <LoadingSpinner size="sm" /> : "📋"}
                       A4記録用紙
                     </Button>
-                          <div className="mt-3">
-                            <Button size="sm" className="w-full" asChild>
-                              <Link href="/family-signature">家族署名フォーム</Link>
-                            </Button>
-                          </div>
+                    <Button
+                      onClick={handleFamilySignaturePreview}
+                      className="flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-lg w-full"
+                      disabled={isLoading}
+                      title="家族署名用フォーム (Ctrl+F)"
+                      variant="secondary"
+                    >
+                      {isLoading ? <LoadingSpinner size="sm" /> : "✍️"}
+                      家族署名用フォーム
+                    </Button>
+                    <Button
+                      onClick={handleMedicalSummaryPreview}
+                      className="flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-lg w-full"
+                      disabled={isLoading}
+                      title="医療サマリー (Ctrl+M)"
+                      variant="secondary"
+                    >
+                      {isLoading ? <LoadingSpinner size="sm" /> : "📊"}
+                      医療サマリー
+                    </Button>
                     <div className="flex flex-col sm:flex-row gap-3">
                       <Button
                         onClick={handlePdfPreview}
@@ -713,6 +789,53 @@ export default function WorldClassSoulCareApp() {
           dailyLog={dailyLog}
           careEvents={careEvents}
         />
+
+        {isFamilySignatureOpen && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+            <div className="bg-white rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+              <div className="flex items-center justify-between p-4 border-b sticky top-0 bg-white z-10">
+                <h2 className="text-xl font-bold text-gray-900">家族署名用フォーム - {selectedUser}</h2>
+                <Button onClick={() => setIsFamilySignatureOpen(false)} variant="outline" size="sm">
+                  閉じる
+                </Button>
+              </div>
+              <div className="overflow-auto max-h-[calc(90vh-80px)]">
+                <FamilySignatureForm
+                  userId={selectedUser}
+                  userName={selectedUser}
+                  onSubmit={(data) => {
+                    console.log("家族署名データ:", data)
+                    toast({
+                      title: "署名データを保存しました",
+                    })
+                    setIsFamilySignatureOpen(false)
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {isMedicalSummaryOpen && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+              <div className="flex items-center justify-between p-4 border-b">
+                <h2 className="text-xl font-bold text-gray-900">医療サマリー - {selectedUser}</h2>
+                <div className="flex gap-2">
+                  <Button onClick={() => window.print()} className="flex items-center gap-2" size="sm">
+                    🖨️ 印刷
+                  </Button>
+                  <Button onClick={() => setIsMedicalSummaryOpen(false)} variant="outline" size="sm">
+                    閉じる
+                  </Button>
+                </div>
+              </div>
+              <div className="overflow-auto max-h-[calc(90vh-80px)] p-6">
+                <MedicalSummaryGenerator userId={selectedUser} userName={selectedUser} careEvents={careEvents} />
+              </div>
+            </div>
+          </div>
+        )}
 
         {isA4RecordSheetOpen && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
