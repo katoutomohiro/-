@@ -17,6 +17,7 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import { AdminPasswordAuth } from "@/components/admin-password-auth"
 import AIDashboard from "@/components/ai-dashboard"
 import Link from "next/link"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 const eventCategories = [
   {
@@ -463,6 +464,9 @@ export default function WorldClassSoulCareApp() {
             </div>
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
+              <div className="flex items-center gap-2">
+                <ThemeToggle />
+              </div>
               <select className="px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary">
                 <option value="">サービス種別を選択</option>
                 {welfareServices.map((service) => (

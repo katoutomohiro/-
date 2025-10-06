@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
 import CareFormLayout from "@/components/care-form-layout"
+import { VoiceInputButton } from "@/components/voice-input-button"
 
 interface ExpressionFormData {
   timestamp: string
@@ -423,14 +424,19 @@ export function ExpressionForm({ onSubmit, onCancel }: ExpressionFormProps) {
             <Label htmlFor="notes" className="text-sm font-medium text-gray-700">
               その他の観察事項
             </Label>
-            <Textarea
-              id="notes"
-              value={formData.notes}
-              onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              placeholder="その他の観察事項や特記事項を詳しく記録してください"
-              rows={4}
-              className="text-base resize-none"
-            />
+            <div className="flex gap-2">
+              <Textarea
+                id="notes"
+                value={formData.notes}
+                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                placeholder="その他の観察事項や特記事項を詳しく記録してください"
+                rows={4}
+                className="text-base resize-none flex-1"
+              />
+              <VoiceInputButton
+                onTranscript={(text) => setFormData({ ...formData, notes: formData.notes + " " + text })}
+              />
+            </div>
           </div>
         </div>
       </div>
