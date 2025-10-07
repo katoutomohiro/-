@@ -6,6 +6,7 @@ export interface CareEvent {
   time: string
   timeOfDay?: "morning" | "afternoon" | "evening" | "night"
   notes?: string
+  photos?: string[]
   [key: string]: any
 }
 
