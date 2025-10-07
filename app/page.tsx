@@ -436,67 +436,18 @@ export default function WorldClassSoulCareApp() {
     const savedUserNames = DataStorageService.getCustomUserNames()
     if (savedUserNames.length > 0) {
       setCustomUserNames(savedUserNames)
-      if (!savedUserNames.includes(selectedUser)) {
+      if (savedUserNames.length > 0 && !selectedUser) {
         setSelectedUser(savedUserNames[0] || "利用者A")
       }
     } else {
       setCustomUserNames(users)
     }
-  }, [selectedUser, isClient])
+  }, [isClient])
 
   useEffect(() => {
-    const handleKeyDown = (event: globalThis.KeyboardEvent) => {
-      if (event.ctrlKey || event.metaKey) {
-        switch (event.key) {
-          case "1":
-            event.preventDefault()
-            setCurrentView("dashboard")
-            break
-          case "2":
-            event.preventDefault()
-            setCurrentView("statistics")
-            break
-          case "3":
-            event.preventDefault()
-            setCurrentView("settings")
-            break
-          case "4":
-            event.preventDefault()
-            setCurrentView("ai-analysis")
-            break
-          case "p":
-            event.preventDefault()
-            handlePdfPreview()
-            break
-          case "e":
-            event.preventDefault()
-            handleExcelExport()
-            break
-          case "a":
-            event.preventDefault()
-            handleA4RecordSheetPreview()
-            break
-          case "f":
-            event.preventDefault()
-            handleFamilySignaturePreview()
-            break
-          case "m":
-            event.preventDefault()
-            handleMedicalSummaryPreview()
-            break
-        }
-      }
-    }
-
-    window.addEventListener("keydown", handleKeyDown)
-    return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [
-    handlePdfPreview,
-    handleExcelExport,
-    handleA4RecordSheetPreview,
-    handleFamilySignaturePreview,
-    handleMedicalSummaryPreview,
-  ])
+    if (!isClient || !selectedUser) return
+    generateDailyLog()
+  }, [isClient, selectedUser, generateDailyLog])
 
   const currentUsers = customUserNames.length > 0 ? customUserNames : users
 
@@ -520,9 +471,8 @@ export default function WorldClassSoulCareApp() {
             </div>
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
-              <div className="flex items-center gap-2">
-                <ThemeToggle />
-              </div>
+              <ThemeToggle />
+
               <select className="px-4 py-2 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary">
                 <option value="">サービス種別を選択</option>
                 {welfareServices.map((service) => (
