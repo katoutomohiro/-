@@ -1,26 +1,36 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { generateQRCodeDataUrl } from "@/lib/qr-code-utils"
+import { useEffect, useRef } from "react"
+import QRCode from "qrcode"
 
-export default function QRCodeGenerator({ text, width = 240 }: { text: string; width?: number }) {
-  const [dataUrl, setDataUrl] = useState<string>("")
+interface QRCodeGeneratorProps {
+  data: string
+  size?: number
+  className?: string
+}
+
+export function QRCodeGenerator({ data, size = 200, className = "" }: QRCodeGeneratorProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
-    let mounted = true
-    generateQRCodeDataUrl(text, { width }).then((d) => {
-      if (mounted) setDataUrl(d)
-    })
-    return () => {
-      mounted = false
+    if (canvasRef.current) {
+      QRCode.toCanvas(
+        canvasRef.current,
+        data,
+        {
+          width: size,
+          margin: 2,
+          color: {
+            dark: "#000000",
+            light: "#FFFFFF",
+          },
+        },
+        (error) => {
+          if (error) console.error("QRコード生成エラー:", error)
+        },
+      )
     }
-  }, [text, width])
+  }, [data, size])
 
-  if (!dataUrl) return <div className="text-sm text-muted-foreground">QRを生成中...</div>
-
-  return (
-    <div className="flex items-center justify-center">
-      <img src={dataUrl} alt="QR code" width={width} height={width} />
-    </div>
-  )
+  return <canvas ref={canvasRef} className={className} />
 }

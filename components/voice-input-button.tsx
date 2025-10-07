@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast"
 interface VoiceInputButtonProps {
   onTranscript: (text: string) => void
   className?: string
+  size?: "sm" | "default" | "lg"
 }
 
 export function VoiceInputButton({ onTranscript, className }: VoiceInputButtonProps) {

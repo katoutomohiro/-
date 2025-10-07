@@ -1,30 +1,49 @@
 "use client"
 
+import type React from "react"
+
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { UserManagementModal } from "@/components/user-management-modal"
 import { Badge } from "@/components/ui/badge"
 import { DataStorageService, type UserProfile } from "@/services/data-storage-service"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { initializeRealUsersData } from "@/lib/data/users-data"
+import { UserManagementModal } from "@/components/user-management-modal"
+import { Plus, Edit } from "lucide-react"
 
 export default function DailyCareUsersPage() {
   const [users, setUsers] = useState<UserProfile[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingUserId, setEditingUserId] = useState<string | null>(null)
-  const [editingUser, setEditingUser] = useState<UserProfile | null>(null)
+  const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null)
   const router = useRouter()
 
-  useEffect(() => {
+  const loadUsers = () => {
     initializeRealUsersData()
-
     const allUsers = DataStorageService.getAllUserProfiles()
     const dailyCareUsers = allUsers.filter((user) => user.serviceType === "daily-care")
-
     setUsers(dailyCareUsers)
+  }
+
+  useEffect(() => {
+    loadUsers()
   }, [])
+
+  const handleAddUser = () => {
+    setSelectedUser(null)
+    setIsModalOpen(true)
+  }
+
+  const handleEditUser = (user: UserProfile, e: React.MouseEvent) => {
+    e.stopPropagation()
+    setSelectedUser(user)
+    setIsModalOpen(true)
+  }
+
+  const handleSave = () => {
+    loadUsers()
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
@@ -37,11 +56,14 @@ export default function DailyCareUsersPage() {
                 日中活動・創作活動・生産活動の記録と支援計画管理（{users.length}名）
               </p>
             </div>
-            <div className="flex items-center gap-3">
-              <Button variant="default" onClick={() => { setEditingUserId(null); setEditingUser(null); setIsModalOpen(true) }}>利用者を追加</Button>
-              <Button asChild variant="outline">
-                <Link href="/">ダッシュボードに戻る</Link>
+            <div className="flex gap-2">
+              <Button onClick={handleAddUser} className="gap-2">
+                <Plus className="h-4 w-4" />
+                利用者を追加
               </Button>
+              <Link href="/">
+                <Button variant="outline">ダッシュボードに戻る</Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -61,8 +83,20 @@ export default function DailyCareUsersPage() {
                     👤
                   </div>
                   <div className="flex-1">
-                    <CardTitle className="text-base font-semibold">{user.name}</CardTitle>
-                    {user.furigana && <p className="text-xs text-muted-foreground mt-1">{user.furigana}</p>}
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <CardTitle className="text-base font-semibold">{user.name}</CardTitle>
+                        {user.furigana && <p className="text-xs text-muted-foreground mt-1">{user.furigana}</p>}
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-8 w-8 p-0"
+                        onClick={(e) => handleEditUser(user, e)}
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                    </div>
                     <Badge variant="secondary" className="mt-2">
                       生活介護
                     </Badge>
@@ -79,38 +113,21 @@ export default function DailyCareUsersPage() {
                     </p>
                   )}
                 </div>
-                <div className="flex gap-2">
-                  <Button size="sm" className="flex-1" onClick={() => router.push(`/daily-care/users/${user.id}`)}>
-                    ケース記録を見る
-                  </Button>
-                  <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); setEditingUserId(user.id); setEditingUser(user); setIsModalOpen(true) }}>
-                    編集
-                  </Button>
-                </div>
+                <Button size="sm" className="w-full">
+                  ケース記録を見る
+                </Button>
               </CardContent>
             </Card>
           ))}
         </div>
       </main>
+
       <UserManagementModal
         open={isModalOpen}
-        onOpenChange={(open) => {
-          if (!open) {
-            setIsModalOpen(false)
-            setEditingUserId(null)
-            setEditingUser(null)
-            const all = DataStorageService.getAllUserProfiles()
-            setUsers(all.filter((u) => u.serviceType === "daily-care"))
-          } else {
-            setIsModalOpen(true)
-          }
-        }}
-        user={editingUser}
+        onOpenChange={setIsModalOpen}
+        user={selectedUser}
         serviceType="daily-care"
-        onSave={() => {
-          const all = DataStorageService.getAllUserProfiles()
-          setUsers(all.filter((us) => us.serviceType === "daily-care"))
-        }}
+        onSave={handleSave}
       />
     </div>
   )
