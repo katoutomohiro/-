@@ -3,6 +3,7 @@
 import React, { useState, useRef } from "react"
 import { Button } from "./ui/button"
 import { Card } from "./ui/card"
+import { Camera } from "lucide-react"
 
 interface PhotoUploadProps {
   photos?: string[]
@@ -68,16 +69,21 @@ export function PhotoUpload({ photos = [], onChange, maxPhotos = 3, maxSizeKB = 
             ref={fileInputRef}
             type="file"
             accept="image/*"
+            capture="environment"
             multiple
             onChange={(e) => handleFiles(e.target.files)}
             className="hidden"
+            id="photo-upload-input"
           />
           <Button
-            onClick={() => fileInputRef.current && fileInputRef.current.click()}
-            disabled={localPhotos.length >= maxPhotos}
-            size="sm"
+            type="button"
+            variant="outline"
+            onClick={() => document.getElementById("photo-upload-input")?.click()}
+            disabled={localPhotos.length >= 3}
+            className="w-full bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
           >
-            写真を追加 ({localPhotos.length}/{maxPhotos})
+            <Camera className="h-4 w-4 mr-2" />
+            写真を追加 ({localPhotos.length}/3)
           </Button>
           <div className="text-sm text-muted-foreground">1枚あたり最大 {maxSizeKB}KB</div>
         </div>

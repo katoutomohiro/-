@@ -1,5 +1,8 @@
 "use client"
 
+import { useState } from "react"
+import { A4RecordSheetPhotoButton } from "@/components/a4-record-sheet-photo-button"
+
 interface A4RecordSheetProps {
   selectedUser: string
   dailyRecords: any[]
@@ -389,6 +392,10 @@ export function A4RecordSheet({
   const morningVitals = getVitalsByTimeOfDay("morning")
   const afternoonVitals = getVitalsByTimeOfDay("afternoon")
   const eveningVitals = getVitalsByTimeOfDay("evening")
+
+  const [refreshCounter, setRefreshCounter] = useState(0)
+
+  const handlePhotosUpdated = () => setRefreshCounter((c) => c + 1)
 
   return (
     <div className="w-full max-w-[210mm] mx-auto bg-white text-black print:shadow-none shadow-lg">
@@ -846,7 +853,21 @@ export function A4RecordSheet({
                         {record.eventType === "infection-prevention" && "感染予防"}
                         {record.eventType === "communication" && "コミュニケーション"}
                       </td>
-                      <td className="border border-foreground p-1 leading-relaxed">{formatRecordDetails(record)}</td>
+                      <td className="border border-gray-300 px-2 py-1 text-xs">
+                        <div className="space-y-1">
+                          <div>{record.notes || "-"}</div>
+                          {record.photos && record.photos.length > 0 && (
+                            <div className="text-xs text-gray-500 print:inline">📷 写真 {record.photos.length}枚</div>
+                          )}
+                          <div className="print:hidden">
+                            <A4RecordSheetPhotoButton
+                              eventId={record.id}
+                              currentPhotos={record.photos || []}
+                              onPhotosUpdated={() => window.location.reload()}
+                            />
+                          </div>
+                        </div>
+                      </td>
                     </tr>
                   ))
                 ) : (

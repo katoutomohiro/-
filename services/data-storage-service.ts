@@ -179,6 +179,11 @@ export class DataStorageService {
     })
   }
 
+  static getCareEventById(eventId: string): CareEvent | null {
+    const allEvents = this.getAllCareEvents()
+    return allEvents.find((event) => event.id === eventId) || null
+  }
+
   static deleteCareEvent(eventId: string): boolean {
     try {
       const events = this.getAllCareEvents()
