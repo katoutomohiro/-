@@ -14,6 +14,7 @@ import { DataStorageService } from "@/services/data-storage-service"
 import { useToast } from "@/hooks/use-toast"
 import CareFormLayout from "@/components/care-form-layout"
 import { VoiceInputButton } from "@/components/voice-input-button"
+import { PhotoUpload } from "@/components/photo-upload"
 
 interface SeizureFormProps {
   selectedUser: string
@@ -112,6 +113,7 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
     observedSymptoms: [] as string[],
     measurementIssues: "",
     notes: "",
+    photos: [] as string[],
     time: new Date().toTimeString().slice(0, 5),
   })
 
@@ -210,6 +212,7 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
         observedSymptoms: formData.observedSymptoms,
         measurementIssues: formData.measurementIssues,
         notes: formData.notes || "",
+        photos: formData.photos,
       })
 
       onSubmit(careEvent)
@@ -522,6 +525,17 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
                 onTranscript={(text) => setFormData({ ...formData, notes: formData.notes + " " + text })}
               />
             </div>
+          </CardContent>
+        </Card>
+        <Card className="border-violet-200 bg-violet-50/30">
+          <CardContent className="p-4">
+            <Label className="text-violet-700 font-medium mb-3 block">📸 写真</Label>
+            <PhotoUpload
+              photos={formData.photos}
+              onChange={(photos) => setFormData({ ...formData, photos })}
+              maxPhotos={3}
+              maxSizeKB={500}
+            />
           </CardContent>
         </Card>
       </div>

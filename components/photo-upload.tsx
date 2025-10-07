@@ -11,7 +11,7 @@ interface PhotoUploadProps {
   maxSizeKB?: number
 }
 
-export default function PhotoUpload({ photos = [], onChange, maxPhotos = 3, maxSizeKB = 500 }: PhotoUploadProps) {
+export function PhotoUpload({ photos = [], onChange, maxPhotos = 3, maxSizeKB = 500 }: PhotoUploadProps) {
   const [localPhotos, setLocalPhotos] = useState<string[]>(photos)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
@@ -100,3 +100,5 @@ export default function PhotoUpload({ photos = [], onChange, maxPhotos = 3, maxS
     </Card>
   )
 }
+
+export default PhotoUpload
