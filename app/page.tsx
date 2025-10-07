@@ -442,7 +442,7 @@ export default function WorldClassSoulCareApp() {
     } else {
       setCustomUserNames(users)
     }
-  }, [isClient, generateDailyLog])
+  }, [selectedUser, isClient])
 
   useEffect(() => {
     const handleKeyDown = (event: globalThis.KeyboardEvent) => {

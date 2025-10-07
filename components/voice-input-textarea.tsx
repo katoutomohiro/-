@@ -36,7 +36,7 @@ export function VoiceInputTextarea({
           rows={rows}
         />
         <div className="absolute bottom-2 right-2">
-          <VoiceInputButton onTranscript={handleVoiceTranscript} size="sm" />
+          <VoiceInputButton onTranscript={handleVoiceTranscript} />
         </div>
       </div>
     </div>
