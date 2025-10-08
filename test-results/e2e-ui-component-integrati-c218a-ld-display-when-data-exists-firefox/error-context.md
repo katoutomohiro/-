@@ -1,0 +1,328 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - generic [ref=e6]:
+            - heading "重心ケアアプリ - PROJECT SOUL" [level=1] [ref=e7]
+            - paragraph [ref=e8]: 重症心身障がい児者の包括的福祉支援システム
+          - generic [ref=e9]:
+            - button "テーマを切り替え" [ref=e10] [cursor=pointer]:
+              - img
+              - generic [ref=e11]: テーマを切り替え
+            - combobox [ref=e12]:
+              - option "サービス種別を選択" [selected]
+              - option "生活介護"
+              - option "放課後等デイサービス"
+              - option "日中一時支援"
+              - option "グループホーム"
+              - option "重度訪問介護"
+            - combobox "利用者を選択" [ref=e13]:
+              - option "利用者A" [selected]
+              - option "利用者B"
+              - option "利用者C"
+              - option "利用者D"
+              - option "利用者E"
+              - option "利用者F"
+              - option "利用者G"
+              - option "利用者H"
+              - option "利用者I"
+              - option "利用者J"
+              - option "利用者K"
+              - option "利用者L"
+              - option "利用者M"
+              - option "利用者N"
+              - option "利用者O"
+              - option "利用者P"
+              - option "利用者Q"
+              - option "利用者R"
+              - option "利用者S"
+              - option "利用者T"
+              - option "利用者U"
+              - option "利用者V"
+              - option "利用者W"
+              - option "利用者X"
+            - generic [ref=e14]: 2025年10月8日
+        - generic [ref=e16]:
+          - button "🏠 ダッシュボード" [ref=e17] [cursor=pointer]
+          - button "📊 統計・分析" [ref=e18] [cursor=pointer]
+          - button "🤖 AI分析" [ref=e19] [cursor=pointer]
+          - button "⚙️ 設定" [ref=e20] [cursor=pointer]
+    - main [ref=e21]:
+      - generic [ref=e22]:
+        - generic [ref=e23] [cursor=pointer]:
+          - generic [ref=e25]:
+            - generic [ref=e26]: 🏥
+            - generic [ref=e28]: 生活介護
+          - generic [ref=e29]:
+            - paragraph [ref=e30]: 日中活動・創作活動・生産活動の記録と支援計画管理
+            - generic [ref=e31]:
+              - generic [ref=e32]: 個別支援計画
+              - generic [ref=e33]: 活動記録
+              - generic [ref=e34]: 健康管理
+              - generic [ref=e35]: 家族連携
+            - link "生活介護記録" [ref=e36]:
+              - /url: /daily-care/users
+        - generic [ref=e37] [cursor=pointer]:
+          - generic [ref=e39]:
+            - generic [ref=e40]: 🎓
+            - generic [ref=e42]: 放課後等デイサービス
+          - generic [ref=e43]:
+            - paragraph [ref=e44]: 学齢期の療育・集団活動・個別支援の記録
+            - generic [ref=e45]:
+              - generic [ref=e46]: 療育プログラム
+              - generic [ref=e47]: 発達支援
+              - generic [ref=e48]: 学習支援
+              - generic [ref=e49]: 社会性育成
+            - link "放課後等デイサービス記録" [ref=e50]:
+              - /url: /after-school/users
+        - generic [ref=e51] [cursor=pointer]:
+          - generic [ref=e53]:
+            - generic [ref=e54]: ⏰
+            - generic [ref=e56]: 日中一時支援
+          - generic [ref=e57]:
+            - paragraph [ref=e58]: 短期預かり・見守り支援の状況記録
+            - generic [ref=e59]:
+              - generic [ref=e60]: 安全管理
+              - generic [ref=e61]: 活動支援
+              - generic [ref=e62]: 緊急対応
+              - generic [ref=e63]: 家族支援
+            - button "日中一時支援記録" [ref=e64]
+        - generic [ref=e65] [cursor=pointer]:
+          - generic [ref=e67]:
+            - generic [ref=e68]: 🏠
+            - generic [ref=e70]: グループホーム
+          - generic [ref=e71]:
+            - paragraph [ref=e72]: 共同生活援助・夜間支援・生活相談の記録
+            - generic [ref=e73]:
+              - generic [ref=e74]: 生活支援
+              - generic [ref=e75]: 夜間ケア
+              - generic [ref=e76]: 自立支援
+              - generic [ref=e77]: 地域連携
+            - button "グループホーム記録" [ref=e78]
+        - generic [ref=e79] [cursor=pointer]:
+          - generic [ref=e81]:
+            - generic [ref=e82]: 🚑
+            - generic [ref=e84]: 重度訪問介護
+          - generic [ref=e85]:
+            - paragraph [ref=e86]: 在宅支援・外出支援・身体介護の記録
+            - generic [ref=e87]:
+              - generic [ref=e88]: 身体介護
+              - generic [ref=e89]: 家事支援
+              - generic [ref=e90]: 外出支援
+              - generic [ref=e91]: 医療連携
+            - button "重度訪問介護記録" [ref=e92]
+      - generic [ref=e93]:
+        - generic [ref=e94] [cursor=pointer]:
+          - generic [ref=e96]:
+            - generic [ref=e97]: ⚡
+            - generic [ref=e99]: 発作記録
+          - generic [ref=e100]:
+            - paragraph [ref=e101]: 発作の種類・時間・対応を記録
+            - button "発作記録を記録する" [ref=e102]: 記録する
+        - generic [ref=e103] [cursor=pointer]:
+          - generic [ref=e105]:
+            - generic [ref=e106]: 😊
+            - generic [ref=e108]: 表情・反応
+          - generic [ref=e109]:
+            - paragraph [ref=e110]: 表情や反応の変化を記録
+            - button "表情・反応を記録する" [ref=e111]: 記録する
+        - generic [ref=e112] [cursor=pointer]:
+          - generic [ref=e114]:
+            - generic [ref=e115]: ❤️
+            - generic [ref=e117]: バイタル
+          - generic [ref=e118]:
+            - paragraph [ref=e119]: 体温・血圧・脈拍を記録
+            - button "バイタルを記録する" [ref=e120]: 記録する
+        - generic [ref=e121] [cursor=pointer]:
+          - generic [ref=e123]:
+            - generic [ref=e124]: 💧
+            - generic [ref=e126]: 水分補給
+          - generic [ref=e127]:
+            - paragraph [ref=e128]: 水分摂取量・方法を記録
+            - button "水分補給を記録する" [ref=e129]: 記録する
+        - generic [ref=e130] [cursor=pointer]:
+          - generic [ref=e132]:
+            - generic [ref=e133]: 🚽
+            - generic [ref=e135]: 排泄
+          - generic [ref=e136]:
+            - paragraph [ref=e137]: 排尿・排便の状況を記録
+            - button "排泄を記録する" [ref=e138]: 記録する
+        - generic [ref=e139] [cursor=pointer]:
+          - generic [ref=e141]:
+            - generic [ref=e142]: 🏃
+            - generic [ref=e144]: 活動
+          - generic [ref=e145]:
+            - paragraph [ref=e146]: 日常活動・リハビリを記録
+            - button "活動を記録する" [ref=e147]: 記録する
+        - generic [ref=e148] [cursor=pointer]:
+          - generic [ref=e150]:
+            - generic [ref=e151]: 🛡️
+            - generic [ref=e153]: 皮膚・口腔ケア
+          - generic [ref=e154]:
+            - paragraph [ref=e155]: 皮膚状態・口腔ケアを記録
+            - button "皮膚・口腔ケアを記録する" [ref=e156]: 記録する
+        - generic [ref=e157] [cursor=pointer]:
+          - generic [ref=e159]:
+            - generic [ref=e160]: 🍽️
+            - generic [ref=e162]: 経管栄養
+          - generic [ref=e163]:
+            - paragraph [ref=e164]: 経管栄養の実施状況を記録
+            - button "経管栄養を記録する" [ref=e165]: 記録する
+        - generic [ref=e166] [cursor=pointer]:
+          - generic [ref=e168]:
+            - generic [ref=e169]: 🫁
+            - generic [ref=e171]: 呼吸管理
+          - generic [ref=e172]:
+            - paragraph [ref=e173]: 呼吸状態・人工呼吸器管理を記録
+            - button "呼吸管理を記録する" [ref=e174]: 記録する
+        - generic [ref=e175] [cursor=pointer]:
+          - generic [ref=e177]:
+            - generic [ref=e178]: 🔄
+            - generic [ref=e180]: 体位変換・姿勢管理
+          - generic [ref=e181]:
+            - paragraph [ref=e182]: 体位変換・姿勢調整を記録
+            - button "体位変換・姿勢管理を記録する" [ref=e183]: 記録する
+        - generic [ref=e184] [cursor=pointer]:
+          - generic [ref=e186]:
+            - generic [ref=e187]: 🍽️
+            - generic [ref=e189]: 摂食嚥下管理
+          - generic [ref=e190]:
+            - paragraph [ref=e191]: 嚥下機能・誤嚥リスク管理を記録
+            - button "摂食嚥下管理を記録する" [ref=e192]: 記録する
+        - generic [ref=e193] [cursor=pointer]:
+          - generic [ref=e195]:
+            - generic [ref=e196]: 🛡️
+            - generic [ref=e198]: 感染予防管理
+          - generic [ref=e199]:
+            - paragraph [ref=e200]: 感染兆候・予防策実施を記録
+            - button "感染予防管理を記録する" [ref=e201]: 記録する
+        - generic [ref=e202] [cursor=pointer]:
+          - generic [ref=e204]:
+            - generic [ref=e205]: 💬
+            - generic [ref=e207]: コミュニケーション支援
+          - generic [ref=e208]:
+            - paragraph [ref=e209]: 意思疎通・支援機器使用を記録
+            - button "コミュニケーション支援を記録する" [ref=e210]: 記録する
+        - generic [ref=e211] [cursor=pointer]:
+          - generic [ref=e213]:
+            - generic [ref=e214]: 💊
+            - generic [ref=e216]: 服薬管理
+          - generic [ref=e217]:
+            - paragraph [ref=e218]: 処方薬の服薬状況・副作用・効果の記録
+            - button "服薬管理を記録する" [ref=e219]: 記録する
+        - generic [ref=e220] [cursor=pointer]:
+          - generic [ref=e222]:
+            - generic [ref=e223]: 🏃‍♂️
+            - generic [ref=e225]: リハビリテーション
+          - generic [ref=e226]:
+            - paragraph [ref=e227]: 理学療法・作業療法・言語療法の実施記録
+            - button "リハビリテーションを記録する" [ref=e228]: 記録する
+        - generic [ref=e229] [cursor=pointer]:
+          - generic [ref=e231]:
+            - generic [ref=e232]: 👨‍👩‍👧‍👦
+            - generic [ref=e234]: 家族連携
+          - generic [ref=e235]:
+            - paragraph [ref=e236]: 家族との情報共有・相談・支援計画の調整
+            - button "家族連携を記録する" [ref=e237]: 記録する
+      - generic [ref=e238]:
+        - generic [ref=e239]:
+          - generic [ref=e241]:
+            - generic [ref=e242]: 📄
+            - text: 記録の出力
+          - generic [ref=e244]:
+            - button "📋A4記録用紙" [ref=e245] [cursor=pointer]
+            - button "✍️家族署名用フォーム" [ref=e246] [cursor=pointer]
+            - button "📊医療サマリー" [ref=e247] [cursor=pointer]
+            - generic [ref=e248]:
+              - button "👁️PDFプレビュー" [ref=e249] [cursor=pointer]
+              - button "📥CSV出力" [ref=e250] [cursor=pointer]
+        - generic [ref=e251]:
+          - generic [ref=e253]: 📁 データ管理
+          - generic [ref=e254]:
+            - generic [ref=e255]:
+              - generic [ref=e256]:
+                - text: データのバックアップ
+                - paragraph [ref=e257]: 全ての記録データをJSONファイルとして保存します
+                - button "📥 バックアップを作成" [ref=e258] [cursor=pointer]
+              - generic [ref=e259]:
+                - text: データの復元
+                - paragraph [ref=e260]: バックアップファイルからデータを復元します
+                - button "Choose File" [ref=e261]
+              - generic [ref=e262]:
+                - text: 危険な操作
+                - paragraph [ref=e263]: 全てのデータを完全に削除します
+                - button "🗑️ 全データを削除" [ref=e264] [cursor=pointer]
+            - generic [ref=e265]:
+              - text: ストレージ使用状況
+              - generic [ref=e267]:
+                - generic [ref=e268]: "使用量: 2 KB"
+                - generic [ref=e269]: 0%
+      - generic [ref=e272]:
+        - generic [ref=e274]:
+          - generic [ref=e275]: 📊
+          - text: 本日の記録サマリー - 利用者A
+        - generic [ref=e277]:
+          - generic [ref=e278]:
+            - generic [ref=e279]: "1"
+            - generic [ref=e280]: 発作記録
+            - generic [ref=e281]: "最終: 10:59"
+          - generic [ref=e282]:
+            - generic [ref=e283]: "0"
+            - generic [ref=e284]: 表情・反応
+            - generic [ref=e285]: "最終: 未記録"
+          - generic [ref=e286]:
+            - generic [ref=e287]: "0"
+            - generic [ref=e288]: バイタル
+            - generic [ref=e289]: "最終: 未記録"
+          - generic [ref=e290]:
+            - generic [ref=e291]: "0"
+            - generic [ref=e292]: 水分補給
+            - generic [ref=e293]: "最終: 未記録"
+          - generic [ref=e294]:
+            - generic [ref=e295]: "0"
+            - generic [ref=e296]: 排泄
+            - generic [ref=e297]: "最終: 未記録"
+          - generic [ref=e298]:
+            - generic [ref=e299]: "0"
+            - generic [ref=e300]: 活動
+            - generic [ref=e301]: "最終: 未記録"
+          - generic [ref=e302]:
+            - generic [ref=e303]: "0"
+            - generic [ref=e304]: 皮膚・口腔ケア
+            - generic [ref=e305]: "最終: 未記録"
+          - generic [ref=e306]:
+            - generic [ref=e307]: "0"
+            - generic [ref=e308]: 経管栄養
+            - generic [ref=e309]: "最終: 未記録"
+          - generic [ref=e310]:
+            - generic [ref=e311]: "0"
+            - generic [ref=e312]: コミュニケーション
+            - generic [ref=e313]: "最終: 未記録"
+          - generic [ref=e314]:
+            - generic [ref=e315]: "0"
+            - generic [ref=e316]: 服薬管理
+            - generic [ref=e317]: "最終: 未記録"
+          - generic [ref=e318]:
+            - generic [ref=e319]: "0"
+            - generic [ref=e320]: リハビリテーション
+            - generic [ref=e321]: "最終: 未記録"
+          - generic [ref=e322]:
+            - generic [ref=e323]: "0"
+            - generic [ref=e324]: 家族連携
+            - generic [ref=e325]: "最終: 未記録"
+          - generic [ref=e326]:
+            - generic [ref=e327]: "0"
+            - generic [ref=e328]: 摂食嚥下管理
+            - generic [ref=e329]: "最終: 未記録"
+          - generic [ref=e330]:
+            - generic [ref=e331]: "0"
+            - generic [ref=e332]: 感染予防管理
+            - generic [ref=e333]: "最終: 未記録"
+  - region "Notifications (F8)":
+    - list
+  - alert [ref=e334]
+```

@@ -1,0 +1,203 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - generic [ref=e6]:
+            - heading "重心ケアアプリ - PROJECT SOUL" [level=1] [ref=e7]
+            - paragraph [ref=e8]: 重症心身障がい児者の包括的福祉支援システム
+          - generic [ref=e9]:
+            - button "テーマを切り替え" [ref=e10] [cursor=pointer]:
+              - img
+              - generic [ref=e11]: テーマを切り替え
+            - combobox [ref=e12]:
+              - option "サービス種別を選択" [selected]
+              - option "生活介護"
+              - option "放課後等デイサービス"
+              - option "日中一時支援"
+              - option "グループホーム"
+              - option "重度訪問介護"
+            - combobox "利用者を選択" [ref=e13]:
+              - option "利用者A" [selected]
+              - option "利用者B"
+              - option "利用者C"
+              - option "利用者D"
+              - option "利用者E"
+              - option "利用者F"
+              - option "利用者G"
+              - option "利用者H"
+              - option "利用者I"
+              - option "利用者J"
+              - option "利用者K"
+              - option "利用者L"
+              - option "利用者M"
+              - option "利用者N"
+              - option "利用者O"
+              - option "利用者P"
+              - option "利用者Q"
+              - option "利用者R"
+              - option "利用者S"
+              - option "利用者T"
+              - option "利用者U"
+              - option "利用者V"
+              - option "利用者W"
+              - option "利用者X"
+            - generic [ref=e14]: 2025年10月8日
+        - generic [ref=e16]:
+          - button "🏠 ダッシュボード" [ref=e17] [cursor=pointer]
+          - button "📊 統計・分析" [active] [ref=e18] [cursor=pointer]
+          - button "🤖 AI分析" [ref=e19] [cursor=pointer]
+          - button "⚙️ 設定" [ref=e20] [cursor=pointer]
+    - main [ref=e21]:
+      - generic [ref=e22]:
+        - generic [ref=e23] [cursor=pointer]:
+          - generic [ref=e25]:
+            - generic [ref=e26]: 🏥
+            - generic [ref=e28]: 生活介護
+          - generic [ref=e29]:
+            - paragraph [ref=e30]: 日中活動・創作活動・生産活動の記録と支援計画管理
+            - generic [ref=e31]:
+              - generic [ref=e32]: 個別支援計画
+              - generic [ref=e33]: 活動記録
+              - generic [ref=e34]: 健康管理
+              - generic [ref=e35]: 家族連携
+            - link "生活介護記録" [ref=e36]:
+              - /url: /daily-care/users
+        - generic [ref=e37] [cursor=pointer]:
+          - generic [ref=e39]:
+            - generic [ref=e40]: 🎓
+            - generic [ref=e42]: 放課後等デイサービス
+          - generic [ref=e43]:
+            - paragraph [ref=e44]: 学齢期の療育・集団活動・個別支援の記録
+            - generic [ref=e45]:
+              - generic [ref=e46]: 療育プログラム
+              - generic [ref=e47]: 発達支援
+              - generic [ref=e48]: 学習支援
+              - generic [ref=e49]: 社会性育成
+            - link "放課後等デイサービス記録" [ref=e50]:
+              - /url: /after-school/users
+        - generic [ref=e51] [cursor=pointer]:
+          - generic [ref=e53]:
+            - generic [ref=e54]: ⏰
+            - generic [ref=e56]: 日中一時支援
+          - generic [ref=e57]:
+            - paragraph [ref=e58]: 短期預かり・見守り支援の状況記録
+            - generic [ref=e59]:
+              - generic [ref=e60]: 安全管理
+              - generic [ref=e61]: 活動支援
+              - generic [ref=e62]: 緊急対応
+              - generic [ref=e63]: 家族支援
+            - button "日中一時支援記録" [ref=e64]
+        - generic [ref=e65] [cursor=pointer]:
+          - generic [ref=e67]:
+            - generic [ref=e68]: 🏠
+            - generic [ref=e70]: グループホーム
+          - generic [ref=e71]:
+            - paragraph [ref=e72]: 共同生活援助・夜間支援・生活相談の記録
+            - generic [ref=e73]:
+              - generic [ref=e74]: 生活支援
+              - generic [ref=e75]: 夜間ケア
+              - generic [ref=e76]: 自立支援
+              - generic [ref=e77]: 地域連携
+            - button "グループホーム記録" [ref=e78]
+        - generic [ref=e79] [cursor=pointer]:
+          - generic [ref=e81]:
+            - generic [ref=e82]: 🚑
+            - generic [ref=e84]: 重度訪問介護
+          - generic [ref=e85]:
+            - paragraph [ref=e86]: 在宅支援・外出支援・身体介護の記録
+            - generic [ref=e87]:
+              - generic [ref=e88]: 身体介護
+              - generic [ref=e89]: 家事支援
+              - generic [ref=e90]: 外出支援
+              - generic [ref=e91]: 医療連携
+            - button "重度訪問介護記録" [ref=e92]
+      - generic [ref=e93]:
+        - generic [ref=e94]:
+          - heading "📊 統計ダッシュボード" [level=2] [ref=e95]
+          - generic [ref=e96]:
+            - button "1週間" [ref=e97] [cursor=pointer]
+            - button "1ヶ月" [ref=e98] [cursor=pointer]
+            - button "全期間" [ref=e99] [cursor=pointer]
+        - generic [ref=e100]:
+          - generic [ref=e101]:
+            - generic [ref=e103]: 総記録数
+            - generic [ref=e104]:
+              - generic [ref=e105]: "0"
+              - paragraph [ref=e106]: 過去1週間
+          - generic [ref=e107]:
+            - generic [ref=e109]: 記録種類数
+            - generic [ref=e110]:
+              - generic [ref=e111]: "0"
+              - paragraph [ref=e112]: 異なるケアイベント
+          - generic [ref=e113]:
+            - generic [ref=e115]: 平均記録数/日
+            - generic [ref=e116]:
+              - generic [ref=e117]: "0"
+              - paragraph [ref=e118]: 1日あたり
+        - generic [ref=e119]:
+          - generic [ref=e121]:
+            - generic [ref=e122]: 週間推移
+            - generic [ref=e123]:
+              - button "棒グラフ" [ref=e124] [cursor=pointer]
+              - button "折れ線" [ref=e125] [cursor=pointer]
+          - generic [ref=e128]:
+            - list [ref=e130]:
+              - listitem [ref=e131]:
+                - img "記録数 legend icon" [ref=e132]
+                - text: 記録数
+            - application [ref=e134]:
+              - generic [ref=e154]:
+                - generic [ref=e157]: 10月2日
+                - generic [ref=e160]: 10月3日
+                - generic [ref=e163]: 10月4日
+                - generic [ref=e166]: 10月5日
+                - generic [ref=e169]: 10月6日
+                - generic [ref=e172]: 10月7日
+                - generic [ref=e175]: 10月8日
+              - generic [ref=e178]:
+                - generic [ref=e181]: "0"
+                - generic [ref=e184]: "1"
+                - generic [ref=e187]: "2"
+                - generic [ref=e190]: "3"
+                - generic [ref=e193]: "4"
+        - generic [ref=e194]:
+          - generic [ref=e195]:
+            - generic [ref=e197]: ケアイベント別記録数
+            - application [ref=e201]
+          - generic [ref=e202]:
+            - generic [ref=e204]: 時間帯別記録分布
+            - generic [ref=e207]:
+              - list [ref=e209]:
+                - listitem [ref=e210]:
+                  - img "記録数 legend icon" [ref=e211]
+                  - text: 記録数
+              - application [ref=e213]:
+                - generic [ref=e236]:
+                  - generic [ref=e239]: 1:00
+                  - generic [ref=e242]: 3:00
+                  - generic [ref=e245]: 5:00
+                  - generic [ref=e248]: 7:00
+                  - generic [ref=e251]: 9:00
+                  - generic [ref=e254]: 11:00
+                  - generic [ref=e257]: 14:00
+                  - generic [ref=e260]: 17:00
+                  - generic [ref=e263]: 20:00
+                  - generic [ref=e266]: 23:00
+                - generic [ref=e269]:
+                  - generic [ref=e272]: "0"
+                  - generic [ref=e275]: "1"
+                  - generic [ref=e278]: "2"
+                  - generic [ref=e281]: "3"
+                  - generic [ref=e284]: "4"
+        - generic [ref=e285]:
+          - generic [ref=e287]: 最近の記録
+          - paragraph [ref=e290]: 記録がありません
+  - region "Notifications (F8)":
+    - list
+  - alert [ref=e291]
+  - generic [ref=e292]: 0:00
+```
