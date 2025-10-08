@@ -2,17 +2,18 @@
 
 import { useState } from "react"
 import { A4RecordSheetPhotoButton } from "@/components/a4-record-sheet-photo-button"
+import { getReiwaYear, getMonth, getDateNumber, formatLocalDateJP } from "@/utils/date"
 
 interface A4RecordSheetProps {
   selectedUser: string
   dailyRecords: any[]
-  date?: string
+  date?: string | undefined
 }
 
 export function A4RecordSheet({
   selectedUser,
   dailyRecords,
-  date = new Date().toLocaleDateString("ja-JP"),
+  date = undefined,
 }: A4RecordSheetProps) {
   const vitalsRecords = dailyRecords.filter((record) => record.eventType === "vitals")
   const careRecords = dailyRecords.filter((record) => record.eventType !== "vitals")
@@ -406,7 +407,7 @@ export function A4RecordSheet({
               <div className="text-lg font-bold">重症心身障害児者記録</div>
               <div className="text-right">
                 <div className="text-base font-semibold">
-                  令和 {new Date().getFullYear() - 2018} 年 {new Date().getMonth() + 1} 月 {new Date().getDate()} 日
+                  令和 {getReiwaYear()} 年 {getMonth()} 月 {getDateNumber()} 日
                 </div>
               </div>
             </div>
@@ -414,7 +415,7 @@ export function A4RecordSheet({
           <div className="p-3">
             <div className="flex justify-between">
               <div className="text-lg font-bold">利用者名: {selectedUser}</div>
-              <div className="text-base">記録日: {date}</div>
+              <div className="text-base">記録日: {date || formatLocalDateJP()}</div>
             </div>
           </div>
         </div>

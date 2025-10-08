@@ -4,6 +4,7 @@ import React, { useState, useRef } from "react"
 import { Button } from "./ui/button"
 import { Card } from "./ui/card"
 import { Camera } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
 interface PhotoUploadProps {
   photos?: string[]
@@ -27,6 +28,8 @@ export function PhotoUpload({ photos = [], onChange, maxPhotos = 3, maxSizeKB = 
     })
   }
 
+  const { toast } = useToast()
+
   async function handleFiles(files: FileList | null) {
     if (!files) return
 
@@ -46,7 +49,7 @@ export function PhotoUpload({ photos = [], onChange, maxPhotos = 3, maxSizeKB = 
         const dataUrl = await toBase64(f)
         next.push(dataUrl)
       } catch (e) {
-        console.error("Failed to read file", e)
+        toast({ title: "ファイル読み込みに失敗しました", description: String((e as Error)?.message || e) })
       }
     }
 
