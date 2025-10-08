@@ -146,7 +146,6 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
           }
         }
       } catch (error) {
-        console.error("[v0] Failed to load custom seizure form options:", error)
       }
     }
 
@@ -224,7 +223,6 @@ export function SeizureForm({ selectedUser, onSubmit, onCancel }: SeizureFormPro
 
       onCancel()
     } catch (error) {
-      console.error("[v0] Failed to save seizure record:", error)
       toast({
         title: "保存に失敗しました",
         description: "記録の保存中にエラーが発生しました。",

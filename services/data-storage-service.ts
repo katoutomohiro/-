@@ -151,7 +151,6 @@ export class DataStorageService {
       // Care event saved successfully
       return newEvent
     } catch (error) {
-      console.error("[v0] Failed to save care event:", error)
       throw new Error("ケア記録の保存に失敗しました")
     }
   }
@@ -161,7 +160,6 @@ export class DataStorageService {
       const events = localStorage.getItem(this.CARE_EVENTS_KEY)
       return events ? JSON.parse(events) : []
     } catch (error) {
-      console.error("[v0] Failed to load care events:", error)
       return []
     }
   }
@@ -197,7 +195,6 @@ export class DataStorageService {
       // Care event deleted successfully
       return true
     } catch (error) {
-      console.error("[v0] Failed to delete care event:", error)
       throw new Error("ケア記録の削除に失敗しました")
     }
   }
@@ -236,7 +233,6 @@ export class DataStorageService {
         return newProfile
       }
     } catch (error) {
-      console.error("[v0] Failed to save user profile:", error)
       throw new Error("利用者プロフィールの保存に失敗しました")
     }
   }
@@ -246,7 +242,6 @@ export class DataStorageService {
       const profiles = localStorage.getItem(this.USER_PROFILES_KEY)
       return profiles ? JSON.parse(profiles) : []
     } catch (error) {
-      console.error("[v0] Failed to load user profiles:", error)
       return []
     }
   }
@@ -273,7 +268,6 @@ export class DataStorageService {
       // User profile deleted successfully
       return true
     } catch (error) {
-      console.error("[v0] Failed to delete user profile:", error)
       throw new Error("利用者プロフィールの削除に失敗しました")
     }
   }
@@ -284,7 +278,6 @@ export class DataStorageService {
       const userNames = localStorage.getItem(this.CUSTOM_USER_NAMES_KEY)
       return userNames ? JSON.parse(userNames) : []
     } catch (error) {
-      console.error("[v0] Failed to load custom user names:", error)
       return []
     }
   }
@@ -294,7 +287,6 @@ export class DataStorageService {
       localStorage.setItem(this.CUSTOM_USER_NAMES_KEY, JSON.stringify(userNames))
       // Custom user names saved successfully
     } catch (error) {
-      console.error("[v0] Failed to save custom user names:", error)
       throw new Error("利用者名の保存に失敗しました")
     }
   }
@@ -306,7 +298,6 @@ export class DataStorageService {
       localStorage.setItem(this.CARE_EVENTS_KEY, JSON.stringify(updatedEvents))
       // User name updated in events successfully
     } catch (error) {
-      console.error("[v0] Failed to update user name in events:", error)
       throw new Error("記録データの利用者名更新に失敗しました")
     }
   }
@@ -320,7 +311,6 @@ export class DataStorageService {
       localStorage.setItem(this.USER_PROFILES_KEY, JSON.stringify(updatedProfiles))
       // User name updated in profiles successfully
     } catch (error) {
-      console.error("[v0] Failed to update user name in profiles:", error)
       throw new Error("プロフィールデータの利用者名更新に失敗しました")
     }
   }
@@ -331,7 +321,6 @@ export class DataStorageService {
       const options = localStorage.getItem(this.FORM_OPTIONS_KEY)
       return options ? JSON.parse(options) : {}
     } catch (error) {
-      console.error("[v0] Failed to load form options:", error)
       return {}
     }
   }
@@ -341,7 +330,6 @@ export class DataStorageService {
       localStorage.setItem(this.FORM_OPTIONS_KEY, JSON.stringify(options))
       // Form options saved successfully
     } catch (error) {
-      console.error("[v0] Failed to save form options:", error)
       throw new Error("フォーム選択項目の保存に失敗しました")
     }
   }
@@ -351,7 +339,6 @@ export class DataStorageService {
       localStorage.removeItem(this.FORM_OPTIONS_KEY)
       // Form options reset to default successfully
     } catch (error) {
-      console.error("[v0] Failed to reset form options:", error)
       throw new Error("フォーム選択項目のリセットに失敗しました")
     }
   }
@@ -415,7 +402,6 @@ export class DataStorageService {
       localStorage.setItem(this.CASE_RECORDS_KEY, JSON.stringify(records))
       return newRecord
     } catch (error) {
-      console.error("[v0] Failed to save case record:", error)
       throw new Error("ケース記録の保存に失敗しました")
     }
   }
@@ -425,7 +411,6 @@ export class DataStorageService {
       const records = localStorage.getItem(this.CASE_RECORDS_KEY)
       return records ? JSON.parse(records) : []
     } catch (error) {
-      console.error("[v0] Failed to load case records:", error)
       return []
     }
   }
@@ -445,7 +430,6 @@ export class DataStorageService {
       localStorage.setItem(this.CASE_RECORDS_KEY, JSON.stringify(records))
       return true
     } catch (error) {
-      console.error("[v0] Failed to delete case record:", error)
       throw new Error("ケース記録の削除に失敗しました")
     }
   }
@@ -467,7 +451,6 @@ export class DataStorageService {
       // Data exported successfully
       return JSON.stringify(data, null, 2)
     } catch (error) {
-      console.error("[v0] Failed to export data:", error)
       throw new Error("データのエクスポートに失敗しました")
     }
   }
@@ -512,7 +495,6 @@ export class DataStorageService {
       // Data imported successfully
       return true
     } catch (error) {
-      console.error("[v0] Failed to import data:", error)
       throw new Error("データのインポートに失敗しました")
     }
   }
@@ -530,7 +512,6 @@ export class DataStorageService {
             notifications: true,
           }
     } catch (error) {
-      console.error("[v0] Failed to load app settings:", error)
       return {}
     }
   }
@@ -540,7 +521,6 @@ export class DataStorageService {
       localStorage.setItem(this.APP_SETTINGS_KEY, JSON.stringify(settings))
       // App settings saved successfully
     } catch (error) {
-      console.error("[v0] Failed to save app settings:", error)
       throw new Error("設定の保存に失敗しました")
     }
   }
@@ -560,7 +540,6 @@ export class DataStorageService {
       localStorage.removeItem(this.CASE_RECORDS_KEY)
       // All data cleared successfully
     } catch (error) {
-      console.error("[v0] Failed to clear data:", error)
       throw new Error("データの削除に失敗しました")
     }
   }
@@ -580,7 +559,6 @@ export class DataStorageService {
 
       return { used, available, percentage }
     } catch (error) {
-      console.error("[v0] Failed to get storage info:", error)
       return { used: 0, available: 0, percentage: 0 }
     }
   }
@@ -594,11 +572,8 @@ export function initializeSampleData(): void {
   // 既にデータが存在するかチェック
   const existingUsers = DataStorageService.getAllUserProfiles()
   if (existingUsers.length > 0) {
-    console.log("[v0] Sample data already exists, skipping initialization")
     return
   }
-
-  console.log("[v0] Initializing sample data...")
 
   // 生活介護のサンプル利用者
   const dailyCareUsers: Omit<UserProfile, "id" | "createdAt" | "updatedAt">[] = [
@@ -709,5 +684,5 @@ export function initializeSampleData(): void {
     DataStorageService.saveUserProfile(user)
   })
 
-  console.log(`[v0] Sample data initialized: ${allSampleUsers.length} users created`)
+  // Sample data initialized
 }

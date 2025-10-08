@@ -430,9 +430,7 @@ export function FormOptionsManager() {
       try {
         const parsed = JSON.parse(savedOptions)
         setFormOptions({ ...defaultFormOptions, ...parsed })
-      } catch (error) {
-        console.error("[v0] Failed to parse saved form options:", error)
-      }
+      } catch (error) {}
     }
   }, [])
 
@@ -445,7 +443,6 @@ export function FormOptionsManager() {
         description: "フォーム選択項目を保存しました",
       })
     } catch (error) {
-      console.error("[v0] Failed to save form options:", error)
       toast({
         title: "保存エラー",
         description: "フォーム選択項目の保存に失敗しました",

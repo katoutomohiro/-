@@ -79,7 +79,6 @@ export function AdminSettings({ onUserNamesUpdate, onAppTitleUpdate }: AdminSett
         description: "アプリタイトルを更新しました",
       })
     } catch (error) {
-      console.error("[v0] Failed to save app title:", error)
       toast({
         title: "保存エラー",
         description: "アプリタイトルの保存に失敗しました",
@@ -109,7 +108,6 @@ export function AdminSettings({ onUserNamesUpdate, onAppTitleUpdate }: AdminSett
         description: "アプリタイトルをデフォルトに戻しました",
       })
     } catch (error) {
-      console.error("[v0] Failed to reset app title:", error)
       toast({
         title: "リセットエラー",
         description: "アプリタイトルのリセットに失敗しました",
@@ -165,7 +163,6 @@ export function AdminSettings({ onUserNamesUpdate, onAppTitleUpdate }: AdminSett
         description: `${filteredNames.length}名の利用者名を保存しました。既存の記録データも更新されました。`,
       })
     } catch (error) {
-      console.error("[v0] Failed to save user names:", error)
       toast({
         title: "保存エラー",
         description: "利用者名の保存に失敗しました。もう一度お試しください。",
@@ -214,7 +211,6 @@ export function AdminSettings({ onUserNamesUpdate, onAppTitleUpdate }: AdminSett
         description: "利用者名をデフォルト（A～X）に戻しました。既存の記録データも更新されました。",
       })
     } catch (error) {
-      console.error("[v0] Failed to reset user names:", error)
       toast({
         title: "リセットエラー",
         description: "利用者名のリセットに失敗しました。もう一度お試しください。",

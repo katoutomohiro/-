@@ -34,13 +34,11 @@ export default function ClickableCard({ children, onClick, className = "", ...re
   const mounted = useRef(false)
 
   useEffect(() => {
-    console.log("[v0] ClickableCard mounted")
     mounted.current = true
     ensureParticleStyle()
   }, [])
 
   const handleClick = (e: React.MouseEvent) => {
-    console.log("[v0] ClickableCard clicked")
     try {
       createParticles(e.clientX, e.clientY)
     } catch (err) {
@@ -50,7 +48,6 @@ export default function ClickableCard({ children, onClick, className = "", ...re
   }
 
   function createParticles(x: number, y: number) {
-    console.log("[v0] Creating particles")
     const count = 10
     for (let i = 0; i < count; i++) {
       const span = document.createElement("span")

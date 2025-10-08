@@ -38,7 +38,6 @@ export function DataBackupPanel({ onDataChange }: DataBackupPanelProps) {
       URL.revokeObjectURL(url)
       setMessage({ type: "success", text: "データのバックアップが完了しました" })
     } catch (error) {
-      console.error("[v0] Export failed:", error)
       setMessage({ type: "error", text: "バックアップの作成に失敗しました" })
     } finally {
       setIsExporting(false)
@@ -63,7 +62,6 @@ export function DataBackupPanel({ onDataChange }: DataBackupPanelProps) {
         setMessage({ type: "error", text: "データの復元に失敗しました" })
       }
     } catch (error) {
-      console.error("[v0] Import failed:", error)
       setMessage({ type: "error", text: "ファイルの読み込みに失敗しました" })
     } finally {
       setIsImporting(false)
@@ -80,7 +78,6 @@ export function DataBackupPanel({ onDataChange }: DataBackupPanelProps) {
         setMessage({ type: "success", text: "全てのデータを削除しました" })
         onDataChange?.()
       } catch (error) {
-        console.error("[v0] Clear data failed:", error)
         setMessage({ type: "error", text: "データの削除に失敗しました" })
       }
     }

@@ -9,7 +9,6 @@ export class DailyLogExportService {
 
       return blob
     } catch (error) {
-      console.error("[v0] PDF generation error:", error)
       throw new Error("PDF生成に失敗しました")
     }
   }
@@ -29,7 +28,6 @@ export class DailyLogExportService {
       URL.revokeObjectURL(url)
       // PDF download completed successfully
     } catch (error) {
-      console.error("[v0] PDF download error:", error)
       throw error
     }
   }
@@ -74,7 +72,6 @@ export class DailyLogExportService {
           const today = new Date().toDateString()
           return eventDate === today
         } catch (error) {
-          console.warn("[v0] Invalid event timestamp:", event)
           return false
         }
       })
@@ -84,10 +81,9 @@ export class DailyLogExportService {
           const time = new Date(event.timestamp).toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" })
           const eventName = this.getEventTypeName(event.eventType || "")
           const details = this.formatEventDetails(event).replace(/,/g, "；") // Replace commas to avoid CSV issues
-          const notes = (event.notes || "").replace(/,/g, "；").replace(/"/g, '""') // Escape quotes
+          const notes = (event.notes || "").replace(/,/g, "；").replace(/\"/g, '""') // Escape quotes
           csvContent += `${time},${eventName},"${details}","${notes}"\n`
         } catch (error) {
-          console.warn("[v0] Failed to process event:", event, error)
         }
       })
 
@@ -109,7 +105,6 @@ export class DailyLogExportService {
 
       // CSV export completed successfully
     } catch (error) {
-      console.error("[v0] CSV export error:", error)
       throw new Error(`CSV出力に失敗しました: ${error instanceof Error ? error.message : "不明なエラー"}`)
     }
   }
@@ -163,7 +158,6 @@ export class DailyLogExportService {
           return "詳細情報なし"
       }
     } catch (error) {
-      console.warn("[v0] Failed to format event details:", event, error)
       return "詳細情報の取得に失敗"
     }
   }
@@ -178,7 +172,6 @@ export class DailyLogExportService {
 
       const careEvents = JSON.parse(careEventsRaw)
       if (!Array.isArray(careEvents)) {
-        console.warn("[v0] Invalid care events data format")
         return this.createEmptyDailyLog(selectedUser)
       }
 
@@ -192,7 +185,6 @@ export class DailyLogExportService {
           const today = new Date().toDateString()
           return eventDate === today
         } catch (error) {
-          console.warn("[v0] Invalid event data:", event, error)
           return false
         }
       })
@@ -232,7 +224,6 @@ export class DailyLogExportService {
                         minute: "2-digit",
                       })
                     } catch (error) {
-                      console.warn("[v0] Failed to format timestamp:", error)
                       return "時刻不明"
                     }
                   })()
@@ -241,7 +232,6 @@ export class DailyLogExportService {
         }),
       }
     } catch (error) {
-      console.error("[v0] Failed to generate daily log:", error)
       return this.createEmptyDailyLog(selectedUser)
     }
   }

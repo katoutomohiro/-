@@ -133,7 +133,7 @@ export function ExpressionForm({ onSubmit, onCancel }: ExpressionFormProps) {
           }
         }
       } catch (error) {
-        console.error("[v0] Failed to load custom expression form options:", error)
+        // failed to load custom expression form options
       }
     }
 

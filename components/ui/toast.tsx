@@ -121,12 +121,8 @@ export function useToast() {
   if (!context) {
     // フォールバック：コンテキストがない場合でも動作するように
     return {
-      toast: (props: Omit<ToastType, "id">) => {
-        console.warn("[v0] Toast context not found, toast will not be displayed:", props)
-      },
-      dismiss: (id: string) => {
-        console.warn("[v0] Toast context not found, cannot dismiss:", id)
-      },
+      toast: (props: Omit<ToastType, "id">) => {},
+      dismiss: (id: string) => {},
       toasts: [],
     }
   }

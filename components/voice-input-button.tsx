@@ -51,7 +51,6 @@ export function VoiceInputButton({ onTranscript, className }: VoiceInputButtonPr
     }
 
     recognition.onerror = (event: any) => {
-      console.error("[v0] Speech recognition error:", event.error)
       toast({
         title: "音声認識エラー",
         description: "音声認識中にエラーが発生しました。もう一度お試しください。",

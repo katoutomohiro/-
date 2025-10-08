@@ -332,16 +332,14 @@ export function initializeRealUsersData() {
   const hasRealUsers = existingUsers.some((user: UserProfile) => user.name.includes("・"))
 
   if (hasRealUsers) {
-    console.log("[v0] Real users data already exists, skipping initialization")
     return existingUsers
   }
-
-  console.log("[v0] Initializing 24 real users data...")
+  
 
   // 24名の利用者データを保存
   const createdUsers = allUsersData.map((userData) => DataStorageService.saveUserProfile(userData))
 
-  console.log(`[v0] Successfully initialized ${createdUsers.length} users`)
+  
 
   return createdUsers
 }
