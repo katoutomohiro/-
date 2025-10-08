@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import ClickableCard from "@/components/clickable-card"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { CareFormModal } from "@/components/care-form-modal"
@@ -244,6 +246,7 @@ export default function WorldClassSoulCareApp() {
   const [isFamilySignatureOpen, setIsFamilySignatureOpen] = useState(false)
   const [isMedicalSummaryOpen, setIsMedicalSummaryOpen] = useState(false)
   const { toast } = useToast()
+  const router = useRouter()
 
   // Client-side only initialization to prevent hydration mismatch
   useEffect(() => {
@@ -546,54 +549,71 @@ export default function WorldClassSoulCareApp() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {welfareServices.map((service) => (
-            <Card
-              key={service.id}
-              className={`group hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-primary/30 hover:scale-[1.02] ${service.color}`}
-            >
-              <CardHeader className="pb-4">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-xl bg-white/50 text-2xl transition-all duration-300 group-hover:scale-110">
-                    {service.icon}
+          {welfareServices.map((service) => {
+            // make whole card clickable
+            const handleCardClick = () => {
+              if (service.id === "life-care") {
+                router.push("/daily-care/users")
+                return
+              }
+              if (service.id === "after-school") {
+                router.push("/after-school/users")
+                return
+              }
+              // fallback: do nothing (button inside still works)
+            }
+
+            return (
+              <ClickableCard
+                key={service.id}
+                onClick={handleCardClick}
+                className={`group hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-primary/30 hover:scale-[1.02] ${service.color}`}
+              >
+                <CardHeader className="pb-4">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 rounded-xl bg-white/50 text-2xl transition-all duration-300 group-hover:scale-110">
+                      {service.icon}
+                    </div>
+                    <div className="flex-1">
+                      <CardTitle className="text-base font-semibold">{service.name}</CardTitle>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <CardTitle className="text-base font-semibold">{service.name}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-sm text-muted-foreground">{service.description}</p>
+                  <div className="flex flex-wrap gap-1">
+                    {service.features.map((feature, index) => (
+                      <Badge key={index} variant="secondary" className="text-xs">
+                        {feature}
+                      </Badge>
+                    ))}
                   </div>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground">{service.description}</p>
-                <div className="flex flex-wrap gap-1">
-                  {service.features.map((feature, index) => (
-                    <Badge key={index} variant="secondary" className="text-xs">
-                      {feature}
-                    </Badge>
-                  ))}
-                </div>
-                {service.id === "life-care" ? (
-                  <Button size="sm" className="w-full" asChild>
-                    <Link href="/daily-care/users">{service.name}記録</Link>
-                  </Button>
-                ) : service.id === "after-school" ? (
-                  <Button size="sm" className="w-full" asChild>
-                    <Link href="/after-school/users">{service.name}記録</Link>
-                  </Button>
-                ) : (
-                  <Button size="sm" className="w-full">
-                    {service.name}記録
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
-          ))}
+                  {service.id === "life-care" ? (
+                    <Button size="sm" className="w-full" asChild>
+                      <Link href="/daily-care/users">{service.name}記録</Link>
+                    </Button>
+                  ) : service.id === "after-school" ? (
+                    <Button size="sm" className="w-full" asChild>
+                      <Link href="/after-school/users">{service.name}記録</Link>
+                    </Button>
+                  ) : (
+                    <Button size="sm" className="w-full">
+                      {service.name}記録
+                    </Button>
+                  )}
+                </CardContent>
+              </ClickableCard>
+            )
+          })}
         </div>
 
         {currentView === "dashboard" ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {enhancedEventCategories.map((category) => (
-                <Card
+                <ClickableCard
                   key={category.id}
+                  onClick={() => openForm(category.id)}
                   className={`group hover:shadow-xl transition-all duration-300 cursor-pointer border-2 hover:border-primary/30 hover:scale-[1.02] ${category.color} backdrop-blur-sm min-h-[200px] flex flex-col`}
                 >
                   <CardHeader className="pb-4">
@@ -613,13 +633,16 @@ export default function WorldClassSoulCareApp() {
                     <Button
                       size="sm"
                       className="w-full transition-all duration-300 hover:shadow-lg hover:scale-105 font-medium mt-auto"
-                      onClick={() => openForm(category.id)}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        openForm(category.id)
+                      }}
                       aria-label={`${category.name}を記録する`}
                     >
                       記録する
                     </Button>
                   </CardContent>
-                </Card>
+                </ClickableCard>
               ))}
             </div>
 
