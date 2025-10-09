@@ -1,93 +1,143 @@
 "use client"
 
-import React, { useEffect, useRef } from "react"
+import type React from "react"
 
-type Props = React.HTMLAttributes<HTMLDivElement> & {
-  onClick?: (e: React.MouseEvent) => void
+import { Card } from "@/components/ui/card"
+import { cn } from "@/lib/utils"
+import { useEffect, useRef, useState } from "react"
+
+interface Particle {
+  x: number
+  y: number
+  vx: number
+  vy: number
+  life: number
+  color: string
+}
+
+interface ClickableCardProps {
+  children: React.ReactNode
+  onClick?: () => void
+  className?: string
   particleColors?: string[]
 }
 
-const EMOJIS = ["⭐", "✨", "💖", "🌸", "💫", "🌟", "❤️"]
+export default function ClickableCard({
+  children,
+  onClick,
+  className,
+  particleColors = ["#FFB6C1", "#FFD700", "#DDA0DD"],
+}: ClickableCardProps) {
+  const [particles, setParticles] = useState<Particle[]>([])
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const cardRef = useRef<HTMLDivElement>(null)
+  const animationFrameRef = useRef<number>()
 
-function ensureParticleStyle() {
-  if (document.getElementById("v0-particle-style")) return
-  const style = document.createElement("style")
-  style.id = "v0-particle-style"
-  style.innerHTML = `
-  @keyframes v0-particle-up {
-    0% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
-    100% { opacity: 0; transform: translateY(-80px) scale(1.2) rotate(360deg); }
+  const createParticles = (x: number, y: number) => {
+    const newParticles: Particle[] = []
+    for (let i = 0; i < 12; i++) {
+      const angle = (Math.PI * 2 * i) / 12
+      const velocity = 2 + Math.random() * 2
+      newParticles.push({
+        x,
+        y,
+        vx: Math.cos(angle) * velocity,
+        vy: Math.sin(angle) * velocity,
+        life: 1,
+        color: particleColors[Math.floor(Math.random() * particleColors.length)],
+      })
+    }
+    setParticles((prev) => [...prev, ...newParticles])
   }
-  .v0-particle {
-    position: fixed;
-    pointer-events: none;
-    font-size: 20px;
-    will-change: transform, opacity;
-    animation: v0-particle-up 800ms ease-out forwards;
-    z-index: 9999;
-    user-select: none;
-  }
-  `
-  document.head.appendChild(style)
-}
 
-export default function ClickableCard({ children, onClick, className = "", particleColors, ...rest }: Props) {
-  const mounted = useRef(false)
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (cardRef.current) {
+      const rect = cardRef.current.getBoundingClientRect()
+      const x = e.clientX - rect.left
+      const y = e.clientY - rect.top
+      createParticles(x, y)
+    }
+    onClick?.()
+  }
 
   useEffect(() => {
-    mounted.current = true
-    ensureParticleStyle()
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      setParticles((prevParticles) => {
+        const updatedParticles = prevParticles
+          .map((particle) => ({
+            ...particle,
+            x: particle.x + particle.vx,
+            y: particle.y + particle.vy,
+            vy: particle.vy + 0.1,
+            life: particle.life - 0.02,
+          }))
+          .filter((particle) => particle.life > 0)
+
+        updatedParticles.forEach((particle) => {
+          ctx.globalAlpha = particle.life
+          ctx.fillStyle = particle.color
+          ctx.beginPath()
+          ctx.arc(particle.x, particle.y, 4, 0, Math.PI * 2)
+          ctx.fill()
+        })
+
+        return updatedParticles
+      })
+
+      animationFrameRef.current = requestAnimationFrame(animate)
+    }
+
+    animate()
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current)
+      }
+    }
   }, [])
 
-  const handleClick = (e: React.MouseEvent) => {
-    try {
-      createParticles(e.clientX, e.clientY)
-    } catch (err) {
-      // ignore
-    }
-    if (onClick) onClick(e)
-  }
-
-  function createParticles(x: number, y: number) {
-    const count = 10
-    for (let i = 0; i < count; i++) {
-      const span = document.createElement("span")
-      span.className = "v0-particle"
-      span.textContent = EMOJIS[Math.floor(Math.random() * EMOJIS.length)]
-      // apply random color if provided
-      if (particleColors && particleColors.length > 0) {
-        const color = particleColors[Math.floor(Math.random() * particleColors.length)]
-        span.style.color = color
+  useEffect(() => {
+    const updateCanvasSize = () => {
+      const canvas = canvasRef.current
+      const card = cardRef.current
+      if (canvas && card) {
+        canvas.width = card.offsetWidth
+        canvas.height = card.offsetHeight
       }
-      const dx = (Math.random() - 0.5) * 80
-      const left = x + dx
-      const top = y + (Math.random() - 0.5) * 20
-      span.style.left = `${left}px`
-      span.style.top = `${top}px`
-      span.style.opacity = "1"
-      span.style.transform = `translateY(0) scale(${0.9 + Math.random() * 0.6}) rotate(${Math.random() * 60 - 30}deg)`
-      document.body.appendChild(span)
-      // remove after animation
-      setTimeout(() => {
-        try {
-          span.remove()
-        } catch (e) {}
-      }, 900)
     }
-  }
+
+    updateCanvasSize()
+    window.addEventListener("resize", updateCanvasSize)
+
+    return () => {
+      window.removeEventListener("resize", updateCanvasSize)
+    }
+  }, [])
 
   return (
-    <div
-      {...rest}
-      role="button"
-      tabIndex={0}
-      onClick={handleClick}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") handleClick(e as any)
-      }}
-      className={className}
-    >
-      {children}
+    <div ref={cardRef} className="relative">
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 pointer-events-none z-10"
+        style={{ width: "100%", height: "100%" }}
+      />
+      <Card
+        className={cn(
+          "cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]",
+          className,
+        )}
+        onClick={handleClick}
+      >
+        {children}
+      </Card>
     </div>
   )
 }

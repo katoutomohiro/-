@@ -1,13 +1,34 @@
 import { chromium } from 'playwright';
+import net from 'node:net';
 
 async function waitForServer(url, retries = 30, delay = 1000) {
+  let parsed
+  try {
+    parsed = new URL(url)
+  } catch (e) {
+    console.error('waitForServer: invalid URL', url)
+    return false
+  }
+  const host = parsed.hostname
+  const port = parsed.port ? Number(parsed.port) : (parsed.protocol === 'https:' ? 443 : 80)
+
   for (let i = 0; i < retries; i++) {
-    try {
-      const res = await fetch(url, { method: 'HEAD' });
-      if (res && (res.status === 200 || res.status === 204 || res.status === 302)) return true
-    } catch (e) {
-      // ignore
-    }
+    const ok = await new Promise((resolve) => {
+      const socket = net.createConnection({ host, port, timeout: 1000 }, () => {
+        socket.destroy()
+        resolve(true)
+      })
+      socket.on('error', (err) => {
+        // console.log('waitForServer: socket error', err && err.message)
+        resolve(false)
+      })
+      socket.on('timeout', () => {
+        socket.destroy()
+        resolve(false)
+      })
+    })
+    console.log('waitForServer: attempt', i, 'host=', host, 'port=', port, 'ok=', ok)
+    if (ok) return true
     await new Promise((r) => setTimeout(r, delay))
   }
   return false
