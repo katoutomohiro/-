@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from "react"
 
 type Props = React.HTMLAttributes<HTMLDivElement> & {
   onClick?: (e: React.MouseEvent) => void
+  particleColors?: string[]
 }
 
 const EMOJIS = ["⭐", "✨", "💖", "🌸", "💫", "🌟", "❤️"]
@@ -30,7 +31,7 @@ function ensureParticleStyle() {
   document.head.appendChild(style)
 }
 
-export default function ClickableCard({ children, onClick, className = "", ...rest }: Props) {
+export default function ClickableCard({ children, onClick, className = "", particleColors, ...rest }: Props) {
   const mounted = useRef(false)
 
   useEffect(() => {
@@ -53,6 +54,11 @@ export default function ClickableCard({ children, onClick, className = "", ...re
       const span = document.createElement("span")
       span.className = "v0-particle"
       span.textContent = EMOJIS[Math.floor(Math.random() * EMOJIS.length)]
+      // apply random color if provided
+      if (particleColors && particleColors.length > 0) {
+        const color = particleColors[Math.floor(Math.random() * particleColors.length)]
+        span.style.color = color
+      }
       const dx = (Math.random() - 0.5) * 80
       const left = x + dx
       const top = y + (Math.random() - 0.5) * 20

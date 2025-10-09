@@ -1,6 +1,25 @@
 import { chromium } from 'playwright';
 
+async function waitForServer(url, retries = 30, delay = 1000) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const res = await fetch(url, { method: 'HEAD' });
+      if (res && (res.status === 200 || res.status === 204 || res.status === 302)) return true
+    } catch (e) {
+      // ignore
+    }
+    await new Promise((r) => setTimeout(r, delay))
+  }
+  return false
+}
+
 (async ()=>{
+  const URL = process.env.CHECK_URL || 'http://localhost:3000'
+  const ok = await waitForServer(URL, 40, 1000)
+  if (!ok) {
+    console.error('SERVER_NOT_READY', URL)
+    process.exit(2)
+  }
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
   const v0Messages = [];
@@ -12,8 +31,8 @@ import { chromium } from 'playwright';
     } catch (e) {}
   });
 
-  try {
-    await page.goto('http://localhost:3000', { waitUntil: 'networkidle' });
+    try {
+    await page.goto(URL, { waitUntil: 'networkidle' });
   } catch (e) {
     console.error('FAILED_TO_LOAD', e.message || e);
     await browser.close();
