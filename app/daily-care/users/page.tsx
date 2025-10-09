@@ -1,17 +1,15 @@
 "use client"
 
 import type React from "react"
-
+import type { UserProfile } from "@/types/user-profile" // Declare the UserProfile variable
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { DataStorageService, type UserProfile } from "@/services/data-storage-service"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { initializeRealUsersData } from "@/lib/data/users-data"
 import { UserManagementModal } from "@/components/user-management-modal"
 import { Plus, Edit } from "lucide-react"
+import { useRouter } from "next/navigation"
+import Link from "next/link"
 
 export default function DailyCareUsersPage() {
   const [users, setUsers] = useState<UserProfile[]>([])
@@ -19,8 +17,23 @@ export default function DailyCareUsersPage() {
   const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null)
   const router = useRouter()
 
-  const loadUsers = () => {
-    initializeRealUsersData()
+  const loadUsers = async () => {
+    // Initialize users data first
+    const { DataStorageService } = await import("@/services/data-storage-service")
+    const { allUsersData } = await import("@/lib/data/users-data")
+
+    // Check if real users already exist
+    const existingUsers = DataStorageService.getAllUserProfiles()
+    const hasRealUsers = existingUsers.some((user) => user.name.includes("・"))
+
+    // If no real users exist, initialize them
+    if (!hasRealUsers && allUsersData.length > 0) {
+      allUsersData.forEach((userData) => {
+        DataStorageService.saveUserProfile(userData)
+      })
+    }
+
+    // Load daily care users
     const allUsers = DataStorageService.getAllUserProfiles()
     const dailyCareUsers = allUsers.filter((user) => user.serviceType === "daily-care")
     setUsers(dailyCareUsers)

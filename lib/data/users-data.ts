@@ -323,23 +323,30 @@ export const allUsersData = [...dailyCareUsersData, ...afterSchoolUsersData]
  * DataStorageServiceに24名の利用者を登録
  */
 export function initializeRealUsersData() {
-  const { DataStorageService } = require("@/services/data-storage-service")
+  // For now, return empty array and let the component handle initialization
+  // This avoids the require() issue
+  return []
+}
+
+/**
+ * 利用者データを初期化する関数（非同期版）
+ * DataStorageServiceに24名の利用者を登録
+ */
+export async function initializeRealUsersDataAsync() {
+  const { DataStorageService } = await import("@/services/data-storage-service")
 
   // 既存の利用者データをチェック
   const existingUsers = DataStorageService.getAllUserProfiles()
 
   // 実際の利用者データ（A・T、I・Kなど）が既に存在するかチェック
-  const hasRealUsers = existingUsers.some((user: UserProfile) => user.name.includes("・"))
+  const hasRealUsers = existingUsers.some((user) => user.name.includes("・"))
 
   if (hasRealUsers) {
     return existingUsers
   }
-  
 
   // 24名の利用者データを保存
   const createdUsers = allUsersData.map((userData) => DataStorageService.saveUserProfile(userData))
-
-  
 
   return createdUsers
 }
