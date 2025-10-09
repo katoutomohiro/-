@@ -1,6 +1,6 @@
 # Page snapshot
 
-```yaml
+\`\`\`yaml
 - generic [ref=e1]:
   - generic [ref=e2]:
     - banner [ref=e3]:
@@ -200,4 +200,4 @@
     - list
   - alert [ref=e291]
   - generic [ref=e292]: 0:00
-```
+\`\`\`

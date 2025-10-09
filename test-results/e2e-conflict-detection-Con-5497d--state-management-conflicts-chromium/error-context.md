@@ -1,6 +1,6 @@
 # Page snapshot
 
-```yaml
+\`\`\`yaml
 - generic [active] [ref=e1]:
   - generic [ref=e2]:
     - banner [ref=e3]:
@@ -301,4 +301,4 @@
   - region "Notifications (F8)":
     - list
   - alert [ref=e310]
-```
+\`\`\`
